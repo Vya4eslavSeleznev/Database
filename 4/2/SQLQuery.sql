@@ -41,3 +41,19 @@ WHERE NumDisc IN
 GO
 
 /*3.9*/
+SELECT NumGr, Quantity FROM Groups
+GO
+
+/*3.10*/
+SELECT NumGr, COUNT(*) FROM Groups 
+JOIN Students ON Groups.IdGroup = Students.GroupId
+JOIN Balls ON Balls.NumSt = Students.IdSt
+GROUP BY Groups.NumGr
+GO
+
+/*3.11*/
+SELECT NumGr, COUNT(*) FROM Groups 
+JOIN Students ON Groups.IdGroup = Students.GroupId
+JOIN Balls ON Balls.NumSt = Students.IdSt
+GROUP BY Groups.NumGr HAVING COUNT(*) > 1
+GO
