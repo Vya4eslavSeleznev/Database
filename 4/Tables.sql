@@ -1,53 +1,55 @@
 USE Session;
 CREATE TABLE Disciplines
 (
-	NumDisc int IDENTITY (1,1) PRIMARY KEY,
+	IdDisc int IDENTITY (1,1) PRIMARY KEY,
 	NameDisc varchar(50)
 )
-GO
+CREATE TABLE Directions
+(
+	IdDir int IDENTITY (1,1) PRIMARY KEY,
+	Title varchar(50),
+	Quantity int
+)
 CREATE TABLE Uplanes
 (
-	NumPlan int IDENTITY (1,1) PRIMARY KEY,
+	IdDisc int IDENTITY (1,1) PRIMARY KEY,
+	NumDir int FOREIGN KEY REFERENCES Directions (IdDir)
+	ON DELETE SET NULL
+	ON UPDATE CASCADE,
 	NumDisc int FOREIGN KEY REFERENCES Disciplines
 	ON DELETE SET NULL
 	ON UPDATE CASCADE,
-	NamePlan varchar(50)
+	Semestr int
 )
-GO
+
 CREATE TABLE Groups
 (
-	NumGroup int IDENTITY(1,1) PRIMARY KEY,
-	NumPlan int FOREIGN KEY REFERENCES Uplanes
+	IdGroup int IDENTITY(1,1) PRIMARY KEY,
+	NumDir int FOREIGN KEY REFERENCES Directions (IdDir)
 	ON DELETE SET NULL
 	ON UPDATE CASCADE,
-	NumSt int,
 	Quantity int CHECK (Quantity BETWEEN 0 AND 20)
 )
-GO
+
 CREATE TABLE Students
 (
-	NumSt int IDENTITY (1,1) PRIMARY KEY,
+	IdSt int IDENTITY (1,1) PRIMARY KEY,
 	Fio varchar(50),
-	NumGroup int FOREIGN KEY REFERENCES Groups
+	NumGroup int FOREIGN KEY REFERENCES Groups (IdGroup)
 	ON DELETE SET NULL
 	ON UPDATE CASCADE
 )
-GO
-CREATE TABLE Directions
-(
-	NumDir int IDENTITY (1,1) PRIMARY KEY,
-	NumSt int FOREIGN KEY REFERENCES Students
-	ON DELETE SET NULL
-	ON UPDATE CASCADE,
-	NameDir varchar(50)
-)
-GO
+	
 CREATE TABLE Balls
 (
-	NumBall int IDENTITY (1,1) PRIMARY KEY,
+	IdBall int IDENTITY (1,1) PRIMARY KEY,
+	IdDisc int FOREIGN KEY REFERENCES Disciplines
+	ON DELETE SET NULL
+	ON UPDATE CASCADE,
 	NumSt int FOREIGN KEY REFERENCES Students
 	ON DELETE SET NULL
 	ON UPDATE CASCADE,
-	Ball int CHECK (Ball BETWEEN 2 AND 5)
+	Ball int CHECK (Ball BETWEEN 2 AND 5),
+	DateEx datetime
 )
 GO
