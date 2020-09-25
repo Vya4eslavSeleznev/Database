@@ -63,11 +63,27 @@ UPDATE Groups SET NumGr=CONVERT(char(1),CONVERT(int, LEFT(NumGr,1))+1)+ SUBSTRIN
 GO
 
 DECLARE @Group VARCHAR(10);
-SET @Group='13504/4';
+SET @Group='23504/2';
 EXEC Next_Course @Group;
 GO
 
 EXEC Next_Course;
+GO
+
+/*Task*/
+--Напишите процедуру, которая будет возвращать старые номера групп обратно.
+CREATE PROCEDURE Previous_Course(@Group AS VARCHAR(10)='13504/1')
+AS
+UPDATE Groups SET NumGr=CONVERT(char(1),CONVERT(int, LEFT(NumGr,1))-1)+ SUBSTRING(NumGr,2,LEN(NumGr)+1)
+WHERE NumGr=@Group;
+GO
+
+DECLARE @Group VARCHAR(10);
+SET @Group='23504/2';
+EXEC Previous_Course @Group;
+GO
+
+EXEC Previous_Course;
 GO
 
 /*5*/
@@ -84,7 +100,8 @@ GO
 /*6*/
 CREATE PROCEDURE Delete_Students_Complete
 AS
-INSERT INTO ArchiveStudents SELECT YEAR(GETDATE()), IdSt, FIO, GroupId 
+INSERT INTO ArchiveStudents
+SELECT YEAR(GETDATE()), IdSt, FIO, GroupId 
 FROM Students
 WHERE LEFT(GroupId,1)=6;
 DELETE FROM Students WHERE LEFT(GroupId,1)=6;
@@ -102,4 +119,33 @@ WHERE IdGroup IN
 GO
 
 EXEC Next_Course_2;
+GO
+
+/*Task*/
+--Напишите обратную процедуру восстановления
+--студентов из архивной таблицы в основную
+CREATE PROCEDURE Delete_From_Archive
+AS
+SET IDENTITY_INSERT dbo.Students ON;
+INSERT INTO Students (IdSt, Fio, GroupId)
+SELECT NumSt, Fio, NumGr 
+FROM ArchiveStudents
+WHERE LEFT(NumGr,1)=6;
+DELETE FROM ArchiveStudents
+WHERE LEFT(NumGr,1)=6;
+SET IDENTITY_INSERT dbo.Students OFF;
+GO
+
+CREATE PROCEDURE Previous_Course_2 
+AS
+EXEC Delete_From_Archive;
+UPDATE Groups SET NumGr=CONVERT(char(1),CONVERT(int, LEFT(NumGr,1))-1)+ SUBSTRING(NumGr,2,LEN(NumGr)+1)
+WHERE IdGroup IN
+(
+	SELECT IdGroup
+	FROM Students_complete_2
+);
+GO
+
+EXEC Previous_Course_2;
 GO
