@@ -81,7 +81,7 @@ GO
 SELECT Fio
 FROM Balls
 RIGHT JOIN Students ON Students.IdSt = Balls.NumSt
-WHERE NumSt IS  NULL
+WHERE NumSt IS NULL
 GO
 
 /*3.10*/
@@ -189,12 +189,14 @@ WHERE EXISTS
 )
 GO
 
+SELECT 1
+
 /*4.8*/
 SELECT Groups.NumGr
 FROM Groups
 WHERE EXISTS
 (
-	SELECT 1
+	SELECT *
 	FROM Students
 	JOIN Balls ON Students.IdSt = Balls.NumSt
 	JOIN Uplans ON Balls.IdDisc = Uplans.IdDisc

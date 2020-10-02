@@ -1,4 +1,4 @@
-USE MySession;
+USE Session;
 
 /*1*/
 CREATE VIEW Disciplines_with_balls AS

@@ -79,7 +79,7 @@ WHERE NumGr=@Group;
 GO
 
 DECLARE @Group VARCHAR(10);
-SET @Group='23504/2';
+SET @Group='23504/1';
 EXEC Previous_Course @Group;
 GO
 
