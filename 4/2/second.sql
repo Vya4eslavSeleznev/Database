@@ -83,7 +83,8 @@ JOIN
 (
 	SELECT NumSt
 	FROM Balls
-	GROUP BY NumSt HAVING COUNT(DISTINCT IdDisc) > 1
+	GROUP BY NumSt
+	HAVING COUNT(DISTINCT IdDisc) > 1
 ) DistBalls
 ON DistBalls.NumSt = Students.IdSt
 GROUP BY Groups.NumGr
@@ -111,7 +112,7 @@ SELECT Fio
 FROM Students
 WHERE EXISTS
 (
-	SELECT 1
+	SELECT *
 	FROM Balls
 	WHERE NumSt = Students.IdSt
 )
@@ -150,7 +151,8 @@ JOIN
 (
 	SELECT NumSt
 	FROM Balls
-	GROUP BY NumSt HAVING COUNT(DISTINCT IdDisc) > 1
+	GROUP BY NumSt HAVING
+	COUNT(DISTINCT IdDisc) > 1
 ) DistBalls
 ON DistBalls.NumSt = Students.IdSt
 GO
@@ -189,7 +191,7 @@ JOIN Students ON Groups.IdGroup = Students.GroupId
 JOIN Balls ON Students.IdSt = Balls.NumSt
 JOIN Uplans ON Balls.IdDisc = Uplans.IdDisc
 WHERE Uplans.NumDisc = 1 AND Uplans.Semestr = 1
-GROUP BY Groups.IdGroup, Groups.NumGr --группируем чтобы понять сколько в группе студентов
+GROUP BY Groups.IdGroup, Groups.NumGr 
 HAVING COUNT(DISTINCT Students.IdSt) > 1
 
 SELECT DISTINCT NumGr 
