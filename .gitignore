@@ -360,3 +360,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+6/sixth/sixth.sln
+6/sixth/sixth/App.config
+6/sixth/sixth/MainForm.resx
+6/sixth/sixth/sixth.csproj
+6/sixth/sixth/Properties/Settings.settings
+6/sixth/sixth/Properties/Resources.resx
