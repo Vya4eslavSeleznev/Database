@@ -40,6 +40,8 @@
       this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.cn = new System.Data.OleDb.OleDbConnection();
+      this.addressToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
+      this.addressToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -63,9 +65,11 @@
       this.tablesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.customersToolStripMenuItem,
             this.toolStripMenuItem2,
-            this.ordersToolStripMenuItem});
+            this.ordersToolStripMenuItem,
+            this.addressToolStripMenuItem,
+            this.addressToolStripMenuItem1});
       this.tablesToolStripMenuItem.Name = "tablesToolStripMenuItem";
-      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
+      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 26);
       this.tablesToolStripMenuItem.Text = "Tables";
       // 
       // customersToolStripMenuItem
@@ -132,6 +136,18 @@
       this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
     "I;Initial Catalog=Company";
       // 
+      // addressToolStripMenuItem
+      // 
+      this.addressToolStripMenuItem.Name = "addressToolStripMenuItem";
+      this.addressToolStripMenuItem.Size = new System.Drawing.Size(221, 6);
+      // 
+      // addressToolStripMenuItem1
+      // 
+      this.addressToolStripMenuItem1.Name = "addressToolStripMenuItem1";
+      this.addressToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
+      this.addressToolStripMenuItem1.Text = "Address";
+      this.addressToolStripMenuItem1.Click += new System.EventHandler(this.addressToolStripMenuItem1_Click);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -164,6 +180,8 @@
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     private System.Windows.Forms.ToolStripMenuItem ordersToolStripMenuItem;
     private System.Data.OleDb.OleDbConnection cn;
+    private System.Windows.Forms.ToolStripSeparator addressToolStripMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem addressToolStripMenuItem1;
   }
 }
 

@@ -70,5 +70,22 @@ namespace seventh
     {
       cn.Close();
     }
+
+    private void addressToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+      if (Table.address == false)
+      {
+        Table Address = new Table(cn, "Address");
+        Address.MdiParent = this;
+        Address.Show();
+      }
+      else
+        foreach (Form tbl in this.MdiChildren)
+          if (tbl.Text == "Address")
+          {
+            tbl.Activate();
+            break;
+          }
+    }
   }
 }
