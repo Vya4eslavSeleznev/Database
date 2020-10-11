@@ -41,8 +41,8 @@
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.tabPage2 = new System.Windows.Forms.TabPage();
       this.tabPage3 = new System.Windows.Forms.TabPage();
-      this.comboBox1 = new System.Windows.Forms.ComboBox();
       this.button2 = new System.Windows.Forms.Button();
+      this.comboBox1 = new System.Windows.Forms.ComboBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -185,14 +185,6 @@
       this.tabPage3.Text = "tabPage3";
       this.tabPage3.UseVisualStyleBackColor = true;
       // 
-      // comboBox1
-      // 
-      this.comboBox1.FormattingEnabled = true;
-      this.comboBox1.Location = new System.Drawing.Point(13, 44);
-      this.comboBox1.Name = "comboBox1";
-      this.comboBox1.Size = new System.Drawing.Size(363, 24);
-      this.comboBox1.TabIndex = 0;
-      // 
       // button2
       // 
       this.button2.Location = new System.Drawing.Point(422, 44);
@@ -202,6 +194,14 @@
       this.button2.Text = "button2";
       this.button2.UseVisualStyleBackColor = true;
       this.button2.Click += new System.EventHandler(this.button2_Click);
+      // 
+      // comboBox1
+      // 
+      this.comboBox1.FormattingEnabled = true;
+      this.comboBox1.Location = new System.Drawing.Point(13, 44);
+      this.comboBox1.Name = "comboBox1";
+      this.comboBox1.Size = new System.Drawing.Size(363, 24);
+      this.comboBox1.TabIndex = 0;
       // 
       // Form2
       // 

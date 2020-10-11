@@ -35,30 +35,37 @@ namespace sixth
       {
         richTextBox2.Text = richTextBox2.Text + item.ToString() + "\r\n";
       }
-
     }
 
     public int numpag;
+
+    private void Data()
+    {
+      comboBox1.Items.Add(new Spr(1, "Ваня"));
+      comboBox1.Items.Add(new Spr(2, "Ваcя"));
+      comboBox1.Items.Add(new Spr(3, "Петя"));
+      comboBox1.Items.Add(new Spr(4, "Гоша"));
+    }
     private void Form2_Load(object sender, EventArgs e)
     {
       if (numpag == 0)
       {
         this.tabControl1.SelectedTab = this.tabPage1;
+        Data();
       }
       else if (numpag == -1)
       {
         this.tabControl1.SelectedTab = this.tabPage2;
-
-        comboBox1.Items.Add(new Spr(1, "Ваня"));
-        comboBox1.Items.Add(new Spr(2, "Ваcя"));
-        comboBox1.Items.Add(new Spr(3, "Петя"));
-        comboBox1.Items.Add(new Spr(4, "Гоша"));
+        Data();
       }
     }
 
     private void button2_Click(object sender, EventArgs e)
     {
-      MessageBox.Show(((Spr)comboBox1.SelectedItem).Id.ToString());
+      if (comboBox1.SelectedItem != null)
+      {
+        MessageBox.Show(((Spr)comboBox1.SelectedItem).Id.ToString());
+      }
     }
   }
 }
