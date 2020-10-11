@@ -31,17 +31,12 @@ namespace seventh
 
     }
 
-    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-    {
-      cn.Close();
-    }
-
     private void customersToolStripMenuItem_Click(object sender, EventArgs e)
     {
       if (Table.customers == false)
       {
         Table Customers = new Table(cn, "Customers");
-        //Customers.MdiParent = this;
+        Customers.MdiParent = this;
         Customers.Show();
       }
       else
@@ -59,7 +54,7 @@ namespace seventh
       if (Table.orders == false)
       {
         Table Orders = new Table(cn, "Orders");
-        //Orders.MdiParent = this;
+        Orders.MdiParent = this;
         Orders.Show();
       }
       else
@@ -69,6 +64,11 @@ namespace seventh
             tbl.Activate();
             break;
           }
+    }
+
+    private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      cn.Close();
     }
   }
 }

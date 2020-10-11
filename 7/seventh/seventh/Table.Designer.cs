@@ -29,7 +29,9 @@
     private void InitializeComponent()
     {
       this.dgTable = new System.Windows.Forms.DataGridView();
+      this.ds = new System.Data.DataSet();
       ((System.ComponentModel.ISupportInitialize)(this.dgTable)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.ds)).BeginInit();
       this.SuspendLayout();
       // 
       // dgTable
@@ -43,6 +45,10 @@
       this.dgTable.Size = new System.Drawing.Size(800, 450);
       this.dgTable.TabIndex = 0;
       // 
+      // ds
+      // 
+      this.ds.DataSetName = "NewDataSet";
+      // 
       // Table
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -52,7 +58,9 @@
       this.Name = "Table";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
       this.Text = "Table";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Table_FormClosing);
       ((System.ComponentModel.ISupportInitialize)(this.dgTable)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.ds)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -60,5 +68,6 @@
     #endregion
 
     private System.Windows.Forms.DataGridView dgTable;
+    private System.Data.DataSet ds;
   }
 }

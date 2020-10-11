@@ -40,9 +40,7 @@
       this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.cn = new System.Data.OleDb.OleDbConnection();
-      this.ds = new System.Data.DataSet();
       this.menuStrip1.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.ds)).BeginInit();
       this.SuspendLayout();
       // 
       // menuStrip1
@@ -67,25 +65,25 @@
             this.toolStripMenuItem2,
             this.ordersToolStripMenuItem});
       this.tablesToolStripMenuItem.Name = "tablesToolStripMenuItem";
-      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 26);
+      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
       this.tablesToolStripMenuItem.Text = "Tables";
       // 
       // customersToolStripMenuItem
       // 
       this.customersToolStripMenuItem.Name = "customersToolStripMenuItem";
-      this.customersToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+      this.customersToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
       this.customersToolStripMenuItem.Text = "Customers";
       this.customersToolStripMenuItem.Click += new System.EventHandler(this.customersToolStripMenuItem_Click);
       // 
       // toolStripMenuItem2
       // 
       this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-      this.toolStripMenuItem2.Size = new System.Drawing.Size(221, 6);
+      this.toolStripMenuItem2.Size = new System.Drawing.Size(158, 6);
       // 
       // ordersToolStripMenuItem
       // 
       this.ordersToolStripMenuItem.Name = "ordersToolStripMenuItem";
-      this.ordersToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+      this.ordersToolStripMenuItem.Size = new System.Drawing.Size(161, 26);
       this.ordersToolStripMenuItem.Text = "Orders";
       this.ordersToolStripMenuItem.Click += new System.EventHandler(this.ordersToolStripMenuItem_Click);
       // 
@@ -96,20 +94,20 @@
             this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
       this.wwToolStripMenuItem.Name = "wwToolStripMenuItem";
-      this.wwToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+      this.wwToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
       this.wwToolStripMenuItem.Text = "File";
       // 
       // connectToolStripMenuItem
       // 
       this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-      this.connectToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+      this.connectToolStripMenuItem.Size = new System.Drawing.Size(146, 26);
       this.connectToolStripMenuItem.Text = "Connect";
       this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
       // 
       // toolStripMenuItem1
       // 
       this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-      this.toolStripMenuItem1.Size = new System.Drawing.Size(221, 6);
+      this.toolStripMenuItem1.Size = new System.Drawing.Size(143, 6);
       // 
       // exitToolStripMenuItem
       // 
@@ -120,13 +118,13 @@
       // windowToolStripMenuItem
       // 
       this.windowToolStripMenuItem.Name = "windowToolStripMenuItem";
-      this.windowToolStripMenuItem.Size = new System.Drawing.Size(78, 26);
+      this.windowToolStripMenuItem.Size = new System.Drawing.Size(78, 24);
       this.windowToolStripMenuItem.Text = "Window";
       // 
       // helpToolStripMenuItem
       // 
       this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-      this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+      this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
       this.helpToolStripMenuItem.Text = "Help";
       // 
       // cn
@@ -134,23 +132,19 @@
       this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
     "I;Initial Catalog=Company";
       // 
-      // ds
-      // 
-      this.ds.DataSetName = "NewDataSet";
-      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 450);
       this.Controls.Add(this.menuStrip1);
+      this.IsMdiContainer = true;
       this.MainMenuStrip = this.menuStrip1;
       this.Name = "MainForm";
       this.Text = "MainForm";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
       this.menuStrip1.ResumeLayout(false);
       this.menuStrip1.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.ds)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -170,7 +164,6 @@
     private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     private System.Windows.Forms.ToolStripMenuItem ordersToolStripMenuItem;
     private System.Data.OleDb.OleDbConnection cn;
-    private System.Data.DataSet ds;
   }
 }
 

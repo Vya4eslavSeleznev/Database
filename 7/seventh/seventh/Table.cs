@@ -17,20 +17,34 @@ namespace seventh
     {
       InitializeComponent();
 
-	  da = new OleDbDataAdapter("SELECT * FROM " + str, cn);
+	  da = new OleDbDataAdapter("SELECT * FROM " + str, db);
 	  DataTable tableCustomers = new DataTable(str);
 	  ds.Tables.Add(tableCustomers);
-	  dgTable.SetDataBinding(ds, str);
+
+	  dgTable.AutoGenerateColumns = true;
+	  dgTable.DataSource = ds;
+	  dgTable.DataMember = str;
+
 	  da.Fill(ds, str);
 	  dgTable.DataMember = str;
 	  Text = str;
-	  if (Text == "Orders") orders = true;
-	  if (Text == "Customers") customers = true;
+	  if (Text == "Orders")
+		orders = true;
 
-
+	  if (Text == "Customers")
+		customers = true;
 	}
 
 	private OleDbDataAdapter da;
     public static bool customers, orders;
+
+    private void Table_FormClosing(object sender, FormClosingEventArgs e)
+    {
+	  if (Text == "Orders")
+		orders = false;
+
+	  if (Text == "Customers")
+		customers = false;
+	}
   }
 }
