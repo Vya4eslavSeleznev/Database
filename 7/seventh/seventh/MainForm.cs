@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace seventh
@@ -86,6 +80,24 @@ namespace seventh
             tbl.Activate();
             break;
           }
+    }
+
+    private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      Close();
+    }
+
+    private void cn_StateChange(object sender, StateChangeEventArgs e)
+    {
+      if (e.CurrentState != ConnectionState.Closed)
+      {
+        tablesToolStripMenuItem.Enabled = true;
+      }
+    }
+
+    private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      MessageBox.Show("Seventh lab", " Attention!", MessageBoxButtons.OK);
     }
   }
 }

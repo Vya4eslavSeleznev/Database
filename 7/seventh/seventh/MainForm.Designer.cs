@@ -33,6 +33,8 @@
       this.customersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
       this.ordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+      this.addressToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
+      this.addressToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.wwToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -40,8 +42,6 @@
       this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.cn = new System.Data.OleDb.OleDbConnection();
-      this.addressToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
-      this.addressToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -56,7 +56,7 @@
       this.menuStrip1.Location = new System.Drawing.Point(0, 0);
       this.menuStrip1.MdiWindowListItem = this.windowToolStripMenuItem;
       this.menuStrip1.Name = "menuStrip1";
-      this.menuStrip1.Size = new System.Drawing.Size(800, 30);
+      this.menuStrip1.Size = new System.Drawing.Size(800, 28);
       this.menuStrip1.TabIndex = 0;
       this.menuStrip1.Text = "menuStrip1";
       // 
@@ -68,8 +68,9 @@
             this.ordersToolStripMenuItem,
             this.addressToolStripMenuItem,
             this.addressToolStripMenuItem1});
+      this.tablesToolStripMenuItem.Enabled = false;
       this.tablesToolStripMenuItem.Name = "tablesToolStripMenuItem";
-      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 26);
+      this.tablesToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
       this.tablesToolStripMenuItem.Text = "Tables";
       // 
       // customersToolStripMenuItem
@@ -91,6 +92,18 @@
       this.ordersToolStripMenuItem.Text = "Orders";
       this.ordersToolStripMenuItem.Click += new System.EventHandler(this.ordersToolStripMenuItem_Click);
       // 
+      // addressToolStripMenuItem
+      // 
+      this.addressToolStripMenuItem.Name = "addressToolStripMenuItem";
+      this.addressToolStripMenuItem.Size = new System.Drawing.Size(158, 6);
+      // 
+      // addressToolStripMenuItem1
+      // 
+      this.addressToolStripMenuItem1.Name = "addressToolStripMenuItem1";
+      this.addressToolStripMenuItem1.Size = new System.Drawing.Size(161, 26);
+      this.addressToolStripMenuItem1.Text = "Address";
+      this.addressToolStripMenuItem1.Click += new System.EventHandler(this.addressToolStripMenuItem1_Click);
+      // 
       // wwToolStripMenuItem
       // 
       this.wwToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -104,20 +117,21 @@
       // connectToolStripMenuItem
       // 
       this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-      this.connectToolStripMenuItem.Size = new System.Drawing.Size(146, 26);
+      this.connectToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
       this.connectToolStripMenuItem.Text = "Connect";
       this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
       // 
       // toolStripMenuItem1
       // 
       this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-      this.toolStripMenuItem1.Size = new System.Drawing.Size(143, 6);
+      this.toolStripMenuItem1.Size = new System.Drawing.Size(221, 6);
       // 
       // exitToolStripMenuItem
       // 
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
       this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
       this.exitToolStripMenuItem.Text = "Exit";
+      this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
       // 
       // windowToolStripMenuItem
       // 
@@ -130,23 +144,13 @@
       this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
       this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
       this.helpToolStripMenuItem.Text = "Help";
+      this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
       // 
       // cn
       // 
       this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
     "I;Initial Catalog=Company";
-      // 
-      // addressToolStripMenuItem
-      // 
-      this.addressToolStripMenuItem.Name = "addressToolStripMenuItem";
-      this.addressToolStripMenuItem.Size = new System.Drawing.Size(221, 6);
-      // 
-      // addressToolStripMenuItem1
-      // 
-      this.addressToolStripMenuItem1.Name = "addressToolStripMenuItem1";
-      this.addressToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
-      this.addressToolStripMenuItem1.Text = "Address";
-      this.addressToolStripMenuItem1.Click += new System.EventHandler(this.addressToolStripMenuItem1_Click);
+      this.cn.StateChange += new System.Data.StateChangeEventHandler(this.cn_StateChange);
       // 
       // MainForm
       // 
