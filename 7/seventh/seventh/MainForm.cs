@@ -22,7 +22,6 @@ namespace seventh
       {
         MessageBox.Show("Connection failed!!", "Connection", MessageBoxButtons.OK);
       }
-
     }
 
     private void customersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,7 +39,6 @@ namespace seventh
             tbl.Activate();
             break;
           }
-
     }
 
     private void ordersToolStripMenuItem_Click(object sender, EventArgs e)
