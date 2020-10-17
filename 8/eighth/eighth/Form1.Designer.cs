@@ -30,6 +30,8 @@
     {
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
+      this.lastButton = new System.Windows.Forms.Button();
+      this.firstButton = new System.Windows.Forms.Button();
       this.label5 = new System.Windows.Forms.Label();
       this.label4 = new System.Windows.Forms.Label();
       this.label3 = new System.Windows.Forms.Label();
@@ -55,8 +57,6 @@
       this.label6 = new System.Windows.Forms.Label();
       this.cn = new System.Data.OleDb.OleDbConnection();
       this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-      this.firstButton = new System.Windows.Forms.Button();
-      this.lastButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -100,6 +100,26 @@
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Orders";
       this.tabPage1.UseVisualStyleBackColor = true;
+      // 
+      // lastButton
+      // 
+      this.lastButton.Location = new System.Drawing.Point(407, 303);
+      this.lastButton.Name = "lastButton";
+      this.lastButton.Size = new System.Drawing.Size(297, 37);
+      this.lastButton.TabIndex = 14;
+      this.lastButton.Text = "Last";
+      this.lastButton.UseVisualStyleBackColor = true;
+      this.lastButton.Click += new System.EventHandler(this.lastButton_Click);
+      // 
+      // firstButton
+      // 
+      this.firstButton.Location = new System.Drawing.Point(22, 303);
+      this.firstButton.Name = "firstButton";
+      this.firstButton.Size = new System.Drawing.Size(297, 37);
+      this.firstButton.TabIndex = 13;
+      this.firstButton.Text = "First";
+      this.firstButton.UseVisualStyleBackColor = true;
+      this.firstButton.Click += new System.EventHandler(this.firstButton_Click);
       // 
       // label5
       // 
@@ -310,26 +330,6 @@
       this.label6.TabIndex = 0;
       this.label6.Text = "Category Name:";
       // 
-      // firstButton
-      // 
-      this.firstButton.Location = new System.Drawing.Point(22, 303);
-      this.firstButton.Name = "firstButton";
-      this.firstButton.Size = new System.Drawing.Size(297, 37);
-      this.firstButton.TabIndex = 13;
-      this.firstButton.Text = "First";
-      this.firstButton.UseVisualStyleBackColor = true;
-      this.firstButton.Click += new System.EventHandler(this.firstButton_Click);
-      // 
-      // lastButton
-      // 
-      this.lastButton.Location = new System.Drawing.Point(407, 303);
-      this.lastButton.Name = "lastButton";
-      this.lastButton.Size = new System.Drawing.Size(297, 37);
-      this.lastButton.TabIndex = 14;
-      this.lastButton.Text = "Last";
-      this.lastButton.UseVisualStyleBackColor = true;
-      this.lastButton.Click += new System.EventHandler(this.lastButton_Click);
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -338,6 +338,7 @@
       this.Controls.Add(this.tabControl1);
       this.Name = "Form1";
       this.Text = "Form1";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.tabPage1.PerformLayout();

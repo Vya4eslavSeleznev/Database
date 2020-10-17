@@ -29,7 +29,7 @@ namespace eighth
       cn.ConnectionString = strConn;
       dSet = new DataSet();
 
-      cn.Close();
+      cn.Open();
 
       DataTable dtTmp;
       dtTmp = dSet.Tables.Add("Order Details");
@@ -41,15 +41,16 @@ namespace eighth
       dtTmp.Columns.Add("ItemTotal", typeof(Decimal),
               "UnitPrice*Quantity*(1-Discount)");
 
-      //dgOrderDetails.SetDataBinding(dSet, "Order Details");
       dgOrderDetails.DataSource = dtTmp;
 
-      String strSQL = "SELECT * FROM Categories";
+      string strSQL = "SELECT * FROM Categories";
 
       dAdapter = new OleDbDataAdapter(strSQL, strConn);
       dAdapter.Fill(dSet, "Categories");
 
-      //dgCategories.SetDataBinding(dSet, "Categories");
+      dgCategories.AutoGenerateColumns = true;
+      dgCategories.DataSource = dSet;
+      dgCategories.DataMember = "Categories";
     }
     private void ShowRow()
     {
@@ -62,29 +63,30 @@ namespace eighth
       ShipCountry.Text = dRow["ShipCountry"].ToString();
     }
 
-    private void showButton_Click(object sender, EventArgs e)
+    private void FillDataTable()
     {
-      String strSQL = "SELECT OrderID, CustomerID, ShipName, " +
+      var strSQL = "SELECT OrderID, CustomerID, ShipName, " +
                         "ShipCity, ShipCountry FROM Orders";
       dAdapter = new OleDbDataAdapter(strSQL, strConn);
       dAdapter.Fill(dSet, "Orders");
       dTable = dSet.Tables["Orders"];
+    }
+
+    private void showButton_Click(object sender, EventArgs e)
+    {
+      FillDataTable();
       ShowRow();
     }
 
     private void nextButton_Click(object sender, EventArgs e)
     {
-      try
+      if (dTable == null)
+        FillDataTable();
+
+      if (iRowID < dSet.Tables["Orders"].Rows.Count - 1)
       {
-        if (iRowID < dSet.Tables["Orders"].Rows.Count - 1)
-        {
-          iRowID++;
-          ShowRow();
-        }
-      }
-      catch (NullReferenceException)
-      {
-        return;
+        iRowID++;
+        ShowRow();
       }
     }
 
@@ -97,34 +99,74 @@ namespace eighth
       }
     }
 
+    private int count = 0;
+
     private void showOrderDetailsButton_Click(object sender, EventArgs e)
     {
       String strSQL = "SELECT * FROM [Order Details]";
 
       dAdapter = new OleDbDataAdapter(strSQL, strConn);
-      dAdapter.Fill(dSet, "Order Details");
+
+      if (count == 0)
+      {
+        dAdapter.Fill(dSet, "Order Details");
+        count++;
+      }
     }
 
     private void addButton_Click(object sender, EventArgs e)
     {
       dRow = dSet.Tables["Categories"].NewRow();
 
+      if (CategoryName.Text == "" || Description.Text == "")
+      {
+        MessageBox.Show("Empty value");
+        return;
+      }
+
       dRow["CategoryName"] = CategoryName.Text;
       dRow["Description"] = Description.Text;
       dSet.Tables["Categories"].Rows.Add(dRow);
+
+      var sql = "INSERT INTO Categories (CategoryName, Description) VALUES (?, ?)";
+      //$"('{CategoryName.Text}', '{Description.Text}')";
+
+      using (var cmd = new OleDbCommand(sql, cn))
+      {
+        cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+        cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+
+        cmd.Parameters[0].Value = CategoryName.Text;
+        cmd.Parameters[1].Value = Description.Text;
+
+        cmd.ExecuteNonQuery();
+      }
+
+      dSet.AcceptChanges();
       MessageBox.Show("New record created in DataTable!");
     }
 
     private void firstButton_Click(object sender, EventArgs e)
     {
+      if (dTable == null)
+        FillDataTable();
+
       iRowID = 0;
       ShowRow();
     }
 
     private void lastButton_Click(object sender, EventArgs e)
     {
+      if (dTable == null)
+        FillDataTable();
+
       iRowID = dSet.Tables["Orders"].Rows.Count - 1;
       ShowRow();
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      cn.Close();
     }
   }
 }
