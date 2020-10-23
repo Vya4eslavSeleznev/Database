@@ -28,7 +28,6 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.components = new System.ComponentModel.Container();
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
       this.City = new System.Windows.Forms.TextBox();
@@ -40,30 +39,32 @@
       this.label3 = new System.Windows.Forms.Label();
       this.label2 = new System.Windows.Forms.Label();
       this.Phone = new System.Windows.Forms.TextBox();
-      this.tabPage2 = new System.Windows.Forms.TabPage();
-      this.cn = new System.Data.OleDb.OleDbConnection();
-      this.label6 = new System.Windows.Forms.Label();
-      this.label7 = new System.Windows.Forms.Label();
-      this.label8 = new System.Windows.Forms.Label();
-      this.label9 = new System.Windows.Forms.Label();
-      this.label10 = new System.Windows.Forms.Label();
-      this.textBox4 = new System.Windows.Forms.TextBox();
-      this.textBox5 = new System.Windows.Forms.TextBox();
-      this.addButton = new System.Windows.Forms.Button();
-      this.dgOD = new System.Windows.Forms.DataGridView();
       this.ContactName = new System.Windows.Forms.TextBox();
       this.CompanyName = new System.Windows.Forms.TextBox();
-      this.cbCID = new System.Windows.Forms.ComboBox();
-      this.cbEID = new System.Windows.Forms.ComboBox();
+      this.tabPage2 = new System.Windows.Forms.TabPage();
       this.cbSV = new System.Windows.Forms.ComboBox();
+      this.cbEID = new System.Windows.Forms.ComboBox();
+      this.cbCID = new System.Windows.Forms.ComboBox();
+      this.dgOD = new System.Windows.Forms.DataGridView();
       this.dsOD = new ninth.dsOrderDetails();
-      this.dsODBindingSource = new System.Windows.Forms.BindingSource(this.components);
+      this.addButton = new System.Windows.Forms.Button();
+      this.textBox5 = new System.Windows.Forms.TextBox();
+      this.OrderDate = new System.Windows.Forms.TextBox();
+      this.label10 = new System.Windows.Forms.Label();
+      this.label9 = new System.Windows.Forms.Label();
+      this.label8 = new System.Windows.Forms.Label();
+      this.label7 = new System.Windows.Forms.Label();
+      this.label6 = new System.Windows.Forms.Label();
+      this.cn = new System.Data.OleDb.OleDbConnection();
+      this.productIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.unitPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.discountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dgOD)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsOD)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dsODBindingSource)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -173,112 +174,6 @@
       this.Phone.Size = new System.Drawing.Size(405, 22);
       this.Phone.TabIndex = 3;
       // 
-      // tabPage2
-      // 
-      this.tabPage2.Controls.Add(this.cbSV);
-      this.tabPage2.Controls.Add(this.cbEID);
-      this.tabPage2.Controls.Add(this.cbCID);
-      this.tabPage2.Controls.Add(this.dgOD);
-      this.tabPage2.Controls.Add(this.addButton);
-      this.tabPage2.Controls.Add(this.textBox5);
-      this.tabPage2.Controls.Add(this.textBox4);
-      this.tabPage2.Controls.Add(this.label10);
-      this.tabPage2.Controls.Add(this.label9);
-      this.tabPage2.Controls.Add(this.label8);
-      this.tabPage2.Controls.Add(this.label7);
-      this.tabPage2.Controls.Add(this.label6);
-      this.tabPage2.Location = new System.Drawing.Point(4, 25);
-      this.tabPage2.Name = "tabPage2";
-      this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage2.Size = new System.Drawing.Size(795, 420);
-      this.tabPage2.TabIndex = 1;
-      this.tabPage2.Text = "Add Order";
-      this.tabPage2.UseVisualStyleBackColor = true;
-      // 
-      // cn
-      // 
-      this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
-    "I;Initial Catalog=Company";
-      // 
-      // label6
-      // 
-      this.label6.AutoSize = true;
-      this.label6.Location = new System.Drawing.Point(21, 27);
-      this.label6.Name = "label6";
-      this.label6.Size = new System.Drawing.Size(89, 17);
-      this.label6.TabIndex = 0;
-      this.label6.Text = "Customer ID:";
-      // 
-      // label7
-      // 
-      this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(21, 71);
-      this.label7.Name = "label7";
-      this.label7.Size = new System.Drawing.Size(84, 17);
-      this.label7.TabIndex = 1;
-      this.label7.Text = "Emploee ID:";
-      // 
-      // label8
-      // 
-      this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(21, 117);
-      this.label8.Name = "label8";
-      this.label8.Size = new System.Drawing.Size(64, 17);
-      this.label8.TabIndex = 2;
-      this.label8.Text = "Ship Via:";
-      // 
-      // label9
-      // 
-      this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(467, 27);
-      this.label9.Name = "label9";
-      this.label9.Size = new System.Drawing.Size(83, 17);
-      this.label9.TabIndex = 3;
-      this.label9.Text = "Order Date:";
-      // 
-      // label10
-      // 
-      this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(467, 71);
-      this.label10.Name = "label10";
-      this.label10.Size = new System.Drawing.Size(76, 17);
-      this.label10.TabIndex = 4;
-      this.label10.Text = "Ship Price:";
-      // 
-      // textBox4
-      // 
-      this.textBox4.Location = new System.Drawing.Point(572, 22);
-      this.textBox4.Name = "textBox4";
-      this.textBox4.Size = new System.Drawing.Size(201, 22);
-      this.textBox4.TabIndex = 8;
-      // 
-      // textBox5
-      // 
-      this.textBox5.Location = new System.Drawing.Point(572, 71);
-      this.textBox5.Name = "textBox5";
-      this.textBox5.Size = new System.Drawing.Size(201, 22);
-      this.textBox5.TabIndex = 9;
-      // 
-      // addButton
-      // 
-      this.addButton.Location = new System.Drawing.Point(470, 99);
-      this.addButton.Name = "addButton";
-      this.addButton.Size = new System.Drawing.Size(303, 40);
-      this.addButton.TabIndex = 10;
-      this.addButton.Text = "Add";
-      this.addButton.UseVisualStyleBackColor = true;
-      this.addButton.Click += new System.EventHandler(this.addButton_Click);
-      // 
-      // dgOD
-      // 
-      this.dgOD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dgOD.Location = new System.Drawing.Point(8, 148);
-      this.dgOD.Name = "dgOD";
-      this.dgOD.RowHeadersWidth = 51;
-      this.dgOD.RowTemplate.Height = 24;
-      this.dgOD.Size = new System.Drawing.Size(776, 271);
-      this.dgOD.TabIndex = 11;
-      // 
       // ContactName
       // 
       this.ContactName.Location = new System.Drawing.Point(213, 72);
@@ -293,21 +188,27 @@
       this.CompanyName.Size = new System.Drawing.Size(406, 22);
       this.CompanyName.TabIndex = 1;
       // 
-      // cbCID
+      // tabPage2
       // 
-      this.cbCID.FormattingEnabled = true;
-      this.cbCID.Location = new System.Drawing.Point(171, 20);
-      this.cbCID.Name = "cbCID";
-      this.cbCID.Size = new System.Drawing.Size(201, 24);
-      this.cbCID.TabIndex = 12;
-      // 
-      // cbEID
-      // 
-      this.cbEID.FormattingEnabled = true;
-      this.cbEID.Location = new System.Drawing.Point(171, 68);
-      this.cbEID.Name = "cbEID";
-      this.cbEID.Size = new System.Drawing.Size(201, 24);
-      this.cbEID.TabIndex = 13;
+      this.tabPage2.Controls.Add(this.cbSV);
+      this.tabPage2.Controls.Add(this.cbEID);
+      this.tabPage2.Controls.Add(this.cbCID);
+      this.tabPage2.Controls.Add(this.dgOD);
+      this.tabPage2.Controls.Add(this.addButton);
+      this.tabPage2.Controls.Add(this.textBox5);
+      this.tabPage2.Controls.Add(this.OrderDate);
+      this.tabPage2.Controls.Add(this.label10);
+      this.tabPage2.Controls.Add(this.label9);
+      this.tabPage2.Controls.Add(this.label8);
+      this.tabPage2.Controls.Add(this.label7);
+      this.tabPage2.Controls.Add(this.label6);
+      this.tabPage2.Location = new System.Drawing.Point(4, 25);
+      this.tabPage2.Name = "tabPage2";
+      this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage2.Size = new System.Drawing.Size(795, 420);
+      this.tabPage2.TabIndex = 1;
+      this.tabPage2.Text = "Add Order";
+      this.tabPage2.UseVisualStyleBackColor = true;
       // 
       // cbSV
       // 
@@ -317,15 +218,150 @@
       this.cbSV.Size = new System.Drawing.Size(201, 24);
       this.cbSV.TabIndex = 14;
       // 
+      // cbEID
+      // 
+      this.cbEID.FormattingEnabled = true;
+      this.cbEID.Location = new System.Drawing.Point(171, 68);
+      this.cbEID.Name = "cbEID";
+      this.cbEID.Size = new System.Drawing.Size(201, 24);
+      this.cbEID.TabIndex = 13;
+      // 
+      // cbCID
+      // 
+      this.cbCID.FormattingEnabled = true;
+      this.cbCID.Location = new System.Drawing.Point(171, 20);
+      this.cbCID.Name = "cbCID";
+      this.cbCID.Size = new System.Drawing.Size(201, 24);
+      this.cbCID.TabIndex = 12;
+      // 
+      // dgOD
+      // 
+      this.dgOD.AutoGenerateColumns = false;
+      this.dgOD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.dgOD.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.productIDDataGridViewTextBoxColumn,
+            this.unitPriceDataGridViewTextBoxColumn,
+            this.quantityDataGridViewTextBoxColumn,
+            this.discountDataGridViewTextBoxColumn});
+      this.dgOD.DataMember = "OrderDetails";
+      this.dgOD.DataSource = this.dsOD;
+      this.dgOD.Location = new System.Drawing.Point(8, 148);
+      this.dgOD.Name = "dgOD";
+      this.dgOD.RowHeadersWidth = 51;
+      this.dgOD.RowTemplate.Height = 24;
+      this.dgOD.Size = new System.Drawing.Size(776, 271);
+      this.dgOD.TabIndex = 11;
+      // 
       // dsOD
       // 
       this.dsOD.DataSetName = "dsOrderDetails";
       this.dsOD.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
       // 
-      // dsODBindingSource
+      // addButton
       // 
-      this.dsODBindingSource.DataSource = this.dsOD;
-      this.dsODBindingSource.Position = 0;
+      this.addButton.Location = new System.Drawing.Point(470, 99);
+      this.addButton.Name = "addButton";
+      this.addButton.Size = new System.Drawing.Size(303, 40);
+      this.addButton.TabIndex = 10;
+      this.addButton.Text = "Add";
+      this.addButton.UseVisualStyleBackColor = true;
+      this.addButton.Click += new System.EventHandler(this.addButton_Click);
+      // 
+      // textBox5
+      // 
+      this.textBox5.Location = new System.Drawing.Point(572, 71);
+      this.textBox5.Name = "textBox5";
+      this.textBox5.Size = new System.Drawing.Size(201, 22);
+      this.textBox5.TabIndex = 9;
+      // 
+      // OrderDate
+      // 
+      this.OrderDate.Location = new System.Drawing.Point(572, 22);
+      this.OrderDate.Name = "OrderDate";
+      this.OrderDate.Size = new System.Drawing.Size(201, 22);
+      this.OrderDate.TabIndex = 8;
+      // 
+      // label10
+      // 
+      this.label10.AutoSize = true;
+      this.label10.Location = new System.Drawing.Point(467, 71);
+      this.label10.Name = "label10";
+      this.label10.Size = new System.Drawing.Size(76, 17);
+      this.label10.TabIndex = 4;
+      this.label10.Text = "Ship Price:";
+      // 
+      // label9
+      // 
+      this.label9.AutoSize = true;
+      this.label9.Location = new System.Drawing.Point(467, 27);
+      this.label9.Name = "label9";
+      this.label9.Size = new System.Drawing.Size(83, 17);
+      this.label9.TabIndex = 3;
+      this.label9.Text = "Order Date:";
+      // 
+      // label8
+      // 
+      this.label8.AutoSize = true;
+      this.label8.Location = new System.Drawing.Point(21, 117);
+      this.label8.Name = "label8";
+      this.label8.Size = new System.Drawing.Size(64, 17);
+      this.label8.TabIndex = 2;
+      this.label8.Text = "Ship Via:";
+      // 
+      // label7
+      // 
+      this.label7.AutoSize = true;
+      this.label7.Location = new System.Drawing.Point(21, 71);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(84, 17);
+      this.label7.TabIndex = 1;
+      this.label7.Text = "Emploee ID:";
+      // 
+      // label6
+      // 
+      this.label6.AutoSize = true;
+      this.label6.Location = new System.Drawing.Point(21, 27);
+      this.label6.Name = "label6";
+      this.label6.Size = new System.Drawing.Size(89, 17);
+      this.label6.TabIndex = 0;
+      this.label6.Text = "Customer ID:";
+      // 
+      // cn
+      // 
+      this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Company";
+      // 
+      // productIDDataGridViewTextBoxColumn
+      // 
+      this.productIDDataGridViewTextBoxColumn.DataPropertyName = "ProductID";
+      this.productIDDataGridViewTextBoxColumn.HeaderText = "ProductID";
+      this.productIDDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.productIDDataGridViewTextBoxColumn.Name = "productIDDataGridViewTextBoxColumn";
+      this.productIDDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // unitPriceDataGridViewTextBoxColumn
+      // 
+      this.unitPriceDataGridViewTextBoxColumn.DataPropertyName = "UnitPrice";
+      this.unitPriceDataGridViewTextBoxColumn.HeaderText = "UnitPrice";
+      this.unitPriceDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.unitPriceDataGridViewTextBoxColumn.Name = "unitPriceDataGridViewTextBoxColumn";
+      this.unitPriceDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // quantityDataGridViewTextBoxColumn
+      // 
+      this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+      this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+      this.quantityDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+      this.quantityDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // discountDataGridViewTextBoxColumn
+      // 
+      this.discountDataGridViewTextBoxColumn.DataPropertyName = "Discount";
+      this.discountDataGridViewTextBoxColumn.HeaderText = "Discount";
+      this.discountDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.discountDataGridViewTextBoxColumn.Name = "discountDataGridViewTextBoxColumn";
+      this.discountDataGridViewTextBoxColumn.Width = 125;
       // 
       // Form1
       // 
@@ -343,7 +379,6 @@
       this.tabPage2.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dgOD)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsOD)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dsODBindingSource)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -364,7 +399,7 @@
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.TextBox textBox5;
-    private System.Windows.Forms.TextBox textBox4;
+    private System.Windows.Forms.TextBox OrderDate;
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.Label label9;
     private System.Windows.Forms.Label label8;
@@ -378,7 +413,10 @@
     private System.Windows.Forms.ComboBox cbEID;
     private System.Windows.Forms.ComboBox cbCID;
     private dsOrderDetails dsOD;
-    private System.Windows.Forms.BindingSource dsODBindingSource;
+    private System.Windows.Forms.DataGridViewTextBoxColumn productIDDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn unitPriceDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn quantityDataGridViewTextBoxColumn;
+    private System.Windows.Forms.DataGridViewTextBoxColumn discountDataGridViewTextBoxColumn;
   }
 }
 

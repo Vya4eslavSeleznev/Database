@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 
@@ -14,10 +8,10 @@ namespace ninth
 {
   public partial class Form1 : Form
   {
-    public Form1()
-    {
-      InitializeComponent();
-      cn.Open();
+	public Form1()
+	{
+	  InitializeComponent();
+	  cn.Open();
 
 	  OleDbCommand IDS = new OleDbCommand("SELECT CustomerID FROM Customers", cn);
 	  OleDbDataReader rdr = IDS.ExecuteReader();
@@ -41,16 +35,36 @@ namespace ninth
 	  while (rdr.Read())
 		cbSV.Items.Add(rdr["ShipperID"] + " - " + rdr["CompanyName"]);
 
+	  RefreshDataSet();
+
 	  rdr.Close();
 	}
 
-	private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+	private void RefreshDataSet()
     {
-      cn.Close();
-    }
+	  var orders = new OleDbCommand("SELECT [OrderID], [ProductID], [UnitPrice], [Quantity], [Discount] FROM [Order Details]", cn);
+	  var dataAdapter = new OleDbDataAdapter(orders);
 
-    private void Insert_Click(object sender, EventArgs e)
-    {
+	  dsOD.Clear();
+
+	  dataAdapter.Fill(dsOD, "OrderDetails");
+	}
+
+	private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+	{
+	  cn.Close();
+	}
+
+	private void Insert_Click(object sender, EventArgs e)
+	{
+	  if (string.IsNullOrEmpty(CompanyName.Text) || string.IsNullOrEmpty(ContactName.Text)
+	   || string.IsNullOrEmpty(Phone.Text) || string.IsNullOrEmpty(Country.Text)
+	   || string.IsNullOrEmpty(City.Text))
+	  {
+		MessageBox.Show("Empty");
+		return;
+	  }
+
 	  String strSQL = "INSERT INTO Customers (CompanyName, " +
 	  "ContactName, Phone, Country, City) VALUES (?, ?, ?, ?, ?)";
 
@@ -62,13 +76,13 @@ namespace ninth
 	  cmdIC.Parameters.Add("@p4", OleDbType.VarChar, 40);
 	  cmdIC.Parameters.Add("@p5", OleDbType.VarChar, 40);
 
-	  if(CompanyName.Text == "" || ContactName.Text == "" ||
+	  if (CompanyName.Text == "" || ContactName.Text == "" ||
 		 Phone.Text == "" || Country.Text == "" ||
 		 City.Text == "")
-      {
+	  {
 		MessageBox.Show("Null value in text box");
 		return;
-      }
+	  }
 
 	  cmdIC.Parameters[0].Value = CompanyName.Text;
 	  cmdIC.Parameters[1].Value = ContactName.Text;
@@ -93,10 +107,18 @@ namespace ninth
 	  }
 	}
 
-    private void addButton_Click(object sender, EventArgs e)
-    {
+	private void addButton_Click(object sender, EventArgs e)
+	{
+	  if (string.IsNullOrEmpty(OrderDate.Text) || string.IsNullOrEmpty(textBox5.Text)
+	   || string.IsNullOrEmpty(cbCID.Text) || string.IsNullOrEmpty(cbEID.Text)
+	   || string.IsNullOrEmpty(cbSV.Text))
+	  {
+		MessageBox.Show("Empty");
+		return;
+	  }
+
 	  String strSQL = "INSERT INTO Orders (CustomerID, EmployeeID, " +
-	  "ShipVia, OrderDate) VALUES (?, ?, ?, ?)";
+		"ShipVia, OrderDate) VALUES (?, ?, ?, ?)";
 	  OleDbCommand cmdIC = new OleDbCommand(strSQL, cn);
 
 	  cmdIC.Parameters.Add("@CID", OleDbType.Integer);
@@ -118,17 +140,26 @@ namespace ninth
 		int iRowAff = cmdIC.ExecuteNonQuery();
 		MessageBox.Show("Orders: rows affected - " + iRowAff.ToString());
 
-		cbCID.SelectedText = "";
-		cbEID.SelectedText = "";
-		cbSV.SelectedText = "";
+		//cbCID.SelectedText = "";
+		//cbEID.SelectedText = "";
+		//cbSV.SelectedText = "";
 		OrderDate.Text = "";
+		textBox5.Text = "";
 
 		cmdIC.Dispose();
 		iRowAff = 0;
 
-		strSQL = "DECLARE @OID int SELECT @OID = max(OrderID) FROM Orders INSERT INTO [Order Details] (OrderID, ProductID, UnitPrice, Quantity, Discount) VALUES (@OID, ?, ?, ?, ?)";
+		OleDbCommand IDS = new OleDbCommand("SELECT Max(OrderID) AS OrderID FROM Orders", cn);
+		OleDbDataReader rdr = IDS.ExecuteReader();
+		rdr.Read();
+		var orderId = rdr["OrderID"];
+
+		strSQL = "INSERT INTO [Order Details] (OrderID, ProductID, UnitPrice, Quantity, Discount)" +
+		"VALUES (?, ?, ?, ?, ?)";
 
 		cmdIC = new OleDbCommand(strSQL, cn);
+
+		cmdIC.Parameters.Add(new OleDbParameter("@OrderId", orderId));
 
 		cmdIC.Parameters.Add("@PID", OleDbType.Integer);
 		cmdIC.Parameters.Add("@UP", OleDbType.Decimal);
@@ -140,18 +171,21 @@ namespace ninth
 		for (iRowID = 0; iRowID < dsOD.Tables["OrderDetails"].Rows.Count; iRowID++)
 		{
 		  DataRow dRow = dsOD.Tables["OrderDetails"].Rows[iRowID];
-		  dcmdIC.Parameters[0].Value = dRow["ProductID"].ToString();
-		  cmdIC.Parameters[1].Value = dRow["UnitPrice"].ToString();
-		  cmdIC.Parameters[2].Value = dRow["Quantity"].ToString();
-		  cmdIC.Parameters[3].Value = dRow["Discount"].ToString();
+		  cmdIC.Parameters[1].Value = dRow["ProductID"].ToString();
+		  cmdIC.Parameters[2].Value = dRow["UnitPrice"].ToString();
+		  cmdIC.Parameters[3].Value = dRow["Quantity"].ToString();
+		  cmdIC.Parameters[4].Value = dRow["Discount"].ToString();
 
 		  iRowAff += cmdIC.ExecuteNonQuery();
 		}
 
+		RefreshDataSet();
 		MessageBox.Show("Order Details: rows affected - " + iRowAff.ToString());
 	  }
-	  catch (OleDbException exc) MessageBox.Show(exc.ToString());
-
+	  catch (OleDbException exc)
+	  {
+		MessageBox.Show(exc.ToString());
+	  }
 	  }
 	}
 }
