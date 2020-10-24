@@ -46,6 +46,10 @@
       this.cbEID = new System.Windows.Forms.ComboBox();
       this.cbCID = new System.Windows.Forms.ComboBox();
       this.dgOD = new System.Windows.Forms.DataGridView();
+      this.productIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.unitPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.discountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.dsOD = new ninth.dsOrderDetails();
       this.addButton = new System.Windows.Forms.Button();
       this.textBox5 = new System.Windows.Forms.TextBox();
@@ -56,10 +60,6 @@
       this.label7 = new System.Windows.Forms.Label();
       this.label6 = new System.Windows.Forms.Label();
       this.cn = new System.Data.OleDb.OleDbConnection();
-      this.productIDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.unitPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.quantityDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.discountDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -252,6 +252,38 @@
       this.dgOD.Size = new System.Drawing.Size(776, 271);
       this.dgOD.TabIndex = 11;
       // 
+      // productIDDataGridViewTextBoxColumn
+      // 
+      this.productIDDataGridViewTextBoxColumn.DataPropertyName = "ProductID";
+      this.productIDDataGridViewTextBoxColumn.HeaderText = "ProductID";
+      this.productIDDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.productIDDataGridViewTextBoxColumn.Name = "productIDDataGridViewTextBoxColumn";
+      this.productIDDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // unitPriceDataGridViewTextBoxColumn
+      // 
+      this.unitPriceDataGridViewTextBoxColumn.DataPropertyName = "UnitPrice";
+      this.unitPriceDataGridViewTextBoxColumn.HeaderText = "UnitPrice";
+      this.unitPriceDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.unitPriceDataGridViewTextBoxColumn.Name = "unitPriceDataGridViewTextBoxColumn";
+      this.unitPriceDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // quantityDataGridViewTextBoxColumn
+      // 
+      this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
+      this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
+      this.quantityDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
+      this.quantityDataGridViewTextBoxColumn.Width = 125;
+      // 
+      // discountDataGridViewTextBoxColumn
+      // 
+      this.discountDataGridViewTextBoxColumn.DataPropertyName = "Discount";
+      this.discountDataGridViewTextBoxColumn.HeaderText = "Discount";
+      this.discountDataGridViewTextBoxColumn.MinimumWidth = 6;
+      this.discountDataGridViewTextBoxColumn.Name = "discountDataGridViewTextBoxColumn";
+      this.discountDataGridViewTextBoxColumn.Width = 125;
+      // 
       // dsOD
       // 
       this.dsOD.DataSetName = "dsOrderDetails";
@@ -330,38 +362,6 @@
       // 
       this.cn.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
     "I;Initial Catalog=Company";
-      // 
-      // productIDDataGridViewTextBoxColumn
-      // 
-      this.productIDDataGridViewTextBoxColumn.DataPropertyName = "ProductID";
-      this.productIDDataGridViewTextBoxColumn.HeaderText = "ProductID";
-      this.productIDDataGridViewTextBoxColumn.MinimumWidth = 6;
-      this.productIDDataGridViewTextBoxColumn.Name = "productIDDataGridViewTextBoxColumn";
-      this.productIDDataGridViewTextBoxColumn.Width = 125;
-      // 
-      // unitPriceDataGridViewTextBoxColumn
-      // 
-      this.unitPriceDataGridViewTextBoxColumn.DataPropertyName = "UnitPrice";
-      this.unitPriceDataGridViewTextBoxColumn.HeaderText = "UnitPrice";
-      this.unitPriceDataGridViewTextBoxColumn.MinimumWidth = 6;
-      this.unitPriceDataGridViewTextBoxColumn.Name = "unitPriceDataGridViewTextBoxColumn";
-      this.unitPriceDataGridViewTextBoxColumn.Width = 125;
-      // 
-      // quantityDataGridViewTextBoxColumn
-      // 
-      this.quantityDataGridViewTextBoxColumn.DataPropertyName = "Quantity";
-      this.quantityDataGridViewTextBoxColumn.HeaderText = "Quantity";
-      this.quantityDataGridViewTextBoxColumn.MinimumWidth = 6;
-      this.quantityDataGridViewTextBoxColumn.Name = "quantityDataGridViewTextBoxColumn";
-      this.quantityDataGridViewTextBoxColumn.Width = 125;
-      // 
-      // discountDataGridViewTextBoxColumn
-      // 
-      this.discountDataGridViewTextBoxColumn.DataPropertyName = "Discount";
-      this.discountDataGridViewTextBoxColumn.HeaderText = "Discount";
-      this.discountDataGridViewTextBoxColumn.MinimumWidth = 6;
-      this.discountDataGridViewTextBoxColumn.Name = "discountDataGridViewTextBoxColumn";
-      this.discountDataGridViewTextBoxColumn.Width = 125;
       // 
       // Form1
       // 

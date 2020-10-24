@@ -61,7 +61,7 @@ namespace ninth
 	   || string.IsNullOrEmpty(Phone.Text) || string.IsNullOrEmpty(Country.Text)
 	   || string.IsNullOrEmpty(City.Text))
 	  {
-		MessageBox.Show("Empty");
+		MessageBox.Show("Null value in text box");
 		return;
 	  }
 
@@ -75,14 +75,6 @@ namespace ninth
 	  cmdIC.Parameters.Add("@p3", OleDbType.VarChar, 40);
 	  cmdIC.Parameters.Add("@p4", OleDbType.VarChar, 40);
 	  cmdIC.Parameters.Add("@p5", OleDbType.VarChar, 40);
-
-	  if (CompanyName.Text == "" || ContactName.Text == "" ||
-		 Phone.Text == "" || Country.Text == "" ||
-		 City.Text == "")
-	  {
-		MessageBox.Show("Null value in text box");
-		return;
-	  }
 
 	  cmdIC.Parameters[0].Value = CompanyName.Text;
 	  cmdIC.Parameters[1].Value = ContactName.Text;
@@ -140,9 +132,6 @@ namespace ninth
 		int iRowAff = cmdIC.ExecuteNonQuery();
 		MessageBox.Show("Orders: rows affected - " + iRowAff.ToString());
 
-		//cbCID.SelectedText = "";
-		//cbEID.SelectedText = "";
-		//cbSV.SelectedText = "";
 		OrderDate.Text = "";
 		textBox5.Text = "";
 
@@ -186,6 +175,6 @@ namespace ninth
 	  {
 		MessageBox.Show(exc.ToString());
 	  }
-	  }
 	}
+  }
 }
