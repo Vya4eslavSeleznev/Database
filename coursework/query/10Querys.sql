@@ -1,40 +1,38 @@
 USE Bank;
 
 /*1*/
-SELECT *
-FROM Customer
-JOIN CustomerCredit ON Customer.CustomerId = CustomerCredit.CustomerId
-JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
-JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
-WHERE EXISTS
-(
-	SELECT 
-)
-
-SELECT *
+SELECT DISTINCT FirstName, LastName, PassportNum, Birthday, Phone
 FROM Customer
 JOIN Balance ON Customer.BalanceId = Balance.BalanceId
+JOIN BalanceCards ON Balance.CardId = BalanceCards.CardId
+JOIN CardServices ON BalanceCards.CardId = CardServices.CardId
 WHERE EXISTS
 (
-	SELECT *
-	FROM CustomerCredit
-	WHERE Customer.CustomerId = CustomerCredit.CustomerId
+	SELECT ServiceId
+	FROM CardServices
+	WHERE ServiceId =
+	(
+		SELECT CardServiceId
+		FROM CardService
+		WHERE NAME = 'SMS'
+	)
 )
-
-SELECT *
+--=======================================================
+SELECT DISTINCT FirstName, LastName, PassportNum, Birthday, Phone
 FROM Customer
 JOIN Balance ON Customer.BalanceId = Balance.BalanceId
+JOIN BalanceCards ON Balance.CardId = BalanceCards.CardId
+JOIN CardServices ON BalanceCards.CardId = CardServices.CardId
 WHERE EXISTS
 (
-	SELECT *
-	FROM BalanceCards
-	WHERE Balance.CardId = BalanceCards.CardId
+	SELECT ServiceId
+	FROM CardServices
+	WHERE ServiceId = 1
 )
 
 /*2*/
-SELECT Name, SUM(CustomerSecurities.Count)
+SELECT Name, SUM(CustomerSecurities.Count), [Percent rate]
 FROM CustomerSecurities
-JOIN InfoSecurities
-ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
-GROUP BY Name
+JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
+GROUP BY Name, [Percent rate]
 ORDER BY COUNT(*) DESC
