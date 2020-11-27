@@ -1,6 +1,7 @@
 USE Bank;
 
 /*1*/
+--Клиенты, у которых есть счет(баланс) с карточкой и с услугой
 SELECT DISTINCT FirstName, LastName, PassportNum, Birthday, Phone
 FROM Customer
 JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
@@ -12,6 +13,7 @@ JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
 WHERE CardService.[Name] = 'SMS';
 
 /*2*/
+--Топ акций: количество купленных, процентная ставка
 SELECT Name, SUM(CustomerSecurities.Count), [Percent rate]
 FROM CustomerSecurities
 JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
@@ -22,7 +24,7 @@ ORDER BY COUNT(*) DESC
 --Самые популярные вклады
 SELECT TOP(10)
 InfoDeposit.DepositName,
-COUNT(*)
+COUNT(*) AS DepositCount
 FROM InfoDeposit
 JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId
 GROUP BY InfoDeposit.DepositName
@@ -41,7 +43,7 @@ GROUP BY InfoDeposit.DepositName, InfoDeposit.[Percent]
 SELECT Customer.FirstName, Customer.LastName, Customer.Phone
 FROM Customer
 LEFT JOIN
-(	
+(
 	SELECT CustomerBalances.CustomerId
 	FROM Balance
 	JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
@@ -62,14 +64,15 @@ JOIN Operation ON Article.ArticleId = Operation.ArticleId
 JOIN Balance ON Operation.BalanceId = Balance.BalanceId
 JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
 JOIN Currency ON Operation.CurrencyId = Currency.CurrencyId
-WHERE CustomerBalances.CustomerId = 5 AND
+WHERE CustomerBalances.CustomerId = 1 AND
 Currency.Name = 'Ruble'
 GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date) ORDER BY SUM(Operation.Cash);
 
 /*7*/
+-- Денежный оборот внутри банка
 -- Количество денег на депозитах
+-- Количество денег на карточках(баланс)
 -- Количество денег отдано в кредит
--- Количество денег на карточках
 SELECT 
 Currency.Name,
 D.DepositAmount,
@@ -146,7 +149,6 @@ JOIN
 	GROUP BY Currency.CurrencyId
 ) AS Stats ON Currency.CurrencyId = Stats.CurrencyId
 ORDER BY Stats.Type
-GO;
 
 /*9*/
 -- Клиенты с кредитами и с 0 на счету
