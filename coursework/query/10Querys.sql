@@ -1,8 +1,8 @@
 USE Bank;
 
 /*1*/
--- лиенты, у которых есть счет(баланс) с карточкой и с услугой
-SELECT DISTINCT FirstName, LastName, PassportNum, Birthday, Phone
+-- лиенты, у которых есть счет(баланс) с карточкой и с услугой SMS
+SELECT FirstName, LastName, PassportNum, Birthday, Phone
 FROM Customer
 JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
 JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
@@ -33,13 +33,13 @@ ORDER BY COUNT(*)
 
 /*4*/
 --—колько было выплачено люд€м по вкладам
-SELECT InfoDeposit.DepositName, SUM(CustomerDeposit.Amount) * InfoDeposit.[Percent]
+SELECT InfoDeposit.CurrencyId, InfoDeposit.DepositName, SUM(CustomerDeposit.Amount) * InfoDeposit.[Percent]
 FROM InfoDeposit
 JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId
-GROUP BY InfoDeposit.DepositName, InfoDeposit.[Percent]
+GROUP BY InfoDeposit.CurrencyId, InfoDeposit.DepositName, InfoDeposit.[Percent]
 
 /*5*/
---  лиенты которые не совершали операций в последние два мес€ца
+--  лиенты которые не совершали операций в банке в последние два мес€ца
 SELECT Customer.FirstName, Customer.LastName, Customer.Phone
 FROM Customer
 LEFT JOIN
@@ -54,7 +54,7 @@ ON Customer.CustomerId = ActiveCustomerBalances.CustomerId
 WHERE ActiveCustomerBalances.CustomerId IS NULL;
 
 /*6*/
--- –асходы по категори€м дл€ клиента за период времени
+-- –асходы/доходы по категори€м дл€ клиента за период времени
 SELECT Article.Name, 
 MONTH(Operation.Date) AS 'Month', 
 YEAR(Operation.Date) AS 'Year', 
@@ -66,7 +66,8 @@ JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
 JOIN Currency ON Operation.CurrencyId = Currency.CurrencyId
 WHERE CustomerBalances.CustomerId = 1 AND
 Currency.Name = 'Ruble'
-GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date) ORDER BY SUM(Operation.Cash);
+GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date)
+ORDER BY SUM(Operation.Cash);
 
 /*7*/
 -- ƒенежный оборот внутри банка
@@ -104,6 +105,7 @@ JOIN
 
 /*8*/
 -- ƒол€ валютных операций
+--  ака€ валюта доминирует?
 WITH balanceTotalCount (Cnt)
 AS
 (	
@@ -120,7 +122,7 @@ AS
 	SELECT COUNT(*) FROM CustomerDeposit
 )
 
-SELECT Currency.Name, Stats.Type, (Stats.Count * 100 / 
+SELECT Currency.Name, Stats.Type, (CAST(Stats.Count AS DECIMAL) * 100 / 
 	(
 		CASE Stats.Type
 			WHEN 'Balance' THEN (SELECT Cnt FROM balanceTotalCount)
@@ -154,7 +156,7 @@ ORDER BY Stats.Type
 --  лиенты с кредитами и с 0 на счету
 -- ѕредположительные должники
 SELECT 
-Customer.FirstName, Customer.LastName
+Customer.FirstName, Customer.LastName, Customer.Phone
 FROM Customer
 WHERE 
 EXISTS
@@ -178,38 +180,43 @@ AND EXISTS
 SELECT TOP(10)
 Info.FirstName,
 Info.LastName,
+Currency.Name,
 SUM(Total) AS Total
 FROM
 (
 	SELECT
 	Customer.CustomerId,
+	Balance.CurrencyId,
 	Customer.FirstName,
 	Customer.LastName, 
 	SUM(Balance.Credit + Balance.Debit) AS Total
 	FROM Customer
 	JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
 	JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
-	GROUP BY Customer.CustomerId, Customer.FirstName, Customer.LastName
+	GROUP BY Customer.CustomerId, Balance.CurrencyId, Customer.FirstName, Customer.LastName
 	UNION
 	SELECT
 	Customer.CustomerId,
+	InfoSecurities.CurrencyId,
 	Customer.FirstName,
 	Customer.LastName,
 	SUM(CustomerSecurities.Count * InfoSecurities.Price) AS Total
 	FROM Customer
 	JOIN CustomerSecurities ON Customer.CustomerId = CustomerSecurities.CustomerId
 	JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
-	GROUP BY Customer.CustomerId, Customer.FirstName, Customer.LastName
+	GROUP BY Customer.CustomerId, InfoSecurities.CurrencyId, Customer.FirstName, Customer.LastName
 	UNION
 	SELECT
 	Customer.CustomerId,
+	InfoDeposit.CurrencyId,
 	Customer.FirstName,
 	Customer.LastName,
 	SUM(CustomerDeposit.Amount * ((CAST(InfoDeposit.[Percent] AS DECIMAL) / 100) + 1)) AS Total
 	FROM Customer
 	JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId
 	JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
-	GROUP BY Customer.CustomerId, Customer.FirstName, Customer.LastName
+	GROUP BY Customer.CustomerId, InfoDeposit.CurrencyId, Customer.FirstName, Customer.LastName
 ) AS Info
-GROUP BY Info.CustomerId, Info.FirstName, Info.LastName
-ORDER BY Total ASC
+JOIN Currency ON Info.CurrencyId = Currency.CurrencyId
+GROUP BY Info.CustomerId, Info.FirstName, Info.LastName, Currency.Name
+ORDER BY Currency.Name, Total DESC
