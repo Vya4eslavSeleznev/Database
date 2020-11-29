@@ -76,7 +76,7 @@ namespace Bank
       this.securityTypesDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage4 = new System.Windows.Forms.TabPage();
       this.topUpButton = new System.Windows.Forms.Button();
-      this.customerCashButton = new System.Windows.Forms.Button();
+      this.customerWriteOffMoneyButton = new System.Windows.Forms.Button();
       this.customerCashTextBox = new System.Windows.Forms.TextBox();
       this.label11 = new System.Windows.Forms.Label();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -551,7 +551,7 @@ namespace Bank
       // tabPage4
       // 
       this.tabPage4.Controls.Add(this.topUpButton);
-      this.tabPage4.Controls.Add(this.customerCashButton);
+      this.tabPage4.Controls.Add(this.customerWriteOffMoneyButton);
       this.tabPage4.Controls.Add(this.customerCashTextBox);
       this.tabPage4.Controls.Add(this.label11);
       this.tabPage4.Controls.Add(this.groupBox5);
@@ -571,14 +571,14 @@ namespace Bank
       this.topUpButton.Text = "Top up";
       this.topUpButton.UseVisualStyleBackColor = true;
       // 
-      // customerCashButton
+      // customerWriteOffMoneyButton
       // 
-      this.customerCashButton.Location = new System.Drawing.Point(551, 7);
-      this.customerCashButton.Name = "customerCashButton";
-      this.customerCashButton.Size = new System.Drawing.Size(208, 40);
-      this.customerCashButton.TabIndex = 5;
-      this.customerCashButton.Text = "Write off money";
-      this.customerCashButton.UseVisualStyleBackColor = true;
+      this.customerWriteOffMoneyButton.Location = new System.Drawing.Point(551, 7);
+      this.customerWriteOffMoneyButton.Name = "customerWriteOffMoneyButton";
+      this.customerWriteOffMoneyButton.Size = new System.Drawing.Size(208, 40);
+      this.customerWriteOffMoneyButton.TabIndex = 5;
+      this.customerWriteOffMoneyButton.Text = "Write off money";
+      this.customerWriteOffMoneyButton.UseVisualStyleBackColor = true;
       // 
       // customerCashTextBox
       // 
@@ -780,7 +780,7 @@ namespace Bank
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.DataGridView securityTypesDataGridView;
     private System.Windows.Forms.GroupBox groupBox5;
-    private System.Windows.Forms.Button customerCashButton;
+    private System.Windows.Forms.Button customerWriteOffMoneyButton;
     private System.Windows.Forms.TextBox customerCashTextBox;
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.DataGridView customerInfoDataGridView;

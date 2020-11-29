@@ -130,6 +130,8 @@ namespace Bank
       this.topSecuritiesDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox13 = new System.Windows.Forms.GroupBox();
       this.mySecuritiesDataGridView = new System.Windows.Forms.DataGridView();
+      this.connection = new System.Data.OleDb.OleDbConnection();
+      this.dsOperation = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -164,6 +166,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.topSecuritiesDataGridView)).BeginInit();
       this.groupBox13.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsOperation)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -1136,6 +1139,15 @@ namespace Bank
       this.mySecuritiesDataGridView.Size = new System.Drawing.Size(508, 438);
       this.mySecuritiesDataGridView.TabIndex = 1;
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
+      // dsOperation
+      // 
+      this.dsOperation.DataSetName = "NewDataSet";
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1145,6 +1157,7 @@ namespace Bank
       this.Name = "User";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "User";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.User_FormClosing);
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.tabPage1.PerformLayout();
@@ -1185,6 +1198,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.topSecuritiesDataGridView)).EndInit();
       this.groupBox13.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsOperation)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1292,5 +1306,7 @@ namespace Bank
     private System.Windows.Forms.DataGridView topSecuritiesDataGridView;
     private System.Windows.Forms.GroupBox groupBox13;
     private System.Windows.Forms.DataGridView mySecuritiesDataGridView;
+    private System.Data.OleDb.OleDbConnection connection;
+    private System.Data.DataSet dsOperation;
   }
 }
