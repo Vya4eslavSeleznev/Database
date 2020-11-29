@@ -34,7 +34,6 @@ namespace Bank
       this.loginTextBox = new System.Windows.Forms.TextBox();
       this.passwordTextBox = new System.Windows.Forms.TextBox();
       this.logInButton = new System.Windows.Forms.Button();
-      this.registrationButton = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // label1
@@ -72,28 +71,18 @@ namespace Bank
       // 
       // logInButton
       // 
-      this.logInButton.Location = new System.Drawing.Point(391, 308);
+      this.logInButton.Location = new System.Drawing.Point(191, 308);
       this.logInButton.Name = "logInButton";
-      this.logInButton.Size = new System.Drawing.Size(182, 31);
+      this.logInButton.Size = new System.Drawing.Size(382, 31);
       this.logInButton.TabIndex = 5;
       this.logInButton.Text = "Log in";
       this.logInButton.UseVisualStyleBackColor = true;
-      // 
-      // registrationButton
-      // 
-      this.registrationButton.Location = new System.Drawing.Point(191, 308);
-      this.registrationButton.Name = "registrationButton";
-      this.registrationButton.Size = new System.Drawing.Size(183, 31);
-      this.registrationButton.TabIndex = 6;
-      this.registrationButton.Text = "Registration";
-      this.registrationButton.UseVisualStyleBackColor = true;
       // 
       // Authentication
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(800, 450);
-      this.Controls.Add(this.registrationButton);
       this.Controls.Add(this.logInButton);
       this.Controls.Add(this.passwordTextBox);
       this.Controls.Add(this.loginTextBox);
@@ -113,6 +102,5 @@ namespace Bank
     private System.Windows.Forms.TextBox loginTextBox;
     private System.Windows.Forms.TextBox passwordTextBox;
     private System.Windows.Forms.Button logInButton;
-    private System.Windows.Forms.Button registrationButton;
   }
 }

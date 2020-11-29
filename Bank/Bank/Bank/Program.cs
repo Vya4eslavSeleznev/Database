@@ -16,7 +16,7 @@ namespace Bank
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new Accountant());
+      Application.Run(new Admin());
     }
   }
 }
