@@ -97,7 +97,7 @@ namespace Bank
       this.tabPage4 = new System.Windows.Forms.TabPage();
       this.addCreditButton = new System.Windows.Forms.Button();
       this.amountCreditTextBox = new System.Windows.Forms.TextBox();
-      this.forWhatCredotTextBox = new System.Windows.Forms.TextBox();
+      this.forWhatCreditTextBox = new System.Windows.Forms.TextBox();
       this.typeCreditComboBox = new System.Windows.Forms.ComboBox();
       this.label25 = new System.Windows.Forms.Label();
       this.label24 = new System.Windows.Forms.Label();
@@ -107,6 +107,11 @@ namespace Bank
       this.groupBox7 = new System.Windows.Forms.GroupBox();
       this.myCreditDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
+      this.addDepositButton = new System.Windows.Forms.Button();
+      this.depositAmountTextBox = new System.Windows.Forms.TextBox();
+      this.depositTypeComboBox = new System.Windows.Forms.ComboBox();
+      this.label27 = new System.Windows.Forms.Label();
+      this.label26 = new System.Windows.Forms.Label();
       this.groupBox8 = new System.Windows.Forms.GroupBox();
       this.depositInfoDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox9 = new System.Windows.Forms.GroupBox();
@@ -114,11 +119,7 @@ namespace Bank
       this.groupBox10 = new System.Windows.Forms.GroupBox();
       this.myDepositsDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage6 = new System.Windows.Forms.TabPage();
-      this.label26 = new System.Windows.Forms.Label();
-      this.label27 = new System.Windows.Forms.Label();
-      this.depositTypeComboBox = new System.Windows.Forms.ComboBox();
-      this.depositAmountTextBox = new System.Windows.Forms.TextBox();
-      this.addDepositButton = new System.Windows.Forms.Button();
+      this.securitiesCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.buySecurityButton = new System.Windows.Forms.Button();
       this.securityTypeComboBox = new System.Windows.Forms.ComboBox();
       this.label28 = new System.Windows.Forms.Label();
@@ -129,7 +130,6 @@ namespace Bank
       this.topSecuritiesDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox13 = new System.Windows.Forms.GroupBox();
       this.mySecuritiesDataGridView = new System.Windows.Forms.DataGridView();
-      this.securitiesCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -157,13 +157,13 @@ namespace Bank
       this.groupBox10.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.myDepositsDataGridView)).BeginInit();
       this.tabPage6.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).BeginInit();
       this.groupBox11.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.securityInfoDataGridView)).BeginInit();
       this.groupBox12.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.topSecuritiesDataGridView)).BeginInit();
       this.groupBox13.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -789,7 +789,7 @@ namespace Bank
       // 
       this.tabPage4.Controls.Add(this.addCreditButton);
       this.tabPage4.Controls.Add(this.amountCreditTextBox);
-      this.tabPage4.Controls.Add(this.forWhatCredotTextBox);
+      this.tabPage4.Controls.Add(this.forWhatCreditTextBox);
       this.tabPage4.Controls.Add(this.typeCreditComboBox);
       this.tabPage4.Controls.Add(this.label25);
       this.tabPage4.Controls.Add(this.label24);
@@ -814,17 +814,17 @@ namespace Bank
       // 
       // amountCreditTextBox
       // 
-      this.amountCreditTextBox.Location = new System.Drawing.Point(368, 25);
+      this.amountCreditTextBox.Location = new System.Drawing.Point(367, 29);
       this.amountCreditTextBox.Name = "amountCreditTextBox";
       this.amountCreditTextBox.Size = new System.Drawing.Size(151, 22);
       this.amountCreditTextBox.TabIndex = 9;
       // 
-      // forWhatCredotTextBox
+      // forWhatCreditTextBox
       // 
-      this.forWhatCredotTextBox.Location = new System.Drawing.Point(121, 82);
-      this.forWhatCredotTextBox.Name = "forWhatCredotTextBox";
-      this.forWhatCredotTextBox.Size = new System.Drawing.Size(151, 22);
-      this.forWhatCredotTextBox.TabIndex = 8;
+      this.forWhatCreditTextBox.Location = new System.Drawing.Point(121, 82);
+      this.forWhatCreditTextBox.Name = "forWhatCreditTextBox";
+      this.forWhatCreditTextBox.Size = new System.Drawing.Size(151, 22);
+      this.forWhatCreditTextBox.TabIndex = 8;
       // 
       // typeCreditComboBox
       // 
@@ -839,9 +839,9 @@ namespace Bank
       this.label25.AutoSize = true;
       this.label25.Location = new System.Drawing.Point(288, 32);
       this.label25.Name = "label25";
-      this.label25.Size = new System.Drawing.Size(56, 17);
+      this.label25.Size = new System.Drawing.Size(60, 17);
       this.label25.TabIndex = 6;
-      this.label25.Text = "Amount";
+      this.label25.Text = "Amount:";
       // 
       // label24
       // 
@@ -864,9 +864,9 @@ namespace Bank
       // groupBox6
       // 
       this.groupBox6.Controls.Add(this.creditInfoDataGridView);
-      this.groupBox6.Location = new System.Drawing.Point(525, 141);
+      this.groupBox6.Location = new System.Drawing.Point(525, 3);
       this.groupBox6.Name = "groupBox6";
-      this.groupBox6.Size = new System.Drawing.Size(516, 403);
+      this.groupBox6.Size = new System.Drawing.Size(516, 541);
       this.groupBox6.TabIndex = 3;
       this.groupBox6.TabStop = false;
       this.groupBox6.Text = "Credit information";
@@ -877,7 +877,7 @@ namespace Bank
       this.creditInfoDataGridView.Location = new System.Drawing.Point(6, 19);
       this.creditInfoDataGridView.Name = "creditInfoDataGridView";
       this.creditInfoDataGridView.RowHeadersWidth = 51;
-      this.creditInfoDataGridView.Size = new System.Drawing.Size(504, 378);
+      this.creditInfoDataGridView.Size = new System.Drawing.Size(504, 516);
       this.creditInfoDataGridView.TabIndex = 1;
       // 
       // groupBox7
@@ -917,6 +917,48 @@ namespace Bank
       this.tabPage5.Text = "Deposit";
       this.tabPage5.UseVisualStyleBackColor = true;
       // 
+      // addDepositButton
+      // 
+      this.addDepositButton.Location = new System.Drawing.Point(528, 46);
+      this.addDepositButton.Name = "addDepositButton";
+      this.addDepositButton.Size = new System.Drawing.Size(510, 33);
+      this.addDepositButton.TabIndex = 22;
+      this.addDepositButton.Text = "Add Deposit";
+      this.addDepositButton.UseVisualStyleBackColor = true;
+      // 
+      // depositAmountTextBox
+      // 
+      this.depositAmountTextBox.Location = new System.Drawing.Point(851, 18);
+      this.depositAmountTextBox.Name = "depositAmountTextBox";
+      this.depositAmountTextBox.Size = new System.Drawing.Size(187, 22);
+      this.depositAmountTextBox.TabIndex = 21;
+      // 
+      // depositTypeComboBox
+      // 
+      this.depositTypeComboBox.FormattingEnabled = true;
+      this.depositTypeComboBox.Location = new System.Drawing.Point(633, 14);
+      this.depositTypeComboBox.Name = "depositTypeComboBox";
+      this.depositTypeComboBox.Size = new System.Drawing.Size(152, 24);
+      this.depositTypeComboBox.TabIndex = 20;
+      // 
+      // label27
+      // 
+      this.label27.AutoSize = true;
+      this.label27.Location = new System.Drawing.Point(790, 21);
+      this.label27.Name = "label27";
+      this.label27.Size = new System.Drawing.Size(60, 17);
+      this.label27.TabIndex = 19;
+      this.label27.Text = "Amount:";
+      // 
+      // label26
+      // 
+      this.label26.AutoSize = true;
+      this.label26.Location = new System.Drawing.Point(528, 21);
+      this.label26.Name = "label26";
+      this.label26.Size = new System.Drawing.Size(91, 17);
+      this.label26.TabIndex = 18;
+      this.label26.Text = "Deposit type:";
+      // 
       // groupBox8
       // 
       this.groupBox8.Controls.Add(this.depositInfoDataGridView);
@@ -945,7 +987,7 @@ namespace Bank
       this.groupBox9.Size = new System.Drawing.Size(524, 269);
       this.groupBox9.TabIndex = 16;
       this.groupBox9.TabStop = false;
-      this.groupBox9.Text = "Top deposits";
+      this.groupBox9.Text = "Popular deposits";
       // 
       // topDepositsDataGridView
       // 
@@ -973,7 +1015,7 @@ namespace Bank
       this.myDepositsDataGridView.Name = "myDepositsDataGridView";
       this.myDepositsDataGridView.RowHeadersWidth = 51;
       this.myDepositsDataGridView.RowTemplate.Height = 24;
-      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 428);
+      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 438);
       this.myDepositsDataGridView.TabIndex = 1;
       // 
       // tabPage6
@@ -993,47 +1035,12 @@ namespace Bank
       this.tabPage6.Text = "Securities";
       this.tabPage6.UseVisualStyleBackColor = true;
       // 
-      // label26
+      // securitiesCountNumericUpDown
       // 
-      this.label26.AutoSize = true;
-      this.label26.Location = new System.Drawing.Point(528, 21);
-      this.label26.Name = "label26";
-      this.label26.Size = new System.Drawing.Size(91, 17);
-      this.label26.TabIndex = 18;
-      this.label26.Text = "Deposit type:";
-      // 
-      // label27
-      // 
-      this.label27.AutoSize = true;
-      this.label27.Location = new System.Drawing.Point(790, 21);
-      this.label27.Name = "label27";
-      this.label27.Size = new System.Drawing.Size(60, 17);
-      this.label27.TabIndex = 19;
-      this.label27.Text = "Amount:";
-      // 
-      // depositTypeComboBox
-      // 
-      this.depositTypeComboBox.FormattingEnabled = true;
-      this.depositTypeComboBox.Location = new System.Drawing.Point(633, 14);
-      this.depositTypeComboBox.Name = "depositTypeComboBox";
-      this.depositTypeComboBox.Size = new System.Drawing.Size(152, 24);
-      this.depositTypeComboBox.TabIndex = 20;
-      // 
-      // depositAmountTextBox
-      // 
-      this.depositAmountTextBox.Location = new System.Drawing.Point(851, 18);
-      this.depositAmountTextBox.Name = "depositAmountTextBox";
-      this.depositAmountTextBox.Size = new System.Drawing.Size(187, 22);
-      this.depositAmountTextBox.TabIndex = 21;
-      // 
-      // addDepositButton
-      // 
-      this.addDepositButton.Location = new System.Drawing.Point(528, 46);
-      this.addDepositButton.Name = "addDepositButton";
-      this.addDepositButton.Size = new System.Drawing.Size(510, 33);
-      this.addDepositButton.TabIndex = 22;
-      this.addDepositButton.Text = "Add Deposit";
-      this.addDepositButton.UseVisualStyleBackColor = true;
+      this.securitiesCountNumericUpDown.Location = new System.Drawing.Point(846, 16);
+      this.securitiesCountNumericUpDown.Name = "securitiesCountNumericUpDown";
+      this.securitiesCountNumericUpDown.Size = new System.Drawing.Size(192, 22);
+      this.securitiesCountNumericUpDown.TabIndex = 2;
       // 
       // buySecurityButton
       // 
@@ -1047,7 +1054,7 @@ namespace Bank
       // securityTypeComboBox
       // 
       this.securityTypeComboBox.FormattingEnabled = true;
-      this.securityTypeComboBox.Location = new System.Drawing.Point(634, 11);
+      this.securityTypeComboBox.Location = new System.Drawing.Point(633, 15);
       this.securityTypeComboBox.Name = "securityTypeComboBox";
       this.securityTypeComboBox.Size = new System.Drawing.Size(152, 24);
       this.securityTypeComboBox.TabIndex = 28;
@@ -1064,7 +1071,7 @@ namespace Bank
       // label29
       // 
       this.label29.AutoSize = true;
-      this.label29.Location = new System.Drawing.Point(529, 18);
+      this.label29.Location = new System.Drawing.Point(537, 18);
       this.label29.Name = "label29";
       this.label29.Size = new System.Drawing.Size(94, 17);
       this.label29.TabIndex = 26;
@@ -1126,15 +1133,8 @@ namespace Bank
       this.mySecuritiesDataGridView.Name = "mySecuritiesDataGridView";
       this.mySecuritiesDataGridView.RowHeadersWidth = 51;
       this.mySecuritiesDataGridView.RowTemplate.Height = 24;
-      this.mySecuritiesDataGridView.Size = new System.Drawing.Size(508, 428);
+      this.mySecuritiesDataGridView.Size = new System.Drawing.Size(508, 438);
       this.mySecuritiesDataGridView.TabIndex = 1;
-      // 
-      // securitiesCountNumericUpDown
-      // 
-      this.securitiesCountNumericUpDown.Location = new System.Drawing.Point(846, 16);
-      this.securitiesCountNumericUpDown.Name = "securitiesCountNumericUpDown";
-      this.securitiesCountNumericUpDown.Size = new System.Drawing.Size(192, 22);
-      this.securitiesCountNumericUpDown.TabIndex = 2;
       // 
       // User
       // 
@@ -1178,13 +1178,13 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.myDepositsDataGridView)).EndInit();
       this.tabPage6.ResumeLayout(false);
       this.tabPage6.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).EndInit();
       this.groupBox11.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.securityInfoDataGridView)).EndInit();
       this.groupBox12.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.topSecuritiesDataGridView)).EndInit();
       this.groupBox13.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1265,7 +1265,7 @@ namespace Bank
     private System.Windows.Forms.DataGridView myCreditDataGridView;
     private System.Windows.Forms.Button addCreditButton;
     private System.Windows.Forms.TextBox amountCreditTextBox;
-    private System.Windows.Forms.TextBox forWhatCredotTextBox;
+    private System.Windows.Forms.TextBox forWhatCreditTextBox;
     private System.Windows.Forms.ComboBox typeCreditComboBox;
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.Label label24;
