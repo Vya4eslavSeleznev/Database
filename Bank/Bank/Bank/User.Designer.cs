@@ -148,6 +148,7 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.terminateDepositButton = new System.Windows.Forms.Button();
       this.sellSecuritiesButton = new System.Windows.Forms.Button();
+      this.dsCustomer = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -194,6 +195,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsMySecurities)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomer)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -1270,6 +1272,10 @@ namespace Bank
       this.sellSecuritiesButton.Text = "Sell now";
       this.sellSecuritiesButton.UseVisualStyleBackColor = true;
       // 
+      // dsCustomer
+      // 
+      this.dsCustomer.DataSetName = "NewDataSet";
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1332,6 +1338,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsMySecurities)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomer)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1457,5 +1464,6 @@ namespace Bank
     private System.Data.DataSet dsTopSecurities;
     private System.Windows.Forms.Button terminateDepositButton;
     private System.Windows.Forms.Button sellSecuritiesButton;
+    private System.Data.DataSet dsCustomer;
   }
 }

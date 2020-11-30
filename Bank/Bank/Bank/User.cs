@@ -14,9 +14,14 @@ namespace Bank
   public partial class User : Form
   {
     private int customerId;
+    private System.Data.DataRow dRow;
+    private System.Data.DataTable dTable;
+    private int iRowID;
+    private System.Data.OleDb.OleDbDataAdapter dAdapter;
 
     public User(int customerId)
     {
+      iRowID = 0;
       this.customerId = customerId;
       InitializeComponent();
       connection.Open();
@@ -32,9 +37,40 @@ namespace Bank
       setMySecurities();
       setSecurityInfo();
       setPopularSecurities();
+      setProfile();
 
         //TEST
-      firstNameTextBox.Text = Convert.ToString(customerId);
+        //firstNameTextBox.Text = Convert.ToString(customerId);
+    }
+
+    private void ShowRow()
+    {
+      dRow = dTable.Rows[iRowID];
+
+      firstNameTextBox.Text = dRow["FirstName"].ToString();
+      lastNameTextBox.Text = dRow["LastName"].ToString();
+
+      //TODO: Birthday
+      passportNumTextBox.Text = dRow["PassportNum"].ToString();
+      phoneTextBox.Text = dRow["Phone"].ToString();
+      //TODO Login + Password
+    }
+
+    private void FillDataTable()
+    {
+      var profile =
+        "SELECT FirstName, LastName, PassportNum, Phone " +
+        "FROM Customer";
+
+      dAdapter = new OleDbDataAdapter(profile, connection);
+      dAdapter.Fill(dsCustomer, "Customer");
+      dTable = dsCustomer.Tables["Customer"];
+    }
+
+    private void setProfile()
+    {
+      FillDataTable();
+      ShowRow();
     }
 
     private void operationDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
