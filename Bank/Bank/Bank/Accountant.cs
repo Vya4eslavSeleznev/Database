@@ -15,6 +15,13 @@ namespace Bank
     public Accountant()
     {
       InitializeComponent();
+      //connection.Open();
+    }
+
+    private void Accountant_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      //connection.Close();
+      Application.Exit();
     }
   }
 }

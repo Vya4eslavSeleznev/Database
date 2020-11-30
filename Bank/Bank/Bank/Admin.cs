@@ -15,6 +15,13 @@ namespace Bank
     public Admin()
     {
       InitializeComponent();
+      //connection.Open();
+    }
+
+    private void Admin_FormClosing(object sender, FormClosingEventArgs e)
+    {
+      //connection.Close();
+      Application.Exit();
     }
   }
 }

@@ -68,16 +68,17 @@ namespace Bank
       this.label10 = new System.Windows.Forms.Label();
       this.label11 = new System.Windows.Forms.Label();
       this.tabPage4 = new System.Windows.Forms.TabPage();
-      this.tabPage5 = new System.Windows.Forms.TabPage();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.richestCustomersDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox6 = new System.Windows.Forms.GroupBox();
       this.debtorsDataGridView = new System.Windows.Forms.DataGridView();
-      this.label12 = new System.Windows.Forms.Label();
-      this.serviceStatisticComboBox = new System.Windows.Forms.ComboBox();
-      this.showServiceStatisticButton = new System.Windows.Forms.Button();
+      this.tabPage5 = new System.Windows.Forms.TabPage();
       this.groupBox7 = new System.Windows.Forms.GroupBox();
       this.callCenterServiceDataGridView = new System.Windows.Forms.DataGridView();
+      this.showServiceStatisticButton = new System.Windows.Forms.Button();
+      this.serviceStatisticComboBox = new System.Windows.Forms.ComboBox();
+      this.label12 = new System.Windows.Forms.Label();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -92,11 +93,11 @@ namespace Bank
       this.groupBox4.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.customerDataGridView)).BeginInit();
       this.tabPage4.SuspendLayout();
-      this.tabPage5.SuspendLayout();
       this.groupBox5.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.richestCustomersDataGridView)).BeginInit();
       this.groupBox6.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.debtorsDataGridView)).BeginInit();
+      this.tabPage5.SuspendLayout();
       this.groupBox7.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.callCenterServiceDataGridView)).BeginInit();
       this.SuspendLayout();
@@ -476,19 +477,6 @@ namespace Bank
       this.tabPage4.Text = "Customer monetary statistic";
       this.tabPage4.UseVisualStyleBackColor = true;
       // 
-      // tabPage5
-      // 
-      this.tabPage5.Controls.Add(this.groupBox7);
-      this.tabPage5.Controls.Add(this.showServiceStatisticButton);
-      this.tabPage5.Controls.Add(this.serviceStatisticComboBox);
-      this.tabPage5.Controls.Add(this.label12);
-      this.tabPage5.Location = new System.Drawing.Point(4, 25);
-      this.tabPage5.Name = "tabPage5";
-      this.tabPage5.Size = new System.Drawing.Size(1040, 545);
-      this.tabPage5.TabIndex = 4;
-      this.tabPage5.Text = "Call center";
-      this.tabPage5.UseVisualStyleBackColor = true;
-      // 
       // groupBox5
       // 
       this.groupBox5.Controls.Add(this.richestCustomersDataGridView);
@@ -528,31 +516,18 @@ namespace Bank
       this.debtorsDataGridView.Size = new System.Drawing.Size(505, 512);
       this.debtorsDataGridView.TabIndex = 0;
       // 
-      // label12
+      // tabPage5
       // 
-      this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(69, 28);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(59, 17);
-      this.label12.TabIndex = 0;
-      this.label12.Text = "Service:";
-      // 
-      // serviceStatisticComboBox
-      // 
-      this.serviceStatisticComboBox.FormattingEnabled = true;
-      this.serviceStatisticComboBox.Location = new System.Drawing.Point(252, 25);
-      this.serviceStatisticComboBox.Name = "serviceStatisticComboBox";
-      this.serviceStatisticComboBox.Size = new System.Drawing.Size(303, 24);
-      this.serviceStatisticComboBox.TabIndex = 1;
-      // 
-      // showServiceStatisticButton
-      // 
-      this.showServiceStatisticButton.Location = new System.Drawing.Point(664, 21);
-      this.showServiceStatisticButton.Name = "showServiceStatisticButton";
-      this.showServiceStatisticButton.Size = new System.Drawing.Size(303, 31);
-      this.showServiceStatisticButton.TabIndex = 2;
-      this.showServiceStatisticButton.Text = "Show";
-      this.showServiceStatisticButton.UseVisualStyleBackColor = true;
+      this.tabPage5.Controls.Add(this.groupBox7);
+      this.tabPage5.Controls.Add(this.showServiceStatisticButton);
+      this.tabPage5.Controls.Add(this.serviceStatisticComboBox);
+      this.tabPage5.Controls.Add(this.label12);
+      this.tabPage5.Location = new System.Drawing.Point(4, 25);
+      this.tabPage5.Name = "tabPage5";
+      this.tabPage5.Size = new System.Drawing.Size(1040, 545);
+      this.tabPage5.TabIndex = 4;
+      this.tabPage5.Text = "Call center";
+      this.tabPage5.UseVisualStyleBackColor = true;
       // 
       // groupBox7
       // 
@@ -574,6 +549,32 @@ namespace Bank
       this.callCenterServiceDataGridView.Size = new System.Drawing.Size(1037, 462);
       this.callCenterServiceDataGridView.TabIndex = 0;
       // 
+      // showServiceStatisticButton
+      // 
+      this.showServiceStatisticButton.Location = new System.Drawing.Point(664, 21);
+      this.showServiceStatisticButton.Name = "showServiceStatisticButton";
+      this.showServiceStatisticButton.Size = new System.Drawing.Size(303, 31);
+      this.showServiceStatisticButton.TabIndex = 2;
+      this.showServiceStatisticButton.Text = "Show";
+      this.showServiceStatisticButton.UseVisualStyleBackColor = true;
+      // 
+      // serviceStatisticComboBox
+      // 
+      this.serviceStatisticComboBox.FormattingEnabled = true;
+      this.serviceStatisticComboBox.Location = new System.Drawing.Point(252, 25);
+      this.serviceStatisticComboBox.Name = "serviceStatisticComboBox";
+      this.serviceStatisticComboBox.Size = new System.Drawing.Size(303, 24);
+      this.serviceStatisticComboBox.TabIndex = 1;
+      // 
+      // label12
+      // 
+      this.label12.AutoSize = true;
+      this.label12.Location = new System.Drawing.Point(69, 28);
+      this.label12.Name = "label12";
+      this.label12.Size = new System.Drawing.Size(59, 17);
+      this.label12.TabIndex = 0;
+      this.label12.Text = "Service:";
+      // 
       // Admin
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -583,6 +584,7 @@ namespace Bank
       this.Name = "Admin";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Admin";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Admin_FormClosing);
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.tabPage1.PerformLayout();
@@ -600,12 +602,12 @@ namespace Bank
       this.groupBox4.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.customerDataGridView)).EndInit();
       this.tabPage4.ResumeLayout(false);
-      this.tabPage5.ResumeLayout(false);
-      this.tabPage5.PerformLayout();
       this.groupBox5.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.richestCustomersDataGridView)).EndInit();
       this.groupBox6.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.debtorsDataGridView)).EndInit();
+      this.tabPage5.ResumeLayout(false);
+      this.tabPage5.PerformLayout();
       this.groupBox7.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.callCenterServiceDataGridView)).EndInit();
       this.ResumeLayout(false);
@@ -663,5 +665,6 @@ namespace Bank
     private System.Windows.Forms.Label label12;
     private System.Windows.Forms.GroupBox groupBox7;
     private System.Windows.Forms.DataGridView callCenterServiceDataGridView;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }
