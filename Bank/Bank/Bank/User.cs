@@ -49,8 +49,7 @@ namespace Bank
 
       firstNameTextBox.Text = dRow["FirstName"].ToString();
       lastNameTextBox.Text = dRow["LastName"].ToString();
-
-      //TODO: Birthday
+      birthdayTimePicker.Text = dRow["Birthday"].ToString();
       passportNumTextBox.Text = dRow["PassportNum"].ToString();
       phoneTextBox.Text = dRow["Phone"].ToString();
       //TODO Login + Password
@@ -59,7 +58,7 @@ namespace Bank
     private void FillDataTable()
     {
       var profile =
-        "SELECT FirstName, LastName, PassportNum, Phone " +
+        "SELECT FirstName, LastName, Birthday, PassportNum, Phone " +
         "FROM Customer";
 
       dAdapter = new OleDbDataAdapter(profile, connection);
