@@ -70,8 +70,11 @@ namespace Bank
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.statisticDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.deleteOperationButton = new System.Windows.Forms.Button();
       this.operationDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.deleteCardButton = new System.Windows.Forms.Button();
+      this.deleteBalanceButton = new System.Windows.Forms.Button();
       this.addCardButton = new System.Windows.Forms.Button();
       this.cardNimberTextBox = new System.Windows.Forms.TextBox();
       this.cardServiceComboBox = new System.Windows.Forms.ComboBox();
@@ -107,6 +110,7 @@ namespace Bank
       this.groupBox7 = new System.Windows.Forms.GroupBox();
       this.myCreditDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
+      this.terminateDepositButton = new System.Windows.Forms.Button();
       this.addDepositButton = new System.Windows.Forms.Button();
       this.depositAmountTextBox = new System.Windows.Forms.TextBox();
       this.depositTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -119,6 +123,7 @@ namespace Bank
       this.groupBox10 = new System.Windows.Forms.GroupBox();
       this.myDepositsDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage6 = new System.Windows.Forms.TabPage();
+      this.sellSecuritiesButton = new System.Windows.Forms.Button();
       this.securitiesCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.buySecurityButton = new System.Windows.Forms.Button();
       this.securityTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -137,17 +142,12 @@ namespace Bank
       this.dsCardService = new System.Data.DataSet();
       this.dsCredit = new System.Data.DataSet();
       this.dsCreditInfo = new System.Data.DataSet();
-      this.deleteOperationButton = new System.Windows.Forms.Button();
-      this.deleteBalanceButton = new System.Windows.Forms.Button();
-      this.deleteCardButton = new System.Windows.Forms.Button();
       this.dsMyDeposit = new System.Data.DataSet();
       this.dsDepositInfo = new System.Data.DataSet();
       this.dsTopDeposits = new System.Data.DataSet();
       this.dsMySecurities = new System.Data.DataSet();
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
-      this.terminateDepositButton = new System.Windows.Forms.Button();
-      this.sellSecuritiesButton = new System.Windows.Forms.Button();
       this.dsCustomer = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
@@ -588,6 +588,15 @@ namespace Bank
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "My Operations";
       // 
+      // deleteOperationButton
+      // 
+      this.deleteOperationButton.Location = new System.Drawing.Point(5, 364);
+      this.deleteOperationButton.Name = "deleteOperationButton";
+      this.deleteOperationButton.Size = new System.Drawing.Size(503, 32);
+      this.deleteOperationButton.TabIndex = 1;
+      this.deleteOperationButton.Text = "Delete selected";
+      this.deleteOperationButton.UseVisualStyleBackColor = true;
+      // 
       // operationDataGridView
       // 
       this.operationDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -628,6 +637,24 @@ namespace Bank
       this.tabPage3.TabIndex = 2;
       this.tabPage3.Text = "Balance";
       this.tabPage3.UseVisualStyleBackColor = true;
+      // 
+      // deleteCardButton
+      // 
+      this.deleteCardButton.Location = new System.Drawing.Point(7, 280);
+      this.deleteCardButton.Name = "deleteCardButton";
+      this.deleteCardButton.Size = new System.Drawing.Size(520, 32);
+      this.deleteCardButton.TabIndex = 21;
+      this.deleteCardButton.Text = "Delete selected";
+      this.deleteCardButton.UseVisualStyleBackColor = true;
+      // 
+      // deleteBalanceButton
+      // 
+      this.deleteBalanceButton.Location = new System.Drawing.Point(536, 503);
+      this.deleteBalanceButton.Name = "deleteBalanceButton";
+      this.deleteBalanceButton.Size = new System.Drawing.Size(503, 32);
+      this.deleteBalanceButton.TabIndex = 20;
+      this.deleteBalanceButton.Text = "Delete selected";
+      this.deleteBalanceButton.UseVisualStyleBackColor = true;
       // 
       // addCardButton
       // 
@@ -954,6 +981,15 @@ namespace Bank
       this.tabPage5.Text = "Deposit";
       this.tabPage5.UseVisualStyleBackColor = true;
       // 
+      // terminateDepositButton
+      // 
+      this.terminateDepositButton.Location = new System.Drawing.Point(531, 509);
+      this.terminateDepositButton.Name = "terminateDepositButton";
+      this.terminateDepositButton.Size = new System.Drawing.Size(503, 32);
+      this.terminateDepositButton.TabIndex = 23;
+      this.terminateDepositButton.Text = "Terminate deposit";
+      this.terminateDepositButton.UseVisualStyleBackColor = true;
+      // 
       // addDepositButton
       // 
       this.addDepositButton.Location = new System.Drawing.Point(528, 46);
@@ -1072,6 +1108,15 @@ namespace Bank
       this.tabPage6.TabIndex = 5;
       this.tabPage6.Text = "Securities";
       this.tabPage6.UseVisualStyleBackColor = true;
+      // 
+      // sellSecuritiesButton
+      // 
+      this.sellSecuritiesButton.Location = new System.Drawing.Point(531, 502);
+      this.sellSecuritiesButton.Name = "sellSecuritiesButton";
+      this.sellSecuritiesButton.Size = new System.Drawing.Size(503, 32);
+      this.sellSecuritiesButton.TabIndex = 31;
+      this.sellSecuritiesButton.Text = "Sell now";
+      this.sellSecuritiesButton.UseVisualStyleBackColor = true;
       // 
       // securitiesCountNumericUpDown
       // 
@@ -1203,33 +1248,6 @@ namespace Bank
       // 
       this.dsCreditInfo.DataSetName = "NewDataSet";
       // 
-      // deleteOperationButton
-      // 
-      this.deleteOperationButton.Location = new System.Drawing.Point(5, 364);
-      this.deleteOperationButton.Name = "deleteOperationButton";
-      this.deleteOperationButton.Size = new System.Drawing.Size(503, 32);
-      this.deleteOperationButton.TabIndex = 1;
-      this.deleteOperationButton.Text = "Delete selected";
-      this.deleteOperationButton.UseVisualStyleBackColor = true;
-      // 
-      // deleteBalanceButton
-      // 
-      this.deleteBalanceButton.Location = new System.Drawing.Point(536, 503);
-      this.deleteBalanceButton.Name = "deleteBalanceButton";
-      this.deleteBalanceButton.Size = new System.Drawing.Size(503, 32);
-      this.deleteBalanceButton.TabIndex = 20;
-      this.deleteBalanceButton.Text = "Delete selected";
-      this.deleteBalanceButton.UseVisualStyleBackColor = true;
-      // 
-      // deleteCardButton
-      // 
-      this.deleteCardButton.Location = new System.Drawing.Point(7, 280);
-      this.deleteCardButton.Name = "deleteCardButton";
-      this.deleteCardButton.Size = new System.Drawing.Size(520, 32);
-      this.deleteCardButton.TabIndex = 21;
-      this.deleteCardButton.Text = "Delete selected";
-      this.deleteCardButton.UseVisualStyleBackColor = true;
-      // 
       // dsMyDeposit
       // 
       this.dsMyDeposit.DataSetName = "NewDataSet";
@@ -1253,24 +1271,6 @@ namespace Bank
       // dsTopSecurities
       // 
       this.dsTopSecurities.DataSetName = "NewDataSet";
-      // 
-      // terminateDepositButton
-      // 
-      this.terminateDepositButton.Location = new System.Drawing.Point(531, 509);
-      this.terminateDepositButton.Name = "terminateDepositButton";
-      this.terminateDepositButton.Size = new System.Drawing.Size(503, 32);
-      this.terminateDepositButton.TabIndex = 23;
-      this.terminateDepositButton.Text = "Terminate deposit";
-      this.terminateDepositButton.UseVisualStyleBackColor = true;
-      // 
-      // sellSecuritiesButton
-      // 
-      this.sellSecuritiesButton.Location = new System.Drawing.Point(531, 502);
-      this.sellSecuritiesButton.Name = "sellSecuritiesButton";
-      this.sellSecuritiesButton.Size = new System.Drawing.Size(503, 32);
-      this.sellSecuritiesButton.TabIndex = 31;
-      this.sellSecuritiesButton.Text = "Sell now";
-      this.sellSecuritiesButton.UseVisualStyleBackColor = true;
       // 
       // dsCustomer
       // 

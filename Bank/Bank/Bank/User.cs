@@ -52,14 +52,16 @@ namespace Bank
       birthdayTimePicker.Text = dRow["Birthday"].ToString();
       passportNumTextBox.Text = dRow["PassportNum"].ToString();
       phoneTextBox.Text = dRow["Phone"].ToString();
-      //TODO Login + Password
+      loginTextBox.Text = dRow["Login"].ToString();
+      passwordTextBox.Text = dRow["Login"].ToString();
     }
 
     private void FillDataTable()
     {
       var profile =
-        "SELECT FirstName, LastName, Birthday, PassportNum, Phone " +
-        "FROM Customer";
+        "SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password] " +
+        "FROM Customer " +
+        "JOIN[User] ON Customer.UserId = [User].Id";
 
       dAdapter = new OleDbDataAdapter(profile, connection);
       dAdapter.Fill(dsCustomer, "Customer");

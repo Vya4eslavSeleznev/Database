@@ -85,3 +85,8 @@ WHERE CustomerId = 1
 SELECT InfoSecurities.[Name], InfoSecurities.Price, Currency.[Name] AS Currency, InfoSecurities.[Percent rate]
 FROM InfoSecurities
 JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId
+
+--Profile
+SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password]
+FROM Customer
+JOIN [User] ON Customer.UserId = [User].Id
