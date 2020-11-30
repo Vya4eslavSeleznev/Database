@@ -29,25 +29,22 @@ namespace Bank
         var login = loginTextBox.Text;
         var password = passwordTextBox.Text;
 
-        string strSQL2 =
+        string idQuery =
           "SELECT CustomerId " +
           "FROM Customer " +
           "JOIN [User] " +
           "ON Customer.UserId = [User].Id " +
           "WHERE Login = ? AND Password = ?";
 
-        string strSQL = "SELECT CustomerId FROM Customer WHERE Customer.UserId =" +
-          "(SELECT [User].Id FROM [User] WHERE Login = ? AND Password = ?)";
+        /*string strSQL = "SELECT CustomerId FROM Customer WHERE Customer.UserId =" +
+          "(SELECT [User].Id FROM [User] WHERE Login = ? AND Password = ?)";*/
 
-        OleDbCommand cmdIC = new OleDbCommand(strSQL, connection);
+        OleDbCommand cmdIC = new OleDbCommand(idQuery, connection);
         cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
         cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
         OleDbDataReader rdr = cmdIC.ExecuteReader();
         rdr.Read();
         var customerId = Convert.ToInt32(rdr["CustomerId"]);
-
-
-        //int customerId = cmdIC.ExecuteNonQuery();
 
         var user = new User(customerId);
         user.Show();

@@ -132,6 +132,22 @@ namespace Bank
       this.mySecuritiesDataGridView = new System.Windows.Forms.DataGridView();
       this.connection = new System.Data.OleDb.OleDbConnection();
       this.dsOperation = new System.Data.DataSet();
+      this.dsBalance = new System.Data.DataSet();
+      this.dsCard = new System.Data.DataSet();
+      this.dsCardService = new System.Data.DataSet();
+      this.dsCredit = new System.Data.DataSet();
+      this.dsCreditInfo = new System.Data.DataSet();
+      this.deleteOperationButton = new System.Windows.Forms.Button();
+      this.deleteBalanceButton = new System.Windows.Forms.Button();
+      this.deleteCardButton = new System.Windows.Forms.Button();
+      this.dsMyDeposit = new System.Data.DataSet();
+      this.dsDepositInfo = new System.Data.DataSet();
+      this.dsTopDeposits = new System.Data.DataSet();
+      this.dsMySecurities = new System.Data.DataSet();
+      this.dsSecurityInfo = new System.Data.DataSet();
+      this.dsTopSecurities = new System.Data.DataSet();
+      this.terminateDepositButton = new System.Windows.Forms.Button();
+      this.sellSecuritiesButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -167,6 +183,17 @@ namespace Bank
       this.groupBox13.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsOperation)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsBalance)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCard)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCardService)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCredit)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCreditInfo)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsMyDeposit)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsDepositInfo)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTopDeposits)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsMySecurities)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -550,6 +577,7 @@ namespace Bank
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.deleteOperationButton);
       this.groupBox1.Controls.Add(this.operationDataGridView);
       this.groupBox1.Location = new System.Drawing.Point(1, 141);
       this.groupBox1.Name = "groupBox1";
@@ -565,11 +593,14 @@ namespace Bank
       this.operationDataGridView.Name = "operationDataGridView";
       this.operationDataGridView.RowHeadersWidth = 51;
       this.operationDataGridView.RowTemplate.Height = 24;
-      this.operationDataGridView.Size = new System.Drawing.Size(505, 378);
+      this.operationDataGridView.Size = new System.Drawing.Size(505, 339);
       this.operationDataGridView.TabIndex = 0;
+      this.operationDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.operationDataGridView_CellContentClick);
       // 
       // tabPage3
       // 
+      this.tabPage3.Controls.Add(this.deleteCardButton);
+      this.tabPage3.Controls.Add(this.deleteBalanceButton);
       this.tabPage3.Controls.Add(this.addCardButton);
       this.tabPage3.Controls.Add(this.cardNimberTextBox);
       this.tabPage3.Controls.Add(this.cardServiceComboBox);
@@ -734,7 +765,7 @@ namespace Bank
       this.groupBox3.Controls.Add(this.cardsDataGridView);
       this.groupBox3.Location = new System.Drawing.Point(3, 89);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(524, 223);
+      this.groupBox3.Size = new System.Drawing.Size(524, 184);
       this.groupBox3.TabIndex = 3;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Available cards";
@@ -746,7 +777,7 @@ namespace Bank
       this.cardsDataGridView.Name = "cardsDataGridView";
       this.cardsDataGridView.RowHeadersWidth = 51;
       this.cardsDataGridView.RowTemplate.Height = 24;
-      this.cardsDataGridView.Size = new System.Drawing.Size(518, 204);
+      this.cardsDataGridView.Size = new System.Drawing.Size(518, 160);
       this.cardsDataGridView.TabIndex = 0;
       // 
       // groupBox5
@@ -773,7 +804,7 @@ namespace Bank
       this.groupBox4.Controls.Add(this.balancesDataGridView);
       this.groupBox4.Location = new System.Drawing.Point(533, 140);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(508, 404);
+      this.groupBox4.Size = new System.Drawing.Size(508, 363);
       this.groupBox4.TabIndex = 1;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "My Balances";
@@ -785,7 +816,7 @@ namespace Bank
       this.balancesDataGridView.Name = "balancesDataGridView";
       this.balancesDataGridView.RowHeadersWidth = 51;
       this.balancesDataGridView.RowTemplate.Height = 24;
-      this.balancesDataGridView.Size = new System.Drawing.Size(508, 380);
+      this.balancesDataGridView.Size = new System.Drawing.Size(508, 336);
       this.balancesDataGridView.TabIndex = 1;
       // 
       // tabPage4
@@ -905,6 +936,7 @@ namespace Bank
       // 
       // tabPage5
       // 
+      this.tabPage5.Controls.Add(this.terminateDepositButton);
       this.tabPage5.Controls.Add(this.addDepositButton);
       this.tabPage5.Controls.Add(this.depositAmountTextBox);
       this.tabPage5.Controls.Add(this.depositTypeComboBox);
@@ -1006,7 +1038,7 @@ namespace Bank
       this.groupBox10.Controls.Add(this.myDepositsDataGridView);
       this.groupBox10.Location = new System.Drawing.Point(530, 85);
       this.groupBox10.Name = "groupBox10";
-      this.groupBox10.Size = new System.Drawing.Size(508, 462);
+      this.groupBox10.Size = new System.Drawing.Size(508, 418);
       this.groupBox10.TabIndex = 15;
       this.groupBox10.TabStop = false;
       this.groupBox10.Text = "My deposits";
@@ -1018,11 +1050,12 @@ namespace Bank
       this.myDepositsDataGridView.Name = "myDepositsDataGridView";
       this.myDepositsDataGridView.RowHeadersWidth = 51;
       this.myDepositsDataGridView.RowTemplate.Height = 24;
-      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 438);
+      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 391);
       this.myDepositsDataGridView.TabIndex = 1;
       // 
       // tabPage6
       // 
+      this.tabPage6.Controls.Add(this.sellSecuritiesButton);
       this.tabPage6.Controls.Add(this.securitiesCountNumericUpDown);
       this.tabPage6.Controls.Add(this.buySecurityButton);
       this.tabPage6.Controls.Add(this.securityTypeComboBox);
@@ -1124,7 +1157,7 @@ namespace Bank
       this.groupBox13.Controls.Add(this.mySecuritiesDataGridView);
       this.groupBox13.Location = new System.Drawing.Point(531, 82);
       this.groupBox13.Name = "groupBox13";
-      this.groupBox13.Size = new System.Drawing.Size(508, 462);
+      this.groupBox13.Size = new System.Drawing.Size(508, 417);
       this.groupBox13.TabIndex = 23;
       this.groupBox13.TabStop = false;
       this.groupBox13.Text = "My secirities";
@@ -1136,7 +1169,7 @@ namespace Bank
       this.mySecuritiesDataGridView.Name = "mySecuritiesDataGridView";
       this.mySecuritiesDataGridView.RowHeadersWidth = 51;
       this.mySecuritiesDataGridView.RowTemplate.Height = 24;
-      this.mySecuritiesDataGridView.Size = new System.Drawing.Size(508, 438);
+      this.mySecuritiesDataGridView.Size = new System.Drawing.Size(508, 390);
       this.mySecuritiesDataGridView.TabIndex = 1;
       // 
       // connection
@@ -1147,6 +1180,95 @@ namespace Bank
       // dsOperation
       // 
       this.dsOperation.DataSetName = "NewDataSet";
+      // 
+      // dsBalance
+      // 
+      this.dsBalance.DataSetName = "NewDataSet";
+      // 
+      // dsCard
+      // 
+      this.dsCard.DataSetName = "NewDataSet";
+      // 
+      // dsCardService
+      // 
+      this.dsCardService.DataSetName = "NewDataSet";
+      // 
+      // dsCredit
+      // 
+      this.dsCredit.DataSetName = "NewDataSet";
+      // 
+      // dsCreditInfo
+      // 
+      this.dsCreditInfo.DataSetName = "NewDataSet";
+      // 
+      // deleteOperationButton
+      // 
+      this.deleteOperationButton.Location = new System.Drawing.Point(5, 364);
+      this.deleteOperationButton.Name = "deleteOperationButton";
+      this.deleteOperationButton.Size = new System.Drawing.Size(503, 32);
+      this.deleteOperationButton.TabIndex = 1;
+      this.deleteOperationButton.Text = "Delete selected";
+      this.deleteOperationButton.UseVisualStyleBackColor = true;
+      // 
+      // deleteBalanceButton
+      // 
+      this.deleteBalanceButton.Location = new System.Drawing.Point(536, 503);
+      this.deleteBalanceButton.Name = "deleteBalanceButton";
+      this.deleteBalanceButton.Size = new System.Drawing.Size(503, 32);
+      this.deleteBalanceButton.TabIndex = 20;
+      this.deleteBalanceButton.Text = "Delete selected";
+      this.deleteBalanceButton.UseVisualStyleBackColor = true;
+      // 
+      // deleteCardButton
+      // 
+      this.deleteCardButton.Location = new System.Drawing.Point(7, 280);
+      this.deleteCardButton.Name = "deleteCardButton";
+      this.deleteCardButton.Size = new System.Drawing.Size(520, 32);
+      this.deleteCardButton.TabIndex = 21;
+      this.deleteCardButton.Text = "Delete selected";
+      this.deleteCardButton.UseVisualStyleBackColor = true;
+      // 
+      // dsMyDeposit
+      // 
+      this.dsMyDeposit.DataSetName = "NewDataSet";
+      // 
+      // dsDepositInfo
+      // 
+      this.dsDepositInfo.DataSetName = "NewDataSet";
+      // 
+      // dsTopDeposits
+      // 
+      this.dsTopDeposits.DataSetName = "NewDataSet";
+      // 
+      // dsMySecurities
+      // 
+      this.dsMySecurities.DataSetName = "NewDataSet";
+      // 
+      // dsSecurityInfo
+      // 
+      this.dsSecurityInfo.DataSetName = "NewDataSet";
+      // 
+      // dsTopSecurities
+      // 
+      this.dsTopSecurities.DataSetName = "NewDataSet";
+      // 
+      // terminateDepositButton
+      // 
+      this.terminateDepositButton.Location = new System.Drawing.Point(531, 509);
+      this.terminateDepositButton.Name = "terminateDepositButton";
+      this.terminateDepositButton.Size = new System.Drawing.Size(503, 32);
+      this.terminateDepositButton.TabIndex = 23;
+      this.terminateDepositButton.Text = "Terminate deposit";
+      this.terminateDepositButton.UseVisualStyleBackColor = true;
+      // 
+      // sellSecuritiesButton
+      // 
+      this.sellSecuritiesButton.Location = new System.Drawing.Point(531, 502);
+      this.sellSecuritiesButton.Name = "sellSecuritiesButton";
+      this.sellSecuritiesButton.Size = new System.Drawing.Size(503, 32);
+      this.sellSecuritiesButton.TabIndex = 31;
+      this.sellSecuritiesButton.Text = "Sell now";
+      this.sellSecuritiesButton.UseVisualStyleBackColor = true;
       // 
       // User
       // 
@@ -1199,6 +1321,17 @@ namespace Bank
       this.groupBox13.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.mySecuritiesDataGridView)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsOperation)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsBalance)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCard)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCardService)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCredit)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCreditInfo)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsMyDeposit)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsDepositInfo)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTopDeposits)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsMySecurities)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1308,5 +1441,21 @@ namespace Bank
     private System.Windows.Forms.DataGridView mySecuritiesDataGridView;
     private System.Data.OleDb.OleDbConnection connection;
     private System.Data.DataSet dsOperation;
+    private System.Data.DataSet dsBalance;
+    private System.Data.DataSet dsCard;
+    private System.Data.DataSet dsCardService;
+    private System.Data.DataSet dsCredit;
+    private System.Data.DataSet dsCreditInfo;
+    private System.Windows.Forms.Button deleteOperationButton;
+    private System.Windows.Forms.Button deleteBalanceButton;
+    private System.Windows.Forms.Button deleteCardButton;
+    private System.Data.DataSet dsMyDeposit;
+    private System.Data.DataSet dsDepositInfo;
+    private System.Data.DataSet dsTopDeposits;
+    private System.Data.DataSet dsMySecurities;
+    private System.Data.DataSet dsSecurityInfo;
+    private System.Data.DataSet dsTopSecurities;
+    private System.Windows.Forms.Button terminateDepositButton;
+    private System.Windows.Forms.Button sellSecuritiesButton;
   }
 }
