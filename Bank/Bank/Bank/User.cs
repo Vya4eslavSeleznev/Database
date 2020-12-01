@@ -38,9 +38,6 @@ namespace Bank
       setSecurityInfo();
       setPopularSecurities();
       setProfile();
-
-        //TEST
-        //firstNameTextBox.Text = Convert.ToString(customerId);
     }
 
     private void ShowRow()
@@ -87,12 +84,6 @@ namespace Bank
 
     private void setOperation()
     {
-      DataGridViewCheckBoxColumn deleteOperation = new DataGridViewCheckBoxColumn();
-      deleteOperation.HeaderText = "Select to delete";
-      deleteOperation.FalseValue = "0";
-      deleteOperation.TrueValue = "1";
-      operationDataGridView.Columns.Insert(0, deleteOperation);
-
       string myOperationQuery =
         "SELECT Article.[Name] AS Article, Currency.[Name] AS Currency, Balance.Number, " +
         "Operation.Cash, Operation.[Date], Operation.WhoseBalance " +
@@ -105,30 +96,13 @@ namespace Bank
         "ON Operation.BalanceId = Balance.BalanceId " +
         "WHERE CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(myOperationQuery, connection);
-      DataTable customersOperation = new DataTable("Operation");
-      dsOperation.Tables.Add(customersOperation);
-      operationDataGridView.AutoGenerateColumns = true;
-      operationDataGridView.DataSource = dsOperation;
-      operationDataGridView.DataMember = "Operation";
-      dataAdapter.Fill(dsOperation, "Operation");
-
-      DataGridViewButtonColumn editOperation = new DataGridViewButtonColumn();
-      operationDataGridView.Columns.Add(editOperation);
-      editOperation.HeaderText = "Click to edit";
-      editOperation.Text = "Edit";
-      editOperation.Name = "editButton";
-      editOperation.UseColumnTextForButtonValue = true;
+      addCheckBoxInDataGrid("Select to delete", operationDataGridView);
+      setDataInTable(myOperationQuery, "Operation", dsOperation, operationDataGridView);
+      addButtonInDataGrid(operationDataGridView);
     }
 
     private void setBalance()
     {
-      DataGridViewCheckBoxColumn deleteBalance = new DataGridViewCheckBoxColumn();
-      deleteBalance.HeaderText = "Select to delete";
-      deleteBalance.FalseValue = "0";
-      deleteBalance.TrueValue = "1";
-      balancesDataGridView.Columns.Insert(0, deleteBalance);
-
       string myBalanceQuery =
         "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
         "Balance.Debit, Balance.Credit, Balance.CardId " +
@@ -136,30 +110,13 @@ namespace Bank
         "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
         "WHERE CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(myBalanceQuery, connection);
-      DataTable customersBalance = new DataTable("Balance");
-      dsBalance.Tables.Add(customersBalance);
-      balancesDataGridView.AutoGenerateColumns = true;
-      balancesDataGridView.DataSource = dsBalance;
-      balancesDataGridView.DataMember = "Balance";
-      dataAdapter.Fill(dsBalance, "Balance");
-
-      DataGridViewButtonColumn editBalance = new DataGridViewButtonColumn();
-      balancesDataGridView.Columns.Add(editBalance);
-      editBalance.HeaderText = "Click to edit";
-      editBalance.Text = "Edit";
-      editBalance.Name = "editButton";
-      editBalance.UseColumnTextForButtonValue = true;
+      addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
+      setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
+      addButtonInDataGrid(balancesDataGridView);
     }
 
     private void setMyCards()
     {
-      DataGridViewCheckBoxColumn deleteCard = new DataGridViewCheckBoxColumn();
-      deleteCard.HeaderText = "Select to delete";
-      deleteCard.FalseValue = "0";
-      deleteCard.TrueValue = "1";
-      cardsDataGridView.Columns.Insert(0, deleteCard);
-
       string myCardsQuery =
         "SELECT [Card].Number, CardService.[Name] AS Service " +
         "FROM[Card] " +
@@ -168,20 +125,9 @@ namespace Bank
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
         "WHERE Balance.CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(myCardsQuery, connection);
-      DataTable customerCards = new DataTable("Card");
-      dsCard.Tables.Add(customerCards);
-      cardsDataGridView.AutoGenerateColumns = true;
-      cardsDataGridView.DataSource = dsCard;
-      cardsDataGridView.DataMember = "Card";
-      dataAdapter.Fill(dsCard, "Card");
-
-      DataGridViewButtonColumn editCard = new DataGridViewButtonColumn();
-      cardsDataGridView.Columns.Add(editCard);
-      editCard.HeaderText = "Click to edit";
-      editCard.Text = "Edit";
-      editCard.Name = "editButton";
-      editCard.UseColumnTextForButtonValue = true;
+      addCheckBoxInDataGrid("Select to delete", cardsDataGridView);
+      setDataInTable(myCardsQuery, "Card", dsCard, cardsDataGridView);
+      addButtonInDataGrid(cardsDataGridView);
     }
 
     private void setCardServices()
@@ -190,13 +136,7 @@ namespace Bank
         "SELECT [Name], Price " +
         "FROM CardService";
 
-      var dataAdapter = new OleDbDataAdapter(cardServiceQuery, connection);
-      DataTable cardServices = new DataTable("CardService");
-      dsCardService.Tables.Add(cardServices);
-      servicesDataGridView.AutoGenerateColumns = true;
-      servicesDataGridView.DataSource = dsCardService;
-      servicesDataGridView.DataMember = "CardService";
-      dataAdapter.Fill(dsCardService, "CardService");
+      setDataInTable(cardServiceQuery, "CardService", dsCardService, servicesDataGridView);
     }
 
     private void setMyCredit()
@@ -209,13 +149,7 @@ namespace Bank
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId " +
         "WHERE CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(myCreditQuery, connection);
-      DataTable myCredit = new DataTable("CustomerCredit");
-      dsCredit.Tables.Add(myCredit);
-      myCreditDataGridView.AutoGenerateColumns = true;
-      myCreditDataGridView.DataSource = dsCredit;
-      myCreditDataGridView.DataMember = "CustomerCredit";
-      dataAdapter.Fill(dsCredit, "CustomerCredit");
+      setDataInTable(myCreditQuery, "CustomerCredit", dsCredit, myCreditDataGridView);
     }
 
     private void setCreditInformation()
@@ -226,37 +160,19 @@ namespace Bank
         "FROM InfoCredit " +
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
 
-      var dataAdapter = new OleDbDataAdapter(creditInfoQuery, connection);
-      DataTable creditInfo = new DataTable("InfoCredit");
-      dsCreditInfo.Tables.Add(creditInfo);
-      creditInfoDataGridView.AutoGenerateColumns = true;
-      creditInfoDataGridView.DataSource = dsCreditInfo;
-      creditInfoDataGridView.DataMember = "InfoCredit";
-      dataAdapter.Fill(dsCreditInfo, "InfoCredit");
+      setDataInTable(creditInfoQuery, "InfoCredit", dsCreditInfo, creditInfoDataGridView);
     }
 
     private void setMyDeposit()
     {
-      DataGridViewCheckBoxColumn selectedDeposits = new DataGridViewCheckBoxColumn();
-      selectedDeposits.HeaderText = "Select to terminate";
-      selectedDeposits.FalseValue = "0";
-      selectedDeposits.TrueValue = "1";
-      myDepositsDataGridView.Columns.Insert(0, selectedDeposits);
-
-
       string myDepositQuery =
         "SELECT InfoDeposit.DepositName, CustomerDeposit.Amount " +
         "FROM CustomerDeposit " +
         "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
         "WHERE CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(myDepositQuery, connection);
-      DataTable myDeposit = new DataTable("CustomerDeposit");
-      dsMyDeposit.Tables.Add(myDeposit);
-      myDepositsDataGridView.AutoGenerateColumns = true;
-      myDepositsDataGridView.DataSource = dsMyDeposit;
-      myDepositsDataGridView.DataMember = "CustomerDeposit";
-      dataAdapter.Fill(dsMyDeposit, "CustomerDeposit");
+      addCheckBoxInDataGrid("Select to terminate", myDepositsDataGridView);
+      setDataInTable(myDepositQuery, "CustomerDeposit", dsMyDeposit, myDepositsDataGridView);
     }
 
     private void setDepositInfo()
@@ -267,13 +183,7 @@ namespace Bank
         "FROM InfoDeposit " +
         "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId";
 
-      var dataAdapter = new OleDbDataAdapter(depositInfoQuery, connection);
-      DataTable myDeposit = new DataTable("InfoDeposit");
-      dsDepositInfo.Tables.Add(myDeposit);
-      depositInfoDataGridView.AutoGenerateColumns = true;
-      depositInfoDataGridView.DataSource = dsDepositInfo;
-      depositInfoDataGridView.DataMember = "InfoDeposit";
-      dataAdapter.Fill(dsDepositInfo, "InfoDeposit");
+      setDataInTable(depositInfoQuery, "InfoDeposit", dsDepositInfo, depositInfoDataGridView);
     }
 
     private void setPopularDeposits()
@@ -288,36 +198,19 @@ namespace Bank
         "HAVING COUNT(*) > 10 " +
         "ORDER BY COUNT(*)";
 
-      var dataAdapter = new OleDbDataAdapter(popularDepositsQuery, connection);
-      DataTable popularDeposits = new DataTable("InfoDeposit");
-      dsTopDeposits.Tables.Add(popularDeposits);
-      topDepositsDataGridView.AutoGenerateColumns = true;
-      topDepositsDataGridView.DataSource = dsTopDeposits;
-      topDepositsDataGridView.DataMember = "InfoDeposit";
-      dataAdapter.Fill(dsTopDeposits, "InfoDeposit");
+      setDataInTable(popularDepositsQuery, "InfoDeposit", dsTopDeposits, topDepositsDataGridView);
     }
 
     private void setMySecurities()
     {
-      DataGridViewCheckBoxColumn selectedSecurities = new DataGridViewCheckBoxColumn();
-      selectedSecurities.HeaderText = "Select to sell";
-      selectedSecurities.FalseValue = "0";
-      selectedSecurities.TrueValue = "1";
-      mySecuritiesDataGridView.Columns.Insert(0, selectedSecurities);
-
       string mySecuritiesQuery =
         "SELECT InfoSecurities.[Name], CustomerSecurities.Count " +
         "FROM CustomerSecurities " +
         "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
         "WHERE CustomerId = " + customerId;
 
-      var dataAdapter = new OleDbDataAdapter(mySecuritiesQuery, connection);
-      DataTable mySecurities = new DataTable("CustomerSecurities");
-      dsMySecurities.Tables.Add(mySecurities);
-      mySecuritiesDataGridView.AutoGenerateColumns = true;
-      mySecuritiesDataGridView.DataSource = dsMySecurities;
-      mySecuritiesDataGridView.DataMember = "CustomerSecurities";
-      dataAdapter.Fill(dsMySecurities, "CustomerSecurities");
+      addCheckBoxInDataGrid("Select to sell", mySecuritiesDataGridView);
+      setDataInTable(mySecuritiesQuery, "CustomerSecurities", dsMySecurities, mySecuritiesDataGridView);
     }
 
     private void setSecurityInfo()
@@ -328,13 +221,7 @@ namespace Bank
         "FROM InfoSecurities " +
         "JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId";
 
-      var dataAdapter = new OleDbDataAdapter(securityInfoQuery, connection);
-      DataTable securityInfo = new DataTable("InfoSecurities");
-      dsSecurityInfo.Tables.Add(securityInfo);
-      securityInfoDataGridView.AutoGenerateColumns = true;
-      securityInfoDataGridView.DataSource = dsSecurityInfo;
-      securityInfoDataGridView.DataMember = "InfoSecurities";
-      dataAdapter.Fill(dsSecurityInfo, "InfoSecurities");
+      setDataInTable(securityInfoQuery, "InfoSecurities", dsSecurityInfo, securityInfoDataGridView);
     }
 
     private void setPopularSecurities()
@@ -346,16 +233,40 @@ namespace Bank
         "GROUP BY Name, [Percent rate] " +
         "ORDER BY COUNT(*) DESC";
 
-      var dataAdapter = new OleDbDataAdapter(topSecuritysQuery, connection);
-      DataTable topSecuritys = new DataTable("InfoSecurities");
-      dsTopSecurities.Tables.Add(topSecuritys);
-      topSecuritiesDataGridView.AutoGenerateColumns = true;
-      topSecuritiesDataGridView.DataSource = dsTopSecurities;
-      topSecuritiesDataGridView.DataMember = "InfoSecurities";
-      dataAdapter.Fill(dsTopSecurities, "InfoSecurities");
+      setDataInTable(topSecuritysQuery, "InfoSecurities", dsTopSecurities, topSecuritiesDataGridView);
     }
 
-      private void User_FormClosing(object sender, FormClosingEventArgs e)
+    private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
+    {
+      DataGridViewCheckBoxColumn check = new DataGridViewCheckBoxColumn();
+      check.HeaderText = headerText;
+      check.FalseValue = "0";
+      check.TrueValue = "1";
+      dataGrid.Columns.Insert(0, check);
+    }
+
+    private void addButtonInDataGrid(DataGridView dataGrid)
+    {
+      DataGridViewButtonColumn button = new DataGridViewButtonColumn();
+      dataGrid.Columns.Add(button);
+      button.HeaderText = "Click to edit";
+      button.Text = "Edit";
+      button.Name = "editButton";
+      button.UseColumnTextForButtonValue = true;
+    }
+
+    private void setDataInTable(string query, string tableName, DataSet dataSet, DataGridView dataGrid)
+    {
+      var dataAdapter = new OleDbDataAdapter(query, connection);
+      DataTable table = new DataTable(tableName);
+      dataSet.Tables.Add(table);
+      dataGrid.AutoGenerateColumns = true;
+      dataGrid.DataSource = dataSet;
+      dataGrid.DataMember = tableName;
+      dataAdapter.Fill(dataSet, tableName);
+    }
+
+    private void User_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
       Application.Exit();
