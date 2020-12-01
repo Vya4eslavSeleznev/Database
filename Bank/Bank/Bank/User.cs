@@ -38,6 +38,8 @@ namespace Bank
       setSecurityInfo();
       setPopularSecurities();
       setProfile();
+
+      birthdayTimePicker.Value.ToShortDateString();
     }
 
     private void ShowRow()
@@ -270,6 +272,49 @@ namespace Bank
     {
       connection.Close();
       Application.Exit();
+    }
+
+    private void saveChangesButton_Click(object sender, EventArgs e)
+    {
+      var firstName = firstNameTextBox.Text;
+      var lastName = lastNameTextBox.Text;
+      //var birthday = birthdayTimePicker.Text;
+      //var birthday = birthdayTimePicker.Value.Date.ToString("yyyy-mm-d");
+      var birthday = birthdayTimePicker.Value.Date.ToString("yyyy / MM / dd");
+      var passNum = passportNumTextBox.Text;
+      var phone = phoneTextBox.Text;
+
+      /*string updateProfileQuery =
+        "UPDATE Customer " +
+        "SET " +
+          "FirstName = " + firstName +
+          ", LastName = " + lastName +
+          ", Birthday = " + birthday +
+          ", PassportNum = " + passNum + 
+          ", Phone = " + phone +
+        " WHERE CustomerId = " + customerId;*/
+
+      string updateProfileQuery =
+        "UPDATE Customer " +
+        "SET " +
+          "FirstName = ?, " +
+          "LastName = ?, " +
+          "Birthday = ?, " +
+          "PassportNum = ?, " +
+          "Phone = ? " +
+        " WHERE CustomerId = " + customerId;
+
+      OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@FirstName", firstName));
+      cmdIC.Parameters.Add(new OleDbParameter("@LastName", lastName));
+      cmdIC.Parameters.Add(new OleDbParameter("@Birthday", birthday));
+      cmdIC.Parameters.Add(new OleDbParameter("@PassportNum", passNum));
+      cmdIC.Parameters.Add(new OleDbParameter("@Phone", phone));
+
+      cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Profile updated!", "Profile", MessageBoxButtons.OK);
+
     }
   }
 }

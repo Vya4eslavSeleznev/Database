@@ -90,3 +90,15 @@ JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId
 SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password]
 FROM Customer
 JOIN [User] ON Customer.UserId = [User].Id
+
+--Update profile
+
+UPDATE Customer
+SET
+	FirstName = 'TEST_UPDATE',
+	LastName = 'TEST',
+	Birthday = '2020-01-01',
+	PassportNum = 00000000,
+	Phone = 777777
+
+WHERE CustomerId = 10
