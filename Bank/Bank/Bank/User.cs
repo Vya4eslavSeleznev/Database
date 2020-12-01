@@ -278,21 +278,9 @@ namespace Bank
     {
       var firstName = firstNameTextBox.Text;
       var lastName = lastNameTextBox.Text;
-      //var birthday = birthdayTimePicker.Text;
-      //var birthday = birthdayTimePicker.Value.Date.ToString("yyyy-mm-d");
       var birthday = birthdayTimePicker.Value.Date.ToString("yyyy / MM / dd");
       var passNum = passportNumTextBox.Text;
       var phone = phoneTextBox.Text;
-
-      /*string updateProfileQuery =
-        "UPDATE Customer " +
-        "SET " +
-          "FirstName = " + firstName +
-          ", LastName = " + lastName +
-          ", Birthday = " + birthday +
-          ", PassportNum = " + passNum + 
-          ", Phone = " + phone +
-        " WHERE CustomerId = " + customerId;*/
 
       string updateProfileQuery =
         "UPDATE Customer " +
@@ -302,7 +290,7 @@ namespace Bank
           "Birthday = ?, " +
           "PassportNum = ?, " +
           "Phone = ? " +
-        " WHERE CustomerId = " + customerId;
+        " WHERE CustomerId = ?";
 
       OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
 
@@ -311,10 +299,32 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@Birthday", birthday));
       cmdIC.Parameters.Add(new OleDbParameter("@PassportNum", passNum));
       cmdIC.Parameters.Add(new OleDbParameter("@Phone", phone));
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
 
       cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Profile updated!", "Profile", MessageBoxButtons.OK);
+      MessageBox.Show("Personal information updated!", "Profile", MessageBoxButtons.OK);
+    }
 
+    private void changeLoginAndPasswordButton_Click(object sender, EventArgs e)
+    {
+      var login = loginTextBox.Text;
+      var password = passwordTextBox.Text;
+
+      string updateProfileQuery =
+        "UPDATE [User] " +
+        "SET " +
+          "[Login] = ?, " +
+          "[Password] = ?, " +
+        " WHERE CustomerId = ?";
+
+      OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
+      cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+      cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
     }
   }
 }

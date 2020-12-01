@@ -31,8 +31,6 @@ namespace Bank
     {
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
-      this.changePasswordButton = new System.Windows.Forms.Button();
-      this.changeLoginButton = new System.Windows.Forms.Button();
       this.saveChangesButton = new System.Windows.Forms.Button();
       this.birthdayTimePicker = new System.Windows.Forms.DateTimePicker();
       this.passwordTextBox = new System.Windows.Forms.TextBox();
@@ -149,6 +147,7 @@ namespace Bank
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
+      this.changeLoginAndPasswordButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -214,8 +213,7 @@ namespace Bank
       // 
       // tabPage1
       // 
-      this.tabPage1.Controls.Add(this.changePasswordButton);
-      this.tabPage1.Controls.Add(this.changeLoginButton);
+      this.tabPage1.Controls.Add(this.changeLoginAndPasswordButton);
       this.tabPage1.Controls.Add(this.saveChangesButton);
       this.tabPage1.Controls.Add(this.birthdayTimePicker);
       this.tabPage1.Controls.Add(this.passwordTextBox);
@@ -238,24 +236,6 @@ namespace Bank
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Profile";
       this.tabPage1.UseVisualStyleBackColor = true;
-      // 
-      // changePasswordButton
-      // 
-      this.changePasswordButton.Location = new System.Drawing.Point(791, 195);
-      this.changePasswordButton.Name = "changePasswordButton";
-      this.changePasswordButton.Size = new System.Drawing.Size(173, 33);
-      this.changePasswordButton.TabIndex = 50;
-      this.changePasswordButton.Text = "Change password";
-      this.changePasswordButton.UseVisualStyleBackColor = true;
-      // 
-      // changeLoginButton
-      // 
-      this.changeLoginButton.Location = new System.Drawing.Point(601, 195);
-      this.changeLoginButton.Name = "changeLoginButton";
-      this.changeLoginButton.Size = new System.Drawing.Size(174, 33);
-      this.changeLoginButton.TabIndex = 49;
-      this.changeLoginButton.Text = "Change login";
-      this.changeLoginButton.UseVisualStyleBackColor = true;
       // 
       // saveChangesButton
       // 
@@ -1277,6 +1257,16 @@ namespace Bank
       // 
       this.dsCustomer.DataSetName = "NewDataSet";
       // 
+      // changeLoginAndPasswordButton
+      // 
+      this.changeLoginAndPasswordButton.Location = new System.Drawing.Point(601, 195);
+      this.changeLoginAndPasswordButton.Name = "changeLoginAndPasswordButton";
+      this.changeLoginAndPasswordButton.Size = new System.Drawing.Size(363, 33);
+      this.changeLoginAndPasswordButton.TabIndex = 49;
+      this.changeLoginAndPasswordButton.Text = "Change login and password";
+      this.changeLoginAndPasswordButton.UseVisualStyleBackColor = true;
+      this.changeLoginAndPasswordButton.Click += new System.EventHandler(this.changeLoginAndPasswordButton_Click);
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1353,8 +1343,6 @@ namespace Bank
     private System.Windows.Forms.TabPage tabPage4;
     private System.Windows.Forms.TabPage tabPage5;
     private System.Windows.Forms.TabPage tabPage6;
-    private System.Windows.Forms.Button changePasswordButton;
-    private System.Windows.Forms.Button changeLoginButton;
     private System.Windows.Forms.Button saveChangesButton;
     private System.Windows.Forms.DateTimePicker birthdayTimePicker;
     private System.Windows.Forms.TextBox passwordTextBox;
@@ -1466,5 +1454,6 @@ namespace Bank
     private System.Windows.Forms.Button terminateDepositButton;
     private System.Windows.Forms.Button sellSecuritiesButton;
     private System.Data.DataSet dsCustomer;
+    private System.Windows.Forms.Button changeLoginAndPasswordButton;
   }
 }
