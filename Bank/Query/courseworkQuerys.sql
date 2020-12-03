@@ -102,3 +102,13 @@ SET
 	Phone = 777777
 
 WHERE CustomerId = 10
+
+--Add operation
+INSERT INTO Operation (ArticleId, CurrencyId, BalanceId, Cash, [Date], WhoseBalance) 
+VALUES (1, 1, 2, 777, '2020-01-01', 2123123)
+
+--ComboBox
+
+SELECT InfoCreditId, [Name]
+FROM InfoCredit
+WHERE CustomerId = 1

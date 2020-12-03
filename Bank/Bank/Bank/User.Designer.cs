@@ -31,6 +31,7 @@ namespace Bank
     {
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
+      this.changeLoginAndPasswordButton = new System.Windows.Forms.Button();
       this.saveChangesButton = new System.Windows.Forms.Button();
       this.birthdayTimePicker = new System.Windows.Forms.DateTimePicker();
       this.passwordTextBox = new System.Windows.Forms.TextBox();
@@ -51,10 +52,10 @@ namespace Bank
       this.dateToPicker = new System.Windows.Forms.DateTimePicker();
       this.label15 = new System.Windows.Forms.Label();
       this.showButton = new System.Windows.Forms.Button();
-      this.textBox3 = new System.Windows.Forms.TextBox();
-      this.cashTextBox = new System.Windows.Forms.TextBox();
-      this.balanceComboBox = new System.Windows.Forms.ComboBox();
-      this.currencyComboBox = new System.Windows.Forms.ComboBox();
+      this.whoseBalanceTextBox = new System.Windows.Forms.TextBox();
+      this.operationCashTextBox = new System.Windows.Forms.TextBox();
+      this.balanceIdComboBox = new System.Windows.Forms.ComboBox();
+      this.currencyOperationComboBox = new System.Windows.Forms.ComboBox();
       this.articleComboBox = new System.Windows.Forms.ComboBox();
       this.addOperationButton = new System.Windows.Forms.Button();
       this.label14 = new System.Windows.Forms.Label();
@@ -147,7 +148,6 @@ namespace Bank
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
-      this.changeLoginAndPasswordButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -236,6 +236,16 @@ namespace Bank
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Profile";
       this.tabPage1.UseVisualStyleBackColor = true;
+      // 
+      // changeLoginAndPasswordButton
+      // 
+      this.changeLoginAndPasswordButton.Location = new System.Drawing.Point(601, 195);
+      this.changeLoginAndPasswordButton.Name = "changeLoginAndPasswordButton";
+      this.changeLoginAndPasswordButton.Size = new System.Drawing.Size(363, 33);
+      this.changeLoginAndPasswordButton.TabIndex = 49;
+      this.changeLoginAndPasswordButton.Text = "Change login and password";
+      this.changeLoginAndPasswordButton.UseVisualStyleBackColor = true;
+      this.changeLoginAndPasswordButton.Click += new System.EventHandler(this.changeLoginAndPasswordButton_Click);
       // 
       // saveChangesButton
       // 
@@ -366,10 +376,10 @@ namespace Bank
       this.tabPage2.Controls.Add(this.dateToPicker);
       this.tabPage2.Controls.Add(this.label15);
       this.tabPage2.Controls.Add(this.showButton);
-      this.tabPage2.Controls.Add(this.textBox3);
-      this.tabPage2.Controls.Add(this.cashTextBox);
-      this.tabPage2.Controls.Add(this.balanceComboBox);
-      this.tabPage2.Controls.Add(this.currencyComboBox);
+      this.tabPage2.Controls.Add(this.whoseBalanceTextBox);
+      this.tabPage2.Controls.Add(this.operationCashTextBox);
+      this.tabPage2.Controls.Add(this.balanceIdComboBox);
+      this.tabPage2.Controls.Add(this.currencyOperationComboBox);
       this.tabPage2.Controls.Add(this.articleComboBox);
       this.tabPage2.Controls.Add(this.addOperationButton);
       this.tabPage2.Controls.Add(this.label14);
@@ -422,35 +432,35 @@ namespace Bank
       this.showButton.Text = "Show";
       this.showButton.UseVisualStyleBackColor = true;
       // 
-      // textBox3
+      // whoseBalanceTextBox
       // 
-      this.textBox3.Location = new System.Drawing.Point(382, 82);
-      this.textBox3.Name = "textBox3";
-      this.textBox3.Size = new System.Drawing.Size(128, 22);
-      this.textBox3.TabIndex = 16;
+      this.whoseBalanceTextBox.Location = new System.Drawing.Point(382, 82);
+      this.whoseBalanceTextBox.Name = "whoseBalanceTextBox";
+      this.whoseBalanceTextBox.Size = new System.Drawing.Size(128, 22);
+      this.whoseBalanceTextBox.TabIndex = 16;
       // 
-      // cashTextBox
+      // operationCashTextBox
       // 
-      this.cashTextBox.Location = new System.Drawing.Point(320, 26);
-      this.cashTextBox.Name = "cashTextBox";
-      this.cashTextBox.Size = new System.Drawing.Size(190, 22);
-      this.cashTextBox.TabIndex = 14;
+      this.operationCashTextBox.Location = new System.Drawing.Point(320, 26);
+      this.operationCashTextBox.Name = "operationCashTextBox";
+      this.operationCashTextBox.Size = new System.Drawing.Size(190, 22);
+      this.operationCashTextBox.TabIndex = 14;
       // 
-      // balanceComboBox
+      // balanceIdComboBox
       // 
-      this.balanceComboBox.FormattingEnabled = true;
-      this.balanceComboBox.Location = new System.Drawing.Point(79, 82);
-      this.balanceComboBox.Name = "balanceComboBox";
-      this.balanceComboBox.Size = new System.Drawing.Size(157, 24);
-      this.balanceComboBox.TabIndex = 13;
+      this.balanceIdComboBox.FormattingEnabled = true;
+      this.balanceIdComboBox.Location = new System.Drawing.Point(79, 82);
+      this.balanceIdComboBox.Name = "balanceIdComboBox";
+      this.balanceIdComboBox.Size = new System.Drawing.Size(157, 24);
+      this.balanceIdComboBox.TabIndex = 13;
       // 
-      // currencyComboBox
+      // currencyOperationComboBox
       // 
-      this.currencyComboBox.FormattingEnabled = true;
-      this.currencyComboBox.Location = new System.Drawing.Point(79, 52);
-      this.currencyComboBox.Name = "currencyComboBox";
-      this.currencyComboBox.Size = new System.Drawing.Size(157, 24);
-      this.currencyComboBox.TabIndex = 12;
+      this.currencyOperationComboBox.FormattingEnabled = true;
+      this.currencyOperationComboBox.Location = new System.Drawing.Point(79, 52);
+      this.currencyOperationComboBox.Name = "currencyOperationComboBox";
+      this.currencyOperationComboBox.Size = new System.Drawing.Size(157, 24);
+      this.currencyOperationComboBox.TabIndex = 12;
       // 
       // articleComboBox
       // 
@@ -468,6 +478,7 @@ namespace Bank
       this.addOperationButton.TabIndex = 10;
       this.addOperationButton.Text = "Add Operation";
       this.addOperationButton.UseVisualStyleBackColor = true;
+      this.addOperationButton.Click += new System.EventHandler(this.addOperationButton_Click);
       // 
       // label14
       // 
@@ -1257,16 +1268,6 @@ namespace Bank
       // 
       this.dsCustomer.DataSetName = "NewDataSet";
       // 
-      // changeLoginAndPasswordButton
-      // 
-      this.changeLoginAndPasswordButton.Location = new System.Drawing.Point(601, 195);
-      this.changeLoginAndPasswordButton.Name = "changeLoginAndPasswordButton";
-      this.changeLoginAndPasswordButton.Size = new System.Drawing.Size(363, 33);
-      this.changeLoginAndPasswordButton.TabIndex = 49;
-      this.changeLoginAndPasswordButton.Text = "Change login and password";
-      this.changeLoginAndPasswordButton.UseVisualStyleBackColor = true;
-      this.changeLoginAndPasswordButton.Click += new System.EventHandler(this.changeLoginAndPasswordButton_Click);
-      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1371,10 +1372,10 @@ namespace Bank
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Label label10;
     private System.Windows.Forms.Label label9;
-    private System.Windows.Forms.TextBox textBox3;
-    private System.Windows.Forms.TextBox cashTextBox;
-    private System.Windows.Forms.ComboBox balanceComboBox;
-    private System.Windows.Forms.ComboBox currencyComboBox;
+    private System.Windows.Forms.TextBox whoseBalanceTextBox;
+    private System.Windows.Forms.TextBox operationCashTextBox;
+    private System.Windows.Forms.ComboBox balanceIdComboBox;
+    private System.Windows.Forms.ComboBox currencyOperationComboBox;
     private System.Windows.Forms.ComboBox articleComboBox;
     private System.Windows.Forms.Button showButton;
     private System.Windows.Forms.DateTimePicker dateToPicker;

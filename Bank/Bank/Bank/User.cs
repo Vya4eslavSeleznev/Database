@@ -38,6 +38,7 @@ namespace Bank
       setSecurityInfo();
       setPopularSecurities();
       setProfile();
+      setComboBox();
 
       birthdayTimePicker.Value.ToShortDateString();
     }
@@ -53,6 +54,73 @@ namespace Bank
       phoneTextBox.Text = dRow["Phone"].ToString();
       loginTextBox.Text = dRow["Login"].ToString();
       passwordTextBox.Text = dRow["Login"].ToString();
+    }
+
+    private void setComboBox()
+    {
+      OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
+      OleDbDataReader rdr = command.ExecuteReader();
+      while (rdr.Read())
+        articleComboBox.Items.Add(rdr["ArticleId"] + " - " + rdr["Name"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT CurrencyId, [Name] FROM Currency";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        currencyOperationComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT Number FROM Balance WHERE CustomerId = ?";
+      command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        balanceIdComboBox.Items.Add(rdr["Number"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        cardServiceComboBox.Items.Add(rdr["CardServiceId"] + " - " + rdr["Name"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT CurrencyId, [Name] FROM Currency";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        currencyBalanceComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
+      rdr.Close();
+
+      /*command.CommandText = 
+        "SELECT [Card].Number, " +
+        "FROM [Card] " +
+        "JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId " +
+        "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
+        "WHERE Balance.CustomerId = VALUES(?)";
+      //command.Parameters.Add("@CustomerId", OleDbType.Integer);
+      //command.Parameters[0].Value = customerId;
+      command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      rdr = command.ExecuteReader();
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        cardComboBox.Items.Add(rdr["Number"]);
+      rdr.Close();*/
+
+      command.CommandText = "SELECT InfoCreditId, [Name] FROM InfoCredit";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        typeCreditComboBox.Items.Add(rdr["InfoCreditId"] + " - " + rdr["Name"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT InfoDepositId, DepositName FROM InfoDeposit";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        depositTypeComboBox.Items.Add(rdr["InfoDepositId"] + " - " + rdr["DepositName"]);
+      rdr.Close();
+
+      command.CommandText = "SELECT InfoSecuritiesId, [Name] FROM InfoSecurities";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        securityTypeComboBox.Items.Add(rdr["InfoSecuritiesId"] + " - " + rdr["Name"]);
+      rdr.Close();
     }
 
     private void FillDataTable()
@@ -307,6 +375,7 @@ namespace Bank
 
     private void changeLoginAndPasswordButton_Click(object sender, EventArgs e)
     {
+      //Не работает
       var login = loginTextBox.Text;
       var password = passwordTextBox.Text;
 
@@ -325,6 +394,31 @@ namespace Bank
 
       cmdIC.ExecuteNonQuery();
       MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
+    }
+
+    private void addOperationButton_Click(object sender, EventArgs e)
+    {
+      var articleId = articleComboBox.Text;
+      var currencyId = currencyOperationComboBox.Text;
+      var balanceId = balanceIdComboBox.Text;
+      var cash = operationCashTextBox.Text;
+      var date = dateOfOperationPicker.Value.Date.ToString("yyyy / MM / dd");
+      var whoseBalance = whoseBalanceTextBox.Text;
+
+      string addOperationQuery =
+        "INSERT INTO Operation (ArticleId, CurrencyId, BalanceId, Cash, [Date], WhoseBalance) " +
+        "VALUES(?, ?, ?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addOperationQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+      cmdIC.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+      cmdIC.Parameters.Add(new OleDbParameter("@Cash", cash));
+      cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
+      cmdIC.Parameters.Add(new OleDbParameter("@BalanWhoseBalanceceId", whoseBalance));
+
+      cmdIC.ExecuteNonQuery();
     }
   }
 }
