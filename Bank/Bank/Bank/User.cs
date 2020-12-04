@@ -383,6 +383,13 @@ namespace Bank
       var passNum = passportNumTextBox.Text;
       var phone = phoneTextBox.Text;
 
+      if (firstName == "" || lastName == "" || birthday == ""
+          || passNum == "" || phone == "")
+      {
+        MessageBox.Show("Incorrect personal information!", "Profile", MessageBoxButtons.OK);
+        return;
+      }
+
       string updateProfileQuery =
         "UPDATE Customer " +
         "SET " +
@@ -401,15 +408,28 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@PassportNum", passNum));
       cmdIC.Parameters.Add(new OleDbParameter("@Phone", phone));
       cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Personal information updated!", "Profile", MessageBoxButtons.OK);
+      
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Personal information updated!", "Profile", MessageBoxButtons.OK);
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect personal information!", "Profile", MessageBoxButtons.OK);
+      }
     }
 
     private void changeLoginAndPasswordButton_Click(object sender, EventArgs e)
     {
       var login = loginTextBox.Text;
       var password = passwordTextBox.Text;
+
+      if(login == "" || password == "")
+      {
+        MessageBox.Show("Incorrect login or password!", "Profile", MessageBoxButtons.OK);
+        return;
+      }
 
       string updateProfileQuery =
         "UPDATE[User] " +
@@ -425,8 +445,15 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
       cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect login or password!", "Profile", MessageBoxButtons.OK);
+      }
     }
 
     private void parseComboBox(int index, string data, OleDbCommand cmdIC)
@@ -443,6 +470,13 @@ namespace Bank
       var cash = operationCashTextBox.Text;
       var date = dateOfOperationPicker.Value.Date.ToString("yyyy / MM / dd");
       var whoseBalance = whoseBalanceTextBox.Text;
+
+      if(articleId == "" || currencyId == "" || balanceId == ""
+         || cash == "" || date == "" || whoseBalance == "")
+      {
+        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        return;
+      }
 
       string addOperationQuery =
         "INSERT INTO Operation (ArticleId, CurrencyId, BalanceId, Cash, [Date], WhoseBalance) " +
@@ -461,10 +495,17 @@ namespace Bank
       parseComboBox(1, currencyId, cmdIC);
       parseComboBox(2, balanceId, cmdIC);
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Operation added successfully!", "Operation", MessageBoxButtons.OK);
-      string myOperationQuery = myOperation();
-      refreshDataSet(myOperationQuery, dsOperation, "Operation");
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Operation added successfully!", "Operation", MessageBoxButtons.OK);
+        string myOperationQuery = myOperation();
+        refreshDataSet(myOperationQuery, dsOperation, "Operation");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+      }
     }
 
     private void addCardButton_Click(object sender, EventArgs e)
