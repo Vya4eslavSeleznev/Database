@@ -386,7 +386,7 @@ namespace Bank
       if (firstName == "" || lastName == "" || birthday == ""
           || passNum == "" || phone == "")
       {
-        MessageBox.Show("Incorrect personal information!", "Profile", MessageBoxButtons.OK);
+        MessageBox.Show("Empty test field!", "Profile", MessageBoxButtons.OK);
         return;
       }
 
@@ -408,7 +408,7 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@PassportNum", passNum));
       cmdIC.Parameters.Add(new OleDbParameter("@Phone", phone));
       cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      
+
       try
       {
         cmdIC.ExecuteNonQuery();
@@ -425,9 +425,9 @@ namespace Bank
       var login = loginTextBox.Text;
       var password = passwordTextBox.Text;
 
-      if(login == "" || password == "")
+      if (login == "" || password == "")
       {
-        MessageBox.Show("Incorrect login or password!", "Profile", MessageBoxButtons.OK);
+        MessageBox.Show("Empty test field!", "Profile", MessageBoxButtons.OK);
         return;
       }
 
@@ -471,10 +471,10 @@ namespace Bank
       var date = dateOfOperationPicker.Value.Date.ToString("yyyy / MM / dd");
       var whoseBalance = whoseBalanceTextBox.Text;
 
-      if(articleId == "" || currencyId == "" || balanceId == ""
+      if (articleId == "" || currencyId == "" || balanceId == ""
          || cash == "" || date == "" || whoseBalance == "")
       {
-        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        MessageBox.Show("Empty test field!", "Operation", MessageBoxButtons.OK);
         return;
       }
 
@@ -511,7 +511,14 @@ namespace Bank
     private void addCardButton_Click(object sender, EventArgs e)
     {
       var number = cardNumberTextBox.Text;
-      var service = cardServiceComboBox.SelectedItem.ToString();
+      //var service = cardServiceComboBox.SelectedItem.ToString();
+      var service = cardServiceComboBox.Text;
+
+      if (number == "" || service == "")
+      {
+        MessageBox.Show("Empty test field!", "Card", MessageBoxButtons.OK);
+        return;
+      }
 
       string addCardQuery =
         "INSERT INTO Card (Number, CardServiceId) " +
@@ -526,10 +533,17 @@ namespace Bank
 
       parseComboBox(1, service, cmdIC);
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
-      string myCardsQuery = myCard();
-      refreshDataSet(myCardsQuery, dsCard, "Card");
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
+        string myCardsQuery = myCard();
+        refreshDataSet(myCardsQuery, dsCard, "Card");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect card!", "Card", MessageBoxButtons.OK);
+      }
     }
 
     private void refreshDataSet(string query, DataSet ds, string table)
@@ -546,9 +560,15 @@ namespace Bank
 
     private void addCreditButton_Click(object sender, EventArgs e)
     {
-      var typeOfCredit = typeCreditComboBox.SelectedItem.ToString();
+      var typeOfCredit = typeCreditComboBox.Text;
       var amount = amountCreditTextBox.Text;
       var forWhat = forWhatCreditTextBox.Text;
+
+      if (typeOfCredit == "" || amount == "" || forWhat == "")
+      {
+        MessageBox.Show("Empty test field!", "Credit", MessageBoxButtons.OK);
+        return;
+      }
 
       string addCreditQuery = 
         "INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) " +
@@ -563,10 +583,17 @@ namespace Bank
 
       parseComboBox(0, typeOfCredit, cmdIC);
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
-      string myCreditQuery = myCredit();
-      refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
+        string myCreditQuery = myCredit();
+        refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect credit!", "Credit", MessageBoxButtons.OK);
+      }
     }
 
     private void addDepositButton_Click(object sender, EventArgs e)
