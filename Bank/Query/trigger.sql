@@ -31,4 +31,4 @@ AS
 		JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
 		JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId
 	) AS BC ON inserted.CardId = BC.CardId
-GO
+GO 
