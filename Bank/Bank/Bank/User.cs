@@ -474,7 +474,7 @@ namespace Bank
       if (articleId == "" || currencyId == "" || balanceId == ""
          || cash == "" || date == "" || whoseBalance == "")
       {
-        MessageBox.Show("Empty test field!", "Operation", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect parameters!", "Operation", MessageBoxButtons.OK);
         return;
       }
 
@@ -504,7 +504,7 @@ namespace Bank
       }
       catch
       {
-        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect parameters!", "Operation", MessageBoxButtons.OK);
       }
     }
 
@@ -542,7 +542,7 @@ namespace Bank
       }
       catch
       {
-        MessageBox.Show("Incorrect card!", "Card", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
       }
     }
 
@@ -592,14 +592,20 @@ namespace Bank
       }
       catch
       {
-        MessageBox.Show("Incorrect credit!", "Credit", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect parameters!", "Credit", MessageBoxButtons.OK);
       }
     }
 
     private void addDepositButton_Click(object sender, EventArgs e)
     {
-      var depositType = depositTypeComboBox.SelectedItem.ToString();
+      var depositType = depositTypeComboBox.Text;
       var amount = depositAmountTextBox.Text;
+
+      if (depositType == "" || amount == "")
+      {
+        MessageBox.Show("Empty test field!", "Deposit", MessageBoxButtons.OK);
+        return;
+      }
 
       string addDepositQuery =
         "INSERT INTO CustomerDeposit(CustomerId, InfoDepositId, Amount) " +
@@ -613,18 +619,31 @@ namespace Bank
 
       parseComboBox(1, depositType, cmdIC);
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
-      string myDepositQuery = myDeposit();
-      string popularDepositsQuery = popularDeposits();
-      refreshDataSet(myDepositQuery, dsMyDeposit, "CustomerDeposit");
-      refreshDataSet(popularDepositsQuery, dsTopDeposits, "InfoDeposit");
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
+        string myDepositQuery = myDeposit();
+        string popularDepositsQuery = popularDeposits();
+        refreshDataSet(myDepositQuery, dsMyDeposit, "CustomerDeposit");
+        refreshDataSet(popularDepositsQuery, dsTopDeposits, "InfoDeposit");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Deposit", MessageBoxButtons.OK);
+      }
     }
 
     private void buySecurityButton_Click(object sender, EventArgs e)
     {
-      var securityType = securityTypeComboBox.SelectedItem.ToString();
+      var securityType = securityTypeComboBox.Text;
       var count = securitiesCountTextBox.Text;
+
+      if (securityType == "" || count == "")
+      {
+        MessageBox.Show("Empty test field!", "Security", MessageBoxButtons.OK);
+        return;
+      }
 
       string addDepositQuery =
         "INSERT INTO CustomerSecurities(InfoSecuritiesId, CustomerId, Count) " +
@@ -638,12 +657,19 @@ namespace Bank
 
       parseComboBox(0, securityType, cmdIC);
 
-      cmdIC.ExecuteNonQuery();
-      MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
-      string mySecuritiesQuery = mySecurities();
-      string topSecuritysQuery = popularSecurities();
-      refreshDataSet(mySecuritiesQuery, dsMySecurities, "CustomerSecurities");
-      refreshDataSet(topSecuritysQuery, dsTopSecurities, "InfoSecurities");
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
+        string mySecuritiesQuery = mySecurities();
+        string topSecuritysQuery = popularSecurities();
+        refreshDataSet(mySecuritiesQuery, dsMySecurities, "CustomerSecurities");
+        refreshDataSet(topSecuritysQuery, dsTopSecurities, "InfoSecurities");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
+      }
     }
   }
 }
