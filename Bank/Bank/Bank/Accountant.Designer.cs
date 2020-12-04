@@ -82,13 +82,23 @@ namespace Bank
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.customerInfoDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
-      this.groupBox10 = new System.Windows.Forms.GroupBox();
-      this.groupBox9 = new System.Windows.Forms.GroupBox();
-      this.connection = new System.Data.OleDb.OleDbConnection();
       this.groupBox8 = new System.Windows.Forms.GroupBox();
-      this.dataGridView1 = new System.Windows.Forms.DataGridView();
-      this.dataGridView2 = new System.Windows.Forms.DataGridView();
       this.dataGridView3 = new System.Windows.Forms.DataGridView();
+      this.groupBox10 = new System.Windows.Forms.GroupBox();
+      this.paymentsDataGridView = new System.Windows.Forms.DataGridView();
+      this.groupBox9 = new System.Windows.Forms.GroupBox();
+      this.dataGridView1 = new System.Windows.Forms.DataGridView();
+      this.connection = new System.Data.OleDb.OleDbConnection();
+      this.dsDepositTypes = new System.Data.DataSet();
+      this.dsPopularDeposits = new System.Data.DataSet();
+      this.dsPopularCredits = new System.Data.DataSet();
+      this.dsCreditTypes = new System.Data.DataSet();
+      this.dsSecurityTypes = new System.Data.DataSet();
+      this.dsPopularSecurity = new System.Data.DataSet();
+      this.dsCustomerInformation = new System.Data.DataSet();
+      this.dsShareOfCurrency = new System.Data.DataSet();
+      this.dsPayments = new System.Data.DataSet();
+      this.dsTurnover = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -109,12 +119,22 @@ namespace Bank
       this.groupBox5.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.customerInfoDataGridView)).BeginInit();
       this.tabPage5.SuspendLayout();
-      this.groupBox10.SuspendLayout();
-      this.groupBox9.SuspendLayout();
       this.groupBox8.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+      this.groupBox10.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.paymentsDataGridView)).BeginInit();
+      this.groupBox9.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsDepositTypes)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularDeposits)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularCredits)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCreditTypes)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsSecurityTypes)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularSecurity)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerInformation)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsShareOfCurrency)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPayments)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTurnover)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -610,11 +630,11 @@ namespace Bank
       // customerInfoDataGridView
       // 
       this.customerInfoDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.customerInfoDataGridView.Location = new System.Drawing.Point(0, 19);
+      this.customerInfoDataGridView.Location = new System.Drawing.Point(4, 19);
       this.customerInfoDataGridView.Name = "customerInfoDataGridView";
       this.customerInfoDataGridView.RowHeadersWidth = 51;
       this.customerInfoDataGridView.RowTemplate.Height = 24;
-      this.customerInfoDataGridView.Size = new System.Drawing.Size(1047, 478);
+      this.customerInfoDataGridView.Size = new System.Drawing.Size(1040, 481);
       this.customerInfoDataGridView.TabIndex = 0;
       // 
       // tabPage5
@@ -629,15 +649,44 @@ namespace Bank
       this.tabPage5.Text = "Bank statistic";
       this.tabPage5.UseVisualStyleBackColor = true;
       // 
+      // groupBox8
+      // 
+      this.groupBox8.Controls.Add(this.dataGridView3);
+      this.groupBox8.Location = new System.Drawing.Point(0, 260);
+      this.groupBox8.Name = "groupBox8";
+      this.groupBox8.Size = new System.Drawing.Size(1040, 285);
+      this.groupBox8.TabIndex = 3;
+      this.groupBox8.TabStop = false;
+      this.groupBox8.Text = "Money turnover";
+      // 
+      // dataGridView3
+      // 
+      this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.dataGridView3.Location = new System.Drawing.Point(3, 21);
+      this.dataGridView3.Name = "dataGridView3";
+      this.dataGridView3.RowHeadersWidth = 51;
+      this.dataGridView3.Size = new System.Drawing.Size(1038, 263);
+      this.dataGridView3.TabIndex = 0;
+      // 
       // groupBox10
       // 
-      this.groupBox10.Controls.Add(this.dataGridView2);
+      this.groupBox10.Controls.Add(this.paymentsDataGridView);
       this.groupBox10.Location = new System.Drawing.Point(523, 0);
       this.groupBox10.Name = "groupBox10";
       this.groupBox10.Size = new System.Drawing.Size(517, 254);
       this.groupBox10.TabIndex = 2;
       this.groupBox10.TabStop = false;
       this.groupBox10.Text = "Bank payments from deposit";
+      // 
+      // paymentsDataGridView
+      // 
+      this.paymentsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.paymentsDataGridView.Location = new System.Drawing.Point(3, 18);
+      this.paymentsDataGridView.Name = "paymentsDataGridView";
+      this.paymentsDataGridView.RowHeadersWidth = 51;
+      this.paymentsDataGridView.RowTemplate.Height = 24;
+      this.paymentsDataGridView.Size = new System.Drawing.Size(518, 235);
+      this.paymentsDataGridView.TabIndex = 0;
       // 
       // groupBox9
       // 
@@ -649,16 +698,6 @@ namespace Bank
       this.groupBox9.TabStop = false;
       this.groupBox9.Text = "Share of currency";
       // 
-      // groupBox8
-      // 
-      this.groupBox8.Controls.Add(this.dataGridView3);
-      this.groupBox8.Location = new System.Drawing.Point(0, 260);
-      this.groupBox8.Name = "groupBox8";
-      this.groupBox8.Size = new System.Drawing.Size(1040, 285);
-      this.groupBox8.TabIndex = 3;
-      this.groupBox8.TabStop = false;
-      this.groupBox8.Text = "Money turnover";
-      // 
       // dataGridView1
       // 
       this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -668,24 +707,50 @@ namespace Bank
       this.dataGridView1.Size = new System.Drawing.Size(515, 237);
       this.dataGridView1.TabIndex = 0;
       // 
-      // dataGridView2
+      // connection
       // 
-      this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridView2.Location = new System.Drawing.Point(3, 18);
-      this.dataGridView2.Name = "dataGridView2";
-      this.dataGridView2.RowHeadersWidth = 51;
-      this.dataGridView2.RowTemplate.Height = 24;
-      this.dataGridView2.Size = new System.Drawing.Size(518, 235);
-      this.dataGridView2.TabIndex = 0;
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
       // 
-      // dataGridView3
+      // dsDepositTypes
       // 
-      this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridView3.Location = new System.Drawing.Point(3, 21);
-      this.dataGridView3.Name = "dataGridView3";
-      this.dataGridView3.RowHeadersWidth = 51;
-      this.dataGridView3.Size = new System.Drawing.Size(1038, 263);
-      this.dataGridView3.TabIndex = 0;
+      this.dsDepositTypes.DataSetName = "NewDataSet";
+      // 
+      // dsPopularDeposits
+      // 
+      this.dsPopularDeposits.DataSetName = "NewDataSet";
+      // 
+      // dsPopularCredits
+      // 
+      this.dsPopularCredits.DataSetName = "NewDataSet";
+      // 
+      // dsCreditTypes
+      // 
+      this.dsCreditTypes.DataSetName = "NewDataSet";
+      // 
+      // dsSecurityTypes
+      // 
+      this.dsSecurityTypes.DataSetName = "NewDataSet";
+      // 
+      // dsPopularSecurity
+      // 
+      this.dsPopularSecurity.DataSetName = "NewDataSet";
+      // 
+      // dsCustomerInformation
+      // 
+      this.dsCustomerInformation.DataSetName = "NewDataSet";
+      // 
+      // dsShareOfCurrency
+      // 
+      this.dsShareOfCurrency.DataSetName = "NewDataSet";
+      // 
+      // dsPayments
+      // 
+      this.dsPayments.DataSetName = "NewDataSet";
+      // 
+      // dsTurnover
+      // 
+      this.dsTurnover.DataSetName = "NewDataSet";
       // 
       // Accountant
       // 
@@ -721,12 +786,22 @@ namespace Bank
       this.groupBox5.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.customerInfoDataGridView)).EndInit();
       this.tabPage5.ResumeLayout(false);
-      this.groupBox10.ResumeLayout(false);
-      this.groupBox9.ResumeLayout(false);
       this.groupBox8.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+      this.groupBox10.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.paymentsDataGridView)).EndInit();
+      this.groupBox9.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsDepositTypes)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularDeposits)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularCredits)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCreditTypes)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsSecurityTypes)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPopularSecurity)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerInformation)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsShareOfCurrency)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPayments)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsTurnover)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -791,7 +866,17 @@ namespace Bank
     private System.Data.OleDb.OleDbConnection connection;
     private System.Windows.Forms.GroupBox groupBox8;
     private System.Windows.Forms.DataGridView dataGridView3;
-    private System.Windows.Forms.DataGridView dataGridView2;
+    private System.Windows.Forms.DataGridView paymentsDataGridView;
     private System.Windows.Forms.DataGridView dataGridView1;
+    private System.Data.DataSet dsDepositTypes;
+    private System.Data.DataSet dsPopularDeposits;
+    private System.Data.DataSet dsPopularCredits;
+    private System.Data.DataSet dsCreditTypes;
+    private System.Data.DataSet dsSecurityTypes;
+    private System.Data.DataSet dsPopularSecurity;
+    private System.Data.DataSet dsCustomerInformation;
+    private System.Data.DataSet dsShareOfCurrency;
+    private System.Data.DataSet dsPayments;
+    private System.Data.DataSet dsTurnover;
   }
 }

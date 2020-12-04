@@ -65,7 +65,7 @@ FROM InfoCredit
 JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
 
 --Deposit info
-SELECT InfoDeposit.Term, InfoDeposit.Amount, Currency.[Name] AS Currency, InfoDeposit.[Percent], InfoDeposit.DepositName
+SELECT Currency.[Name] AS Currency, InfoDeposit.Term, InfoDeposit.Amount, InfoDeposit.[Percent], InfoDeposit.DepositName
 FROM InfoDeposit
 JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
 
@@ -122,4 +122,16 @@ WHERE CustomerId = 1
 
 --incert credit
 INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) 
-VALUES (1, 1, 2, 777, '2020-01-01', 2123123)
+VALUES (1, 1, 'TEST', 777)
+
+--Accountant
+SELECT [Role]
+FROM [User]
+WHERE Login = 'login1' AND Password = 'pwd1'
+
+--Accountant Customer Debit
+SELECT Customer.FirstName, Customer.LastName, Customer.Phone, Balance.Cash, Balance.Number AS BalanceNumber, [Card].Number AS CardNumber
+FROM Customer
+JOIN Balance ON Customer.CustomerId = Balance.CustomerId
+JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
+JOIN [Card] ON BalanceCards.CardId = [Card].CardId

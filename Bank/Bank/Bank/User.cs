@@ -243,7 +243,7 @@ namespace Bank
     {
       string myBalanceQuery =
         "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
-        "Balance.Debit, Balance.Credit, Balance.CardId " +
+        "Balance.Cash, Balance.CardId " +
         "FROM Balance " +
         "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
         "WHERE CustomerId = " + customerId;

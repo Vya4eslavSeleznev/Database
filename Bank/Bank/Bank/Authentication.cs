@@ -24,11 +24,11 @@ namespace Bank
 
     private void logInButton_Click(object sender, EventArgs e)
     {
-      if(rolesComboBox.SelectedIndex == 0)
-      {
-        var login = loginTextBox.Text;
-        var password = passwordTextBox.Text;
+      var login = loginTextBox.Text;
+      var password = passwordTextBox.Text;
 
+      if (rolesComboBox.SelectedIndex == 0)
+      {
         string idQuery =
           "SELECT CustomerId " +
           "FROM Customer " +
@@ -56,9 +56,35 @@ namespace Bank
       }
       else if (rolesComboBox.SelectedIndex == 1)
       {
-        var accountant = new Accountant();
-        accountant.Show();
-        Visible = false;
+        string roleQuery =
+          "SELECT [Role] " +
+          "FROM [User] " +
+          "WHERE [Login] = ? AND [Password] = ?";
+
+        OleDbCommand cmdIC = new OleDbCommand(roleQuery, connection);
+        cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
+        cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
+        OleDbDataReader rdr = cmdIC.ExecuteReader();
+        rdr.Read();
+
+        try
+        {
+          var role = Convert.ToInt32(rdr["Role"]);
+
+          if (role != 1)
+          {
+            MessageBox.Show("Incorrect type of account!", "Authentication", MessageBoxButtons.OK);
+            return;
+          }
+
+          var accountant = new Accountant();
+          accountant.Show();
+          Visible = false;
+        }
+        catch
+        {
+          MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
+        }
       }
       else if (rolesComboBox.SelectedIndex == 2)
       {

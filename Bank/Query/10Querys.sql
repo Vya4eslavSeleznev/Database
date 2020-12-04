@@ -39,10 +39,11 @@ ORDER BY COUNT(*)
 
 /*4*/
 --Сколько было выплачено людям по вкладам
-SELECT InfoDeposit.CurrencyId, InfoDeposit.DepositName, SUM(CustomerDeposit.Amount) * InfoDeposit.[Percent]
+SELECT Currency.[Name], InfoDeposit.DepositName, SUM(CustomerDeposit.Amount) * InfoDeposit.[Percent]
 FROM InfoDeposit
 JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId
-GROUP BY InfoDeposit.CurrencyId, InfoDeposit.DepositName, InfoDeposit.[Percent]
+JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
+GROUP BY Currency.[Name], InfoDeposit.DepositName, InfoDeposit.[Percent]
 
 /*5*/
 -- Клиенты которые не совершали операций в банке в последние два месяца
