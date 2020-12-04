@@ -26,6 +26,25 @@ namespace Bank
       setCustomerInformation();
     }
 
+    private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
+    {
+      DataGridViewCheckBoxColumn check = new DataGridViewCheckBoxColumn();
+      check.HeaderText = headerText;
+      check.FalseValue = "0";
+      check.TrueValue = "1";
+      dataGrid.Columns.Insert(0, check);
+    }
+
+    private void addButtonInDataGrid(DataGridView dataGrid)
+    {
+      DataGridViewButtonColumn button = new DataGridViewButtonColumn();
+      dataGrid.Columns.Add(button);
+      button.HeaderText = "Click to edit";
+      button.Text = "Edit";
+      button.Name = "editButton";
+      button.UseColumnTextForButtonValue = true;
+    }
+
     private void setDataInTable(string query, string tableName, DataSet dataSet, DataGridView dataGrid)
     {
       var dataAdapter = new OleDbDataAdapter(query, connection);
@@ -121,8 +140,10 @@ namespace Bank
 
     private void setDepositTypes()
     {
+      addCheckBoxInDataGrid("Select to delete", depositDataGridView);
       string depositTypesQuery = depositTypes();
       setDataInTable(depositTypesQuery, "InfoDeposit", dsDepositTypes, depositDataGridView);
+      addButtonInDataGrid(depositDataGridView);
     }
 
     private void setTopDeposits()
@@ -133,14 +154,18 @@ namespace Bank
 
     private void setCreditTypes()
     {
+      addCheckBoxInDataGrid("Select to delete", creditTypesDataGridView);
       string creditTypesQuery = creditTypes();
       setDataInTable(creditTypesQuery, "InfoCredit", dsCreditTypes, creditTypesDataGridView);
+      addButtonInDataGrid(creditTypesDataGridView);
     }
 
     private void setSecurityTypes()
     {
+      addCheckBoxInDataGrid("Select to delete", securityTypesDataGridView);
       string securityTypesQuery = securityTypes();
       setDataInTable(securityTypesQuery, "InfoSecurities", dsSecurityTypes, securityTypesDataGridView);
+      addButtonInDataGrid(securityTypesDataGridView);
     }
 
     private void setTopSecurities()

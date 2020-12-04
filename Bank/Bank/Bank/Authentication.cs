@@ -34,7 +34,7 @@ namespace Bank
           "FROM Customer " +
           "JOIN [User] " +
           "ON Customer.UserId = [User].Id " +
-          "WHERE Login = ? AND Password = ?";
+          "WHERE [Login] = ? AND [Password] = ?";
 
         OleDbCommand cmdIC = new OleDbCommand(idQuery, connection);
         cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
