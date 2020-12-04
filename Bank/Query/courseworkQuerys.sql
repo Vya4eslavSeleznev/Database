@@ -111,4 +111,11 @@ VALUES (1, 1, 2, 777, '2020-01-01', 2123123)
 
 SELECT InfoCreditId, [Name]
 FROM InfoCredit
+
+--Profile
+
+UPDATE [User]
+SET [Login] = 'lg', [Password] = 'pwd'
+FROM [User]
+JOIN Customer ON [User].Id = Customer.UserId
 WHERE CustomerId = 1

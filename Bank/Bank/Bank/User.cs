@@ -43,19 +43,6 @@ namespace Bank
       birthdayTimePicker.Value.ToShortDateString();
     }
 
-    private void ShowRow()
-    {
-      dRow = dTable.Rows[iRowID];
-
-      firstNameTextBox.Text = dRow["FirstName"].ToString();
-      lastNameTextBox.Text = dRow["LastName"].ToString();
-      birthdayTimePicker.Text = dRow["Birthday"].ToString();
-      passportNumTextBox.Text = dRow["PassportNum"].ToString();
-      phoneTextBox.Text = dRow["Phone"].ToString();
-      loginTextBox.Text = dRow["Login"].ToString();
-      passwordTextBox.Text = dRow["Login"].ToString();
-    }
-
     private void setComboBox()
     {
       OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
@@ -123,12 +110,25 @@ namespace Bank
       rdr.Close();
     }
 
+    private void ShowRow()
+    {
+      dRow = dTable.Rows[iRowID];
+
+      firstNameTextBox.Text = dRow["FirstName"].ToString();
+      lastNameTextBox.Text = dRow["LastName"].ToString();
+      birthdayTimePicker.Text = dRow["Birthday"].ToString();
+      passportNumTextBox.Text = dRow["PassportNum"].ToString();
+      phoneTextBox.Text = dRow["Phone"].ToString();
+      loginTextBox.Text = dRow["Login"].ToString();
+      passwordTextBox.Text = dRow["Password"].ToString();
+    }
+
     private void FillDataTable()
     {
       var profile =
         "SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password] " +
         "FROM Customer " +
-        "JOIN[User] ON Customer.UserId = [User].Id";
+        "JOIN [User] ON Customer.UserId = [User].Id";
 
       dAdapter = new OleDbDataAdapter(profile, connection);
       dAdapter.Fill(dsCustomer, "Customer");
@@ -375,16 +375,16 @@ namespace Bank
 
     private void changeLoginAndPasswordButton_Click(object sender, EventArgs e)
     {
-      //Не работает
       var login = loginTextBox.Text;
       var password = passwordTextBox.Text;
 
       string updateProfileQuery =
-        "UPDATE [User] " +
-        "SET " +
-          "[Login] = ?, " +
-          "[Password] = ?, " +
-        " WHERE CustomerId = ?";
+        "UPDATE[User] " +
+          "SET[Login] = ?, " +
+          "[Password] = ? " +
+          "FROM [User] " +
+          "JOIN Customer ON [User].Id = Customer.UserId " +
+        "WHERE CustomerId = ?";
 
       OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
 
@@ -417,6 +417,24 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@Cash", cash));
       cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
       cmdIC.Parameters.Add(new OleDbParameter("@BalanWhoseBalanceceId", whoseBalance));
+
+      cmdIC.ExecuteNonQuery();
+    }
+
+    private void addCardButton_Click(object sender, EventArgs e)
+    {
+      var number = cardNumberTextBox.Text;
+      var service = cardServiceComboBox.SelectedItem.ToString();
+
+      string addOperationQuery =
+        "INSERT INTO Card (Number, CardServiceId) " +
+        "VALUES(?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addOperationQuery, connection);
+      cmdIC.Parameters[2].Value = service.Remove(service.IndexOf("-") - 1, service.Length - service.IndexOf("-") + 1);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", number));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", service));
 
       cmdIC.ExecuteNonQuery();
     }

@@ -34,7 +34,6 @@ namespace Bank
       this.changeLoginAndPasswordButton = new System.Windows.Forms.Button();
       this.saveChangesButton = new System.Windows.Forms.Button();
       this.birthdayTimePicker = new System.Windows.Forms.DateTimePicker();
-      this.passwordTextBox = new System.Windows.Forms.TextBox();
       this.loginTextBox = new System.Windows.Forms.TextBox();
       this.phoneTextBox = new System.Windows.Forms.TextBox();
       this.passportNumTextBox = new System.Windows.Forms.TextBox();
@@ -75,7 +74,7 @@ namespace Bank
       this.deleteCardButton = new System.Windows.Forms.Button();
       this.deleteBalanceButton = new System.Windows.Forms.Button();
       this.addCardButton = new System.Windows.Forms.Button();
-      this.cardNimberTextBox = new System.Windows.Forms.TextBox();
+      this.cardNumberTextBox = new System.Windows.Forms.TextBox();
       this.cardServiceComboBox = new System.Windows.Forms.ComboBox();
       this.label22 = new System.Windows.Forms.Label();
       this.label21 = new System.Windows.Forms.Label();
@@ -148,6 +147,7 @@ namespace Bank
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
+      this.passwordTextBox = new System.Windows.Forms.TextBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -213,10 +213,10 @@ namespace Bank
       // 
       // tabPage1
       // 
+      this.tabPage1.Controls.Add(this.passwordTextBox);
       this.tabPage1.Controls.Add(this.changeLoginAndPasswordButton);
       this.tabPage1.Controls.Add(this.saveChangesButton);
       this.tabPage1.Controls.Add(this.birthdayTimePicker);
-      this.tabPage1.Controls.Add(this.passwordTextBox);
       this.tabPage1.Controls.Add(this.loginTextBox);
       this.tabPage1.Controls.Add(this.phoneTextBox);
       this.tabPage1.Controls.Add(this.passportNumTextBox);
@@ -263,14 +263,6 @@ namespace Bank
       this.birthdayTimePicker.Name = "birthdayTimePicker";
       this.birthdayTimePicker.Size = new System.Drawing.Size(277, 22);
       this.birthdayTimePicker.TabIndex = 47;
-      // 
-      // passwordTextBox
-      // 
-      this.passwordTextBox.Location = new System.Drawing.Point(672, 142);
-      this.passwordTextBox.Name = "passwordTextBox";
-      this.passwordTextBox.Size = new System.Drawing.Size(292, 22);
-      this.passwordTextBox.TabIndex = 46;
-      this.passwordTextBox.UseSystemPasswordChar = true;
       // 
       // loginTextBox
       // 
@@ -605,7 +597,7 @@ namespace Bank
       this.tabPage3.Controls.Add(this.deleteCardButton);
       this.tabPage3.Controls.Add(this.deleteBalanceButton);
       this.tabPage3.Controls.Add(this.addCardButton);
-      this.tabPage3.Controls.Add(this.cardNimberTextBox);
+      this.tabPage3.Controls.Add(this.cardNumberTextBox);
       this.tabPage3.Controls.Add(this.cardServiceComboBox);
       this.tabPage3.Controls.Add(this.label22);
       this.tabPage3.Controls.Add(this.label21);
@@ -656,13 +648,14 @@ namespace Bank
       this.addCardButton.TabIndex = 19;
       this.addCardButton.Text = "Add Card";
       this.addCardButton.UseVisualStyleBackColor = true;
+      this.addCardButton.Click += new System.EventHandler(this.addCardButton_Click);
       // 
-      // cardNimberTextBox
+      // cardNumberTextBox
       // 
-      this.cardNimberTextBox.Location = new System.Drawing.Point(106, 6);
-      this.cardNimberTextBox.Name = "cardNimberTextBox";
-      this.cardNimberTextBox.Size = new System.Drawing.Size(154, 22);
-      this.cardNimberTextBox.TabIndex = 18;
+      this.cardNumberTextBox.Location = new System.Drawing.Point(106, 6);
+      this.cardNumberTextBox.Name = "cardNumberTextBox";
+      this.cardNumberTextBox.Size = new System.Drawing.Size(154, 22);
+      this.cardNumberTextBox.TabIndex = 18;
       // 
       // cardServiceComboBox
       // 
@@ -1268,6 +1261,13 @@ namespace Bank
       // 
       this.dsCustomer.DataSetName = "NewDataSet";
       // 
+      // passwordTextBox
+      // 
+      this.passwordTextBox.Location = new System.Drawing.Point(672, 143);
+      this.passwordTextBox.Name = "passwordTextBox";
+      this.passwordTextBox.Size = new System.Drawing.Size(291, 22);
+      this.passwordTextBox.TabIndex = 50;
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1346,7 +1346,6 @@ namespace Bank
     private System.Windows.Forms.TabPage tabPage6;
     private System.Windows.Forms.Button saveChangesButton;
     private System.Windows.Forms.DateTimePicker birthdayTimePicker;
-    private System.Windows.Forms.TextBox passwordTextBox;
     private System.Windows.Forms.TextBox loginTextBox;
     private System.Windows.Forms.TextBox phoneTextBox;
     private System.Windows.Forms.TextBox passportNumTextBox;
@@ -1399,7 +1398,7 @@ namespace Bank
     private System.Windows.Forms.ComboBox cardComboBox;
     private System.Windows.Forms.Button addBalanceButton;
     private System.Windows.Forms.Button addCardButton;
-    private System.Windows.Forms.TextBox cardNimberTextBox;
+    private System.Windows.Forms.TextBox cardNumberTextBox;
     private System.Windows.Forms.ComboBox cardServiceComboBox;
     private System.Windows.Forms.Label label22;
     private System.Windows.Forms.Label label21;
@@ -1456,5 +1455,6 @@ namespace Bank
     private System.Windows.Forms.Button sellSecuritiesButton;
     private System.Data.DataSet dsCustomer;
     private System.Windows.Forms.Button changeLoginAndPasswordButton;
+    private System.Windows.Forms.TextBox passwordTextBox;
   }
 }
