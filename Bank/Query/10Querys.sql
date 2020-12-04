@@ -20,6 +20,12 @@ JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.Info
 GROUP BY Name, [Percent rate]
 ORDER BY COUNT(*) DESC
 
+SELECT Name, SUM(CustomerSecurities.Count), [Percent rate]
+FROM CustomerSecurities
+JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
+GROUP BY Name, [Percent rate]
+ORDER BY SUM(CustomerSecurities.Count) DESC
+
 /*3*/
 --—амые попул€рные вклады
 SELECT TOP(10)

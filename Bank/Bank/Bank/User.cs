@@ -189,6 +189,47 @@ namespace Bank
         "WHERE CustomerId = " + customerId;
     }
 
+    private string myDeposit()
+    {
+      return
+        "SELECT InfoDeposit.DepositName, CustomerDeposit.Amount " +
+        "FROM CustomerDeposit " +
+        "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
+        "WHERE CustomerId = " + customerId;
+    }
+
+    private string mySecurities()
+    {
+      return
+        "SELECT InfoSecurities.[Name], CustomerSecurities.Count " +
+        "FROM CustomerSecurities " +
+        "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
+        "WHERE CustomerId = " + customerId;
+    }
+
+    private string popularSecurities()
+    {
+      return
+        "SELECT Name, SUM(CustomerSecurities.Count), [Percent rate] " +
+        "FROM CustomerSecurities " +
+        "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
+        "GROUP BY Name, [Percent rate] " +
+        "ORDER BY SUM(CustomerSecurities.Count) DESC";
+    }
+
+    private string popularDeposits()
+    {
+      return
+        "SELECT TOP(10) " +
+        "InfoDeposit.DepositName, " +
+        "COUNT(*) AS DepositCount " +
+        "FROM InfoDeposit " +
+        "JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId " +
+        "GROUP BY InfoDeposit.DepositName " +
+        "HAVING COUNT(*) > 10 " +
+        "ORDER BY COUNT(*)";
+    }
+
     private void setOperation()
     {
       string myOperationQuery = myOperation();
@@ -250,11 +291,7 @@ namespace Bank
 
     private void setMyDeposit()
     {
-      string myDepositQuery =
-        "SELECT InfoDeposit.DepositName, CustomerDeposit.Amount " +
-        "FROM CustomerDeposit " +
-        "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
-        "WHERE CustomerId = " + customerId;
+      string myDepositQuery = myDeposit();
 
       addCheckBoxInDataGrid("Select to terminate", myDepositsDataGridView);
       setDataInTable(myDepositQuery, "CustomerDeposit", dsMyDeposit, myDepositsDataGridView);
@@ -273,26 +310,13 @@ namespace Bank
 
     private void setPopularDeposits()
     {
-      string popularDepositsQuery =
-        "SELECT TOP(10) " +
-        "InfoDeposit.DepositName, " +
-        "COUNT(*) AS DepositCount " +
-        "FROM InfoDeposit " +
-        "JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId " +
-        "GROUP BY InfoDeposit.DepositName " +
-        "HAVING COUNT(*) > 10 " +
-        "ORDER BY COUNT(*)";
-
+      string popularDepositsQuery = popularDeposits();
       setDataInTable(popularDepositsQuery, "InfoDeposit", dsTopDeposits, topDepositsDataGridView);
     }
 
     private void setMySecurities()
     {
-      string mySecuritiesQuery =
-        "SELECT InfoSecurities.[Name], CustomerSecurities.Count " +
-        "FROM CustomerSecurities " +
-        "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
-        "WHERE CustomerId = " + customerId;
+      string mySecuritiesQuery = mySecurities();
 
       addCheckBoxInDataGrid("Select to sell", mySecuritiesDataGridView);
       setDataInTable(mySecuritiesQuery, "CustomerSecurities", dsMySecurities, mySecuritiesDataGridView);
@@ -311,13 +335,7 @@ namespace Bank
 
     private void setPopularSecurities()
     {
-      string topSecuritysQuery =
-        "SELECT Name, SUM(CustomerSecurities.Count), [Percent rate] " +
-        "FROM CustomerSecurities " +
-        "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
-        "GROUP BY Name, [Percent rate] " +
-        "ORDER BY COUNT(*) DESC";
-
+      string topSecuritysQuery = popularSecurities();
       setDataInTable(topSecuritysQuery, "InfoSecurities", dsTopSecurities, topSecuritiesDataGridView);
     }
 
@@ -491,11 +509,11 @@ namespace Bank
       var amount = amountCreditTextBox.Text;
       var forWhat = forWhatCreditTextBox.Text;
 
-      string addCardQuery = 
+      string addCreditQuery = 
         "INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) " +
         "VALUES(?, ?, ?, ?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
+      OleDbCommand cmdIC = new OleDbCommand(addCreditQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@InfoCreditId", typeOfCredit));
       cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
@@ -508,6 +526,56 @@ namespace Bank
       MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
       string myCreditQuery = myCredit();
       refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
+    }
+
+    private void addDepositButton_Click(object sender, EventArgs e)
+    {
+      var depositType = depositTypeComboBox.SelectedItem.ToString();
+      var amount = depositAmountTextBox.Text;
+
+      string addDepositQuery =
+        "INSERT INTO CustomerDeposit(CustomerId, InfoDepositId, Amount) " +
+        "VALUES(?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      cmdIC.Parameters.Add(new OleDbParameter("@InfoDepositId", depositType));
+      cmdIC.Parameters.Add(new OleDbParameter("@Amount", amount));
+
+      parseComboBox(1, depositType, cmdIC);
+
+      cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
+      string myDepositQuery = myDeposit();
+      string popularDepositsQuery = popularDeposits();
+      refreshDataSet(myDepositQuery, dsMyDeposit, "CustomerDeposit");
+      refreshDataSet(popularDepositsQuery, dsTopDeposits, "InfoDeposit");
+    }
+
+    private void buySecurityButton_Click(object sender, EventArgs e)
+    {
+      var securityType = securityTypeComboBox.SelectedItem.ToString();
+      var count = securitiesCountTextBox.Text;
+
+      string addDepositQuery =
+        "INSERT INTO CustomerSecurities(InfoSecuritiesId, CustomerId, Count) " +
+        "VALUES(?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@InfoSecuritiesId", securityType));
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      cmdIC.Parameters.Add(new OleDbParameter("@Count", count));
+
+      parseComboBox(0, securityType, cmdIC);
+
+      cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
+      string mySecuritiesQuery = mySecurities();
+      string topSecuritysQuery = popularSecurities();
+      refreshDataSet(mySecuritiesQuery, dsMySecurities, "CustomerSecurities");
+      refreshDataSet(topSecuritysQuery, dsTopSecurities, "InfoSecurities");
     }
   }
 }

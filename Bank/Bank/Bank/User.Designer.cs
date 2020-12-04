@@ -122,7 +122,6 @@ namespace Bank
       this.myDepositsDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage6 = new System.Windows.Forms.TabPage();
       this.sellSecuritiesButton = new System.Windows.Forms.Button();
-      this.securitiesCountNumericUpDown = new System.Windows.Forms.NumericUpDown();
       this.buySecurityButton = new System.Windows.Forms.Button();
       this.securityTypeComboBox = new System.Windows.Forms.ComboBox();
       this.label28 = new System.Windows.Forms.Label();
@@ -148,6 +147,7 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
       this.passwordTextBox = new System.Windows.Forms.TextBox();
+      this.securitiesCountTextBox = new System.Windows.Forms.TextBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -175,7 +175,6 @@ namespace Bank
       this.groupBox10.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.myDepositsDataGridView)).BeginInit();
       this.tabPage6.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).BeginInit();
       this.groupBox11.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.securityInfoDataGridView)).BeginInit();
       this.groupBox12.SuspendLayout();
@@ -985,6 +984,7 @@ namespace Bank
       this.addDepositButton.TabIndex = 22;
       this.addDepositButton.Text = "Add Deposit";
       this.addDepositButton.UseVisualStyleBackColor = true;
+      this.addDepositButton.Click += new System.EventHandler(this.addDepositButton_Click);
       // 
       // depositAmountTextBox
       // 
@@ -1080,8 +1080,8 @@ namespace Bank
       // 
       // tabPage6
       // 
+      this.tabPage6.Controls.Add(this.securitiesCountTextBox);
       this.tabPage6.Controls.Add(this.sellSecuritiesButton);
-      this.tabPage6.Controls.Add(this.securitiesCountNumericUpDown);
       this.tabPage6.Controls.Add(this.buySecurityButton);
       this.tabPage6.Controls.Add(this.securityTypeComboBox);
       this.tabPage6.Controls.Add(this.label28);
@@ -1105,13 +1105,6 @@ namespace Bank
       this.sellSecuritiesButton.Text = "Sell now";
       this.sellSecuritiesButton.UseVisualStyleBackColor = true;
       // 
-      // securitiesCountNumericUpDown
-      // 
-      this.securitiesCountNumericUpDown.Location = new System.Drawing.Point(846, 16);
-      this.securitiesCountNumericUpDown.Name = "securitiesCountNumericUpDown";
-      this.securitiesCountNumericUpDown.Size = new System.Drawing.Size(192, 22);
-      this.securitiesCountNumericUpDown.TabIndex = 2;
-      // 
       // buySecurityButton
       // 
       this.buySecurityButton.Location = new System.Drawing.Point(529, 43);
@@ -1120,6 +1113,7 @@ namespace Bank
       this.buySecurityButton.TabIndex = 30;
       this.buySecurityButton.Text = "Buy now";
       this.buySecurityButton.UseVisualStyleBackColor = true;
+      this.buySecurityButton.Click += new System.EventHandler(this.buySecurityButton_Click);
       // 
       // securityTypeComboBox
       // 
@@ -1269,6 +1263,14 @@ namespace Bank
       this.passwordTextBox.Name = "passwordTextBox";
       this.passwordTextBox.Size = new System.Drawing.Size(291, 22);
       this.passwordTextBox.TabIndex = 50;
+      this.passwordTextBox.UseSystemPasswordChar = true;
+      // 
+      // securitiesCountTextBox
+      // 
+      this.securitiesCountTextBox.Location = new System.Drawing.Point(845, 13);
+      this.securitiesCountTextBox.Name = "securitiesCountTextBox";
+      this.securitiesCountTextBox.Size = new System.Drawing.Size(188, 22);
+      this.securitiesCountTextBox.TabIndex = 32;
       // 
       // User
       // 
@@ -1313,7 +1315,6 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.myDepositsDataGridView)).EndInit();
       this.tabPage6.ResumeLayout(false);
       this.tabPage6.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.securitiesCountNumericUpDown)).EndInit();
       this.groupBox11.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.securityInfoDataGridView)).EndInit();
       this.groupBox12.ResumeLayout(false);
@@ -1426,7 +1427,6 @@ namespace Bank
     private System.Windows.Forms.ComboBox depositTypeComboBox;
     private System.Windows.Forms.Label label27;
     private System.Windows.Forms.Label label26;
-    private System.Windows.Forms.NumericUpDown securitiesCountNumericUpDown;
     private System.Windows.Forms.Button buySecurityButton;
     private System.Windows.Forms.ComboBox securityTypeComboBox;
     private System.Windows.Forms.Label label28;
@@ -1458,5 +1458,6 @@ namespace Bank
     private System.Data.DataSet dsCustomer;
     private System.Windows.Forms.Button changeLoginAndPasswordButton;
     private System.Windows.Forms.TextBox passwordTextBox;
+    private System.Windows.Forms.TextBox securitiesCountTextBox;
   }
 }
