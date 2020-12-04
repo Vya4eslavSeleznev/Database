@@ -1,35 +1,49 @@
-CREATE PROCEDURE FillTables
-	@CustomerId INT
-AS
+CREATE PROCEDURE CurrencyStatistics AS
 BEGIN
-	SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password]
-    FROM Customer
-    JOIN[User] ON Customer.UserId = [User].Id
-
-	SELECT Article.[Name] AS Article, Currency.[Name] AS Currency, Balance.Number, 
-	Operation.Cash, Operation.[Date], Operation.WhoseBalance
-    FROM Operation
-    JOIN Article
-    ON Operation.ArticleId = Article.ArticleId
-    JOIN Currency
-    ON Operation.CurrencyId = Currency.CurrencyId
-    JOIN Balance
-    ON Operation.BalanceId = Balance.BalanceId
-    WHERE CustomerId = customerId
-
-	SELECT Balance.Number, Balance.[Date], Currency.[Name],
-    Balance.Debit, Balance.Credit, Balance.CardId
-    FROM Balance
-    JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId
-    WHERE CustomerId = customerId
-
-	SELECT [Card].Number, CardService.[Name] AS Service
-    FROM [Card]
-    JOIN CardService ON [Card].CardServiceId = CardService.CardServiceId
-    JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId
-    JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
-    WHERE Balance.CustomerId = customerId
-
-	SELECT [Name], Price
-    FROM CardService
+	WITH balanceTotalCount (Cnt)
+	AS
+	(	
+		SELECT COUNT(*) FROM Balance
+	),
+	creditTotalCount (Cnt)
+	AS
+	(
+		SELECT COUNT(*) FROM CustomerCredit
+	),
+	depositeTotalCount (Cnt)
+	AS
+	(
+		SELECT COUNT(*) FROM CustomerDeposit
+	)
+	
+	SELECT Currency.Name, Stats.Type, (CAST(Stats.Count AS DECIMAL) * 100 / 
+		(
+			CASE Stats.Type
+				WHEN 'Balance' THEN (SELECT Cnt FROM balanceTotalCount)
+				WHEN 'Deposite' THEN (SELECT Cnt FROM depositeTotalCount)
+				WHEN 'Credit' THEN (SELECT Cnt FROM creditTotalCount)
+			END
+		)) AS [Percent]
+	FROM Currency
+	JOIN
+	(
+		SELECT Currency.CurrencyId, 'Balance' AS 'Type', COUNT(*) AS 'Count'
+		FROM Currency
+		JOIN Balance ON Currency.CurrencyId = Balance.CurrencyId
+		GROUP BY Currency.CurrencyId
+		UNION
+		SELECT Currency.CurrencyId, 'Deposite' AS 'Type', COUNT(*) AS 'Count' 
+		FROM CustomerDeposit
+		JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
+		JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
+		GROUP BY Currency.CurrencyId
+		UNION
+		SELECT Currency.CurrencyId, 'Credit' AS 'Type', COUNT(*)
+		FROM CustomerCredit
+		JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId
+		JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
+		GROUP BY Currency.CurrencyId
+	) AS Stats ON Currency.CurrencyId = Stats.CurrencyId
+	ORDER BY Stats.Type
 END
+GO
