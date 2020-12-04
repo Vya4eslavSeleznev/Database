@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace Bank
 {
-  public partial class EditCard : Form
+  public partial class EditBalance : Form
   {
-    public EditCard()
+    public EditBalance()
     {
       InitializeComponent();
     }
-
   }
 }
