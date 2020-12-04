@@ -57,11 +57,11 @@ namespace Bank
         currencyOperationComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
       rdr.Close();
 
-      command.CommandText = "SELECT Number FROM Balance WHERE CustomerId = ?";
+      command.CommandText = "SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?";
       command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
       rdr = command.ExecuteReader();
       while (rdr.Read())
-        balanceIdComboBox.Items.Add(rdr["Number"]);
+        balanceIdComboBox.Items.Add(rdr["BalanceId"] + " - " + rdr["Number"]);
       rdr.Close();
 
       command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
@@ -152,10 +152,10 @@ namespace Bank
       }
     }
 
-    private void setOperation()
+    private string myOperation()
     {
-      string myOperationQuery =
-        "SELECT Article.[Name] AS Article, Currency.[Name] AS Currency, Balance.Number, " +
+      return
+        "SELECT Operation. OperationId, Article.[Name] AS Article, Currency.[Name] AS Currency, Balance.Number, " +
         "Operation.Cash, Operation.[Date], Operation.WhoseBalance " +
         "FROM Operation " +
         "JOIN Article " +
@@ -165,6 +165,33 @@ namespace Bank
         "JOIN Balance " +
         "ON Operation.BalanceId = Balance.BalanceId " +
         "WHERE CustomerId = " + customerId;
+    }
+
+    private string myCard()
+    {
+      return
+        "SELECT [Card].Number, CardService.[Name] AS Service " +
+        "FROM[Card] " +
+        "JOIN CardService ON [Card].CardServiceId = CardService.CardServiceId " +
+        "JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId " +
+        "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
+        "WHERE Balance.CustomerId = " + customerId;
+    }
+
+    private string myCredit()
+    {
+      return
+        "SELECT CustomerCredit.Info, CustomerCredit.Amount, Currency.[Name] AS Currency, " +
+        "InfoCredit.Term, InfoCredit.[Percent] " +
+        "FROM CustomerCredit " +
+        "JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId " +
+        "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId " +
+        "WHERE CustomerId = " + customerId;
+    }
+
+    private void setOperation()
+    {
+      string myOperationQuery = myOperation();
 
       addCheckBoxInDataGrid("Select to delete", operationDataGridView);
       setDataInTable(myOperationQuery, "Operation", dsOperation, operationDataGridView);
@@ -187,13 +214,7 @@ namespace Bank
 
     private void setMyCards()
     {
-      string myCardsQuery =
-        "SELECT [Card].Number, CardService.[Name] AS Service " +
-        "FROM[Card] " +
-        "JOIN CardService ON[Card].CardServiceId = CardService.CardServiceId " +
-        "JOIN BalanceCards ON[Card].CardId = BalanceCards.BalanceId " +
-        "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
-        "WHERE Balance.CustomerId = " + customerId;
+      string myCardsQuery = myCard();
 
       addCheckBoxInDataGrid("Select to delete", cardsDataGridView);
       setDataInTable(myCardsQuery, "Card", dsCard, cardsDataGridView);
@@ -211,13 +232,7 @@ namespace Bank
 
     private void setMyCredit()
     {
-      string myCreditQuery =
-        "SELECT CustomerCredit.Info, CustomerCredit.Amount, Currency.[Name] AS Currency, " +
-        "InfoCredit.Term, InfoCredit.[Percent] " +
-        "FROM CustomerCredit " +
-        "JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId " +
-        "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId " +
-        "WHERE CustomerId = " + customerId;
+      string myCreditQuery = myCredit();
 
       setDataInTable(myCreditQuery, "CustomerCredit", dsCredit, myCreditDataGridView);
     }
@@ -396,6 +411,12 @@ namespace Bank
       MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
     }
 
+    private void parseComboBox(int index, string data, OleDbCommand cmdIC)
+    {
+      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
+        data.Length - data.IndexOf("-") + 1);
+    }
+
     private void addOperationButton_Click(object sender, EventArgs e)
     {
       var articleId = articleComboBox.Text;
@@ -418,7 +439,14 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
       cmdIC.Parameters.Add(new OleDbParameter("@BalanWhoseBalanceceId", whoseBalance));
 
+      parseComboBox(0, articleId, cmdIC);
+      parseComboBox(1, currencyId, cmdIC);
+      parseComboBox(2, balanceId, cmdIC);
+
       cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Operation added successfully!", "Operation", MessageBoxButtons.OK);
+      string myOperationQuery = myOperation();
+      refreshDataSet(myOperationQuery, dsOperation, "Operation");
     }
 
     private void addCardButton_Click(object sender, EventArgs e)
@@ -426,17 +454,60 @@ namespace Bank
       var number = cardNumberTextBox.Text;
       var service = cardServiceComboBox.SelectedItem.ToString();
 
-      string addOperationQuery =
+      string addCardQuery =
         "INSERT INTO Card (Number, CardServiceId) " +
-        "VALUES(?, ?)";
+        "FROM Card " +
+        "VALUES(?, ?) " +
+        "JOIN BalanceCards ON Card.CardId = BalanceCards.CardId";
 
-      OleDbCommand cmdIC = new OleDbCommand(addOperationQuery, connection);
-      cmdIC.Parameters[2].Value = service.Remove(service.IndexOf("-") - 1, service.Length - service.IndexOf("-") + 1);
+      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
 
-      cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", number));
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", service));
+      cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
+      cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
+
+      parseComboBox(1, service, cmdIC);
 
       cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
+      string myCardsQuery = myCard();
+      refreshDataSet(myCardsQuery, dsCard, "Card");
+    }
+
+    private void refreshDataSet(string query, DataSet ds, string table)
+    {
+      var command = new OleDbCommand(query, connection);
+      var dataAdapter = new OleDbDataAdapter(command);
+      ds.Clear();
+      dataAdapter.Fill(ds, table);
+    }
+
+    private void showButton_Click(object sender, EventArgs e)
+    {
+    }
+
+    private void addCreditButton_Click(object sender, EventArgs e)
+    {
+      var typeOfCredit = typeCreditComboBox.SelectedItem.ToString();
+      var amount = amountCreditTextBox.Text;
+      var forWhat = forWhatCreditTextBox.Text;
+
+      string addCardQuery = 
+        "INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) " +
+        "VALUES(?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@InfoCreditId", typeOfCredit));
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      cmdIC.Parameters.Add(new OleDbParameter("@Info", forWhat));
+      cmdIC.Parameters.Add(new OleDbParameter("@Amount", amount));
+
+      parseComboBox(0, typeOfCredit, cmdIC);
+
+      cmdIC.ExecuteNonQuery();
+      MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
+      string myCreditQuery = myCredit();
+      refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
     }
   }
 }

@@ -115,7 +115,11 @@ FROM InfoCredit
 --Profile
 
 UPDATE [User]
-SET [Login] = 'lg', [Password] = 'pwd'
+SET [Login] = 'login', [Password] = 'pwd'
 FROM [User]
 JOIN Customer ON [User].Id = Customer.UserId
 WHERE CustomerId = 1
+
+--incert credit
+INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) 
+VALUES (1, 1, 2, 777, '2020-01-01', 2123123)

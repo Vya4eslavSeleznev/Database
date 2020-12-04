@@ -423,6 +423,7 @@ namespace Bank
       this.showButton.TabIndex = 17;
       this.showButton.Text = "Show";
       this.showButton.UseVisualStyleBackColor = true;
+      this.showButton.Click += new System.EventHandler(this.showButton_Click);
       // 
       // whoseBalanceTextBox
       // 
@@ -859,6 +860,7 @@ namespace Bank
       this.addCreditButton.TabIndex = 10;
       this.addCreditButton.Text = "Add credit";
       this.addCreditButton.UseVisualStyleBackColor = true;
+      this.addCreditButton.Click += new System.EventHandler(this.addCreditButton_Click);
       // 
       // amountCreditTextBox
       // 
