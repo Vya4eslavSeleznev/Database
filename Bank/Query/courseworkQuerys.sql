@@ -135,3 +135,17 @@ FROM Customer
 JOIN Balance ON Customer.CustomerId = Balance.CustomerId
 JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
 JOIN [Card] ON BalanceCards.CardId = [Card].CardId
+
+--Customer credits
+SELECT Customer.FirstName, Customer.LastName, Customer.Phone, InfoCredit.[Name], Currency.[Name], CustomerCredit.Amount, InfoCredit.[Percent]
+FROM Customer
+JOIN CustomerCredit ON Customer.CustomerId = CustomerCredit.CustomerId
+JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId
+JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
+
+--Customer deposits
+SELECT Customer.FirstName, Customer.LastName, Customer.Phone, InfoDeposit.DepositName, Currency.[Name], CustomerDeposit.Amount, InfoDeposit.[Percent]
+FROM Customer
+JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId
+JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
+JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId

@@ -18,12 +18,20 @@ namespace Bank
       InitializeComponent();
       connection.Open();
       setDepositTypes();
-      //setTopDeposits();
+      setTopDeposits();
       setCreditTypes();
       setSecurityTypes();
       setTopSecurities();
       setBankPayments();
       setCustomerInformation();
+      setShareOfCurrency();
+      setMoneyTurnover();
+      setPopularCredits();
+      setCustomerCredits();
+      setCustomerDeposits();
+      setCurrencyComboBox(currencyDepositComboBox);
+      setCurrencyComboBox(creditCurrencyComboBox);
+      setCurrencyComboBox(securityCurrencyComboBox);
     }
 
     private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
@@ -77,7 +85,10 @@ namespace Bank
         "FROM InfoDeposit " +
         "JOIN CustomerDeposit ON InfoDeposit.InfoDepositId = CustomerDeposit.InfoDepositId " +
         "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId " +
-        "GROUP BY InfoDeposit.DepositName " +
+        "GROUP BY InfoDeposit.DepositName, " +
+        "InfoDeposit.[Percent], " +
+        "InfoDeposit.Amount, " +
+        "Currency.Name " +
         "HAVING COUNT(*) > 10 " +
         "ORDER BY COUNT(*)";
     }
@@ -110,12 +121,6 @@ namespace Bank
         "ORDER BY SUM(CustomerSecurities.Count) DESC";
     }
 
-    private string shareOfCurrency()
-    {
-      return 
-        "";
-    }
-
     private string bankPayments()
     {
       return
@@ -131,11 +136,46 @@ namespace Bank
     {
       return
         "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, Balance.Cash, " +
-        "Balance.Number AS BalanceNumber, [Card].Number AS CardNumber " +
+        "Balance.Number AS BalanceNumber " +//, [Card].Number AS CardNumber " +
         "FROM Customer " +
-        "JOIN Balance ON Customer.CustomerId = Balance.CustomerId " +
-        "JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId " +
-        "JOIN[Card] ON BalanceCards.CardId = [Card].CardId";
+        "JOIN Balance ON Customer.CustomerId = Balance.CustomerId ";
+        //"JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId " +
+        //"JOIN[Card] ON BalanceCards.CardId = [Card].CardId";
+    }
+
+    private string popularCredits()
+    {
+      return
+        "SELECT TOP(10) " +
+        "InfoCredit.[Name], " +
+        "COUNT(*) AS CreditCount " +
+        "FROM InfoCredit " +
+        "JOIN CustomerCredit ON InfoCredit.InfoCreditId = CustomerCredit.InfoCreditId " +
+        "GROUP BY InfoCredit.[Name] " +
+        "HAVING COUNT(*) > 10 " +
+        "ORDER BY COUNT(*)";
+    }
+
+    private string customerCredit()
+    {
+      return
+        "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, InfoCredit.[Name], " +
+        "Currency.[Name], CustomerCredit.Amount, InfoCredit.[Percent] " +
+        "FROM Customer " +
+        "JOIN CustomerCredit ON Customer.CustomerId = CustomerCredit.CustomerId " +
+        "JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId " +
+        "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
+    }
+
+    private string customerDeposit()
+    {
+      return
+        "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, " +
+        "InfoDeposit.DepositName, Currency.[Name], CustomerDeposit.Amount, InfoDeposit.[Percent] " +
+        "FROM Customer " +
+        "JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId " +
+        "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
+        "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId";
     }
 
     private void setDepositTypes()
@@ -186,10 +226,108 @@ namespace Bank
       setDataInTable(customerInformationQuery, "Customer", dsCustomerInformation, customerInfoDataGridView);
     }
 
+    private void setShareOfCurrency()
+    {
+      string shareOfCurrencyQuery = "CurrencyStatistics";
+      setDataInTable(shareOfCurrencyQuery, "CurrencyStatistics", dsShareOfCurrency,
+                     shareOfCurrencyDataGridView);
+    }
+
+    private void setMoneyTurnover()
+    {
+      string moneyTurnoverQuery = "MoneyTurnOver";
+      setDataInTable(moneyTurnoverQuery, "MoneyStatistics", dsTurnover, turnOverDataGridView);
+    }
+
+    private void setPopularCredits()
+    {
+      string popularCreditsQuery = popularCredits();
+      setDataInTable(popularCreditsQuery, "InfoCredit", dsPopularCredits, topCreditsDataGridView);
+    }
+
+    private void setCustomerCredits()
+    {
+      addCheckBoxInDataGrid("Select to terminate credit", customerCreditsDataGridView);
+      string customerCreditsQuery = customerCredit();
+      setDataInTable(customerCreditsQuery, "InfoCredit", dsCustomerCredits, customerCreditsDataGridView);
+    }
+
+    private void setCustomerDeposits()
+    {
+      addCheckBoxInDataGrid("Select to terminate deposit", customerDepositDataGridView);
+      string customerDepositsQuery = customerDeposit();
+      setDataInTable(customerDepositsQuery, "InfoDeposit", dsCustomerDeposits, customerDepositDataGridView);
+    }
+
+    private void setCurrencyComboBox(ComboBox comboBox)
+    {
+      OleDbCommand command = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection);
+      OleDbDataReader rdr = command.ExecuteReader();
+      while (rdr.Read())
+        comboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
+      rdr.Close();
+    }
+
     private void Accountant_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
       Application.Exit();
+    }
+
+    private void addDepositButton_Click(object sender, EventArgs e)
+    {
+      var currency = currencyDepositComboBox.Text;
+      var term = depositTermTextBox.Text;
+      var amountDeposit = amountDepositTextBox.Text;
+      var percent = depositPercentTextBox.Text;
+      var depositInfo = depositInfoTextBox.Text;
+
+      if (currency == "" || term == "" || amountDeposit == ""
+          || percent == "" || depositInfo == "")
+      {
+        MessageBox.Show("Empty test field!", "Deposit types", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addCreditQuery =
+        "INSERT INTO InfoDeposit(CurrencyId, Term, Amount, [Percent], DepositName) " +
+        "VALUES(?, ?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addCreditQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
+      cmdIC.Parameters.Add(new OleDbParameter("@Amount", amountDeposit));
+      cmdIC.Parameters.Add(new OleDbParameter("@Percent", percent));
+      cmdIC.Parameters.Add(new OleDbParameter("@DepositName", depositInfo));
+
+      parseComboBox(0, currency, cmdIC);
+
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Deposit type added successfully!", "Deposit type", MessageBoxButtons.OK);
+        string depositTypesQuery = depositTypes();
+        refreshDataSet(depositTypesQuery, dsDepositTypes, "InfoDeposit");
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Deposit", MessageBoxButtons.OK);
+      }
+    }
+
+    private void parseComboBox(int index, string data, OleDbCommand cmdIC)
+    {
+      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
+        data.Length - data.IndexOf("-") + 1);
+    }
+
+    private void refreshDataSet(string query, DataSet ds, string table)
+    {
+      var command = new OleDbCommand(query, connection);
+      var dataAdapter = new OleDbDataAdapter(command);
+      ds.Clear();
+      dataAdapter.Fill(ds, table);
     }
   }
 }

@@ -37,6 +37,15 @@ GROUP BY InfoDeposit.DepositName
 HAVING COUNT(*) > 10
 ORDER BY COUNT(*)
 
+SELECT TOP(10)
+InfoCredit.[Name],
+COUNT(*) AS CreditCount
+FROM InfoCredit
+JOIN CustomerCredit ON InfoCredit.InfoCreditId = CustomerCredit.InfoCreditId
+GROUP BY InfoCredit.[Name]
+HAVING COUNT(*) > 10
+ORDER BY COUNT(*)
+
 /*4*/
 --Сколько было выплачено людям по вкладам
 SELECT Currency.[Name], InfoDeposit.DepositName, SUM(CustomerDeposit.Amount) * InfoDeposit.[Percent]

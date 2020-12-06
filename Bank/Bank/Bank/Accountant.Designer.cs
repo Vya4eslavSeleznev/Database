@@ -31,6 +31,7 @@ namespace Bank
     {
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
+      this.deleteDepositButton = new System.Windows.Forms.Button();
       this.depositInfoTextBox = new System.Windows.Forms.TextBox();
       this.depositPercentTextBox = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@ namespace Bank
       this.groupBox7 = new System.Windows.Forms.GroupBox();
       this.depositDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage2 = new System.Windows.Forms.TabPage();
+      this.deleteCreditButton = new System.Windows.Forms.Button();
       this.creditInfoTextBox = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.topCreditsDataGridView = new System.Windows.Forms.DataGridView();
@@ -61,6 +63,7 @@ namespace Bank
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.creditTypesDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.deleteSecurityButton = new System.Windows.Forms.Button();
       this.percentTextBox = new System.Windows.Forms.TextBox();
       this.securityPriceTextBox = new System.Windows.Forms.TextBox();
       this.label8 = new System.Windows.Forms.Label();
@@ -83,11 +86,11 @@ namespace Bank
       this.customerInfoDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
       this.groupBox8 = new System.Windows.Forms.GroupBox();
-      this.dataGridView3 = new System.Windows.Forms.DataGridView();
+      this.turnOverDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox10 = new System.Windows.Forms.GroupBox();
       this.paymentsDataGridView = new System.Windows.Forms.DataGridView();
       this.groupBox9 = new System.Windows.Forms.GroupBox();
-      this.dataGridView1 = new System.Windows.Forms.DataGridView();
+      this.shareOfCurrencyDataGridView = new System.Windows.Forms.DataGridView();
       this.connection = new System.Data.OleDb.OleDbConnection();
       this.dsDepositTypes = new System.Data.DataSet();
       this.dsPopularDeposits = new System.Data.DataSet();
@@ -99,9 +102,15 @@ namespace Bank
       this.dsShareOfCurrency = new System.Data.DataSet();
       this.dsPayments = new System.Data.DataSet();
       this.dsTurnover = new System.Data.DataSet();
-      this.deleteDepositButton = new System.Windows.Forms.Button();
-      this.deleteCreditButton = new System.Windows.Forms.Button();
-      this.deleteSecurityButton = new System.Windows.Forms.Button();
+      this.tabPage6 = new System.Windows.Forms.TabPage();
+      this.groupBox11 = new System.Windows.Forms.GroupBox();
+      this.customerDepositDataGridView = new System.Windows.Forms.DataGridView();
+      this.groupBox12 = new System.Windows.Forms.GroupBox();
+      this.customerCreditsDataGridView = new System.Windows.Forms.DataGridView();
+      this.dsCustomerCredits = new System.Data.DataSet();
+      this.dsCustomerDeposits = new System.Data.DataSet();
+      this.terminateCustomerCreditButton = new System.Windows.Forms.Button();
+      this.terminateDepositButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -123,11 +132,11 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.customerInfoDataGridView)).BeginInit();
       this.tabPage5.SuspendLayout();
       this.groupBox8.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.turnOverDataGridView)).BeginInit();
       this.groupBox10.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.paymentsDataGridView)).BeginInit();
       this.groupBox9.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.shareOfCurrencyDataGridView)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsDepositTypes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPopularDeposits)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPopularCredits)).BeginInit();
@@ -138,6 +147,13 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsShareOfCurrency)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPayments)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTurnover)).BeginInit();
+      this.tabPage6.SuspendLayout();
+      this.groupBox11.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.customerDepositDataGridView)).BeginInit();
+      this.groupBox12.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.customerCreditsDataGridView)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerCredits)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerDeposits)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -147,6 +163,7 @@ namespace Bank
       this.tabControl1.Controls.Add(this.tabPage3);
       this.tabControl1.Controls.Add(this.tabPage4);
       this.tabControl1.Controls.Add(this.tabPage5);
+      this.tabControl1.Controls.Add(this.tabPage6);
       this.tabControl1.Location = new System.Drawing.Point(2, 0);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
@@ -176,6 +193,15 @@ namespace Bank
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Deposit types";
       this.tabPage1.UseVisualStyleBackColor = true;
+      // 
+      // deleteDepositButton
+      // 
+      this.deleteDepositButton.Location = new System.Drawing.Point(6, 505);
+      this.deleteDepositButton.Name = "deleteDepositButton";
+      this.deleteDepositButton.Size = new System.Drawing.Size(504, 31);
+      this.deleteDepositButton.TabIndex = 24;
+      this.deleteDepositButton.Text = "Delete selected";
+      this.deleteDepositButton.UseVisualStyleBackColor = true;
       // 
       // depositInfoTextBox
       // 
@@ -217,6 +243,7 @@ namespace Bank
       this.addDepositButton.TabIndex = 19;
       this.addDepositButton.Text = "Create deposit";
       this.addDepositButton.UseVisualStyleBackColor = true;
+      this.addDepositButton.Click += new System.EventHandler(this.addDepositButton_Click);
       // 
       // amountDepositTextBox
       // 
@@ -327,6 +354,15 @@ namespace Bank
       this.tabPage2.TabIndex = 1;
       this.tabPage2.Text = "Credit types";
       this.tabPage2.UseVisualStyleBackColor = true;
+      // 
+      // deleteCreditButton
+      // 
+      this.deleteCreditButton.Location = new System.Drawing.Point(527, 501);
+      this.deleteCreditButton.Name = "deleteCreditButton";
+      this.deleteCreditButton.Size = new System.Drawing.Size(506, 37);
+      this.deleteCreditButton.TabIndex = 37;
+      this.deleteCreditButton.Text = "Delete selected";
+      this.deleteCreditButton.UseVisualStyleBackColor = true;
       // 
       // creditInfoTextBox
       // 
@@ -462,6 +498,15 @@ namespace Bank
       this.tabPage3.Text = "Security types";
       this.tabPage3.UseVisualStyleBackColor = true;
       // 
+      // deleteSecurityButton
+      // 
+      this.deleteSecurityButton.Location = new System.Drawing.Point(8, 496);
+      this.deleteSecurityButton.Name = "deleteSecurityButton";
+      this.deleteSecurityButton.Size = new System.Drawing.Size(502, 40);
+      this.deleteSecurityButton.TabIndex = 37;
+      this.deleteSecurityButton.Text = "Delete selecyed";
+      this.deleteSecurityButton.UseVisualStyleBackColor = true;
+      // 
       // percentTextBox
       // 
       this.percentTextBox.Location = new System.Drawing.Point(336, 48);
@@ -586,7 +631,7 @@ namespace Bank
       this.tabPage4.Name = "tabPage4";
       this.tabPage4.Size = new System.Drawing.Size(1040, 545);
       this.tabPage4.TabIndex = 3;
-      this.tabPage4.Text = "Customer debit";
+      this.tabPage4.Text = "Customer balance";
       this.tabPage4.UseVisualStyleBackColor = true;
       // 
       // topUpButton
@@ -657,7 +702,7 @@ namespace Bank
       // 
       // groupBox8
       // 
-      this.groupBox8.Controls.Add(this.dataGridView3);
+      this.groupBox8.Controls.Add(this.turnOverDataGridView);
       this.groupBox8.Location = new System.Drawing.Point(0, 260);
       this.groupBox8.Name = "groupBox8";
       this.groupBox8.Size = new System.Drawing.Size(1040, 285);
@@ -665,14 +710,14 @@ namespace Bank
       this.groupBox8.TabStop = false;
       this.groupBox8.Text = "Money turnover";
       // 
-      // dataGridView3
+      // turnOverDataGridView
       // 
-      this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridView3.Location = new System.Drawing.Point(3, 21);
-      this.dataGridView3.Name = "dataGridView3";
-      this.dataGridView3.RowHeadersWidth = 51;
-      this.dataGridView3.Size = new System.Drawing.Size(1038, 263);
-      this.dataGridView3.TabIndex = 0;
+      this.turnOverDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.turnOverDataGridView.Location = new System.Drawing.Point(3, 21);
+      this.turnOverDataGridView.Name = "turnOverDataGridView";
+      this.turnOverDataGridView.RowHeadersWidth = 51;
+      this.turnOverDataGridView.Size = new System.Drawing.Size(1038, 263);
+      this.turnOverDataGridView.TabIndex = 0;
       // 
       // groupBox10
       // 
@@ -696,7 +741,7 @@ namespace Bank
       // 
       // groupBox9
       // 
-      this.groupBox9.Controls.Add(this.dataGridView1);
+      this.groupBox9.Controls.Add(this.shareOfCurrencyDataGridView);
       this.groupBox9.Location = new System.Drawing.Point(-4, 0);
       this.groupBox9.Name = "groupBox9";
       this.groupBox9.Size = new System.Drawing.Size(521, 254);
@@ -704,14 +749,14 @@ namespace Bank
       this.groupBox9.TabStop = false;
       this.groupBox9.Text = "Share of currency";
       // 
-      // dataGridView1
+      // shareOfCurrencyDataGridView
       // 
-      this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridView1.Location = new System.Drawing.Point(5, 18);
-      this.dataGridView1.Name = "dataGridView1";
-      this.dataGridView1.RowHeadersWidth = 51;
-      this.dataGridView1.Size = new System.Drawing.Size(515, 237);
-      this.dataGridView1.TabIndex = 0;
+      this.shareOfCurrencyDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.shareOfCurrencyDataGridView.Location = new System.Drawing.Point(5, 18);
+      this.shareOfCurrencyDataGridView.Name = "shareOfCurrencyDataGridView";
+      this.shareOfCurrencyDataGridView.RowHeadersWidth = 51;
+      this.shareOfCurrencyDataGridView.Size = new System.Drawing.Size(515, 237);
+      this.shareOfCurrencyDataGridView.TabIndex = 0;
       // 
       // connection
       // 
@@ -758,32 +803,83 @@ namespace Bank
       // 
       this.dsTurnover.DataSetName = "NewDataSet";
       // 
-      // deleteDepositButton
+      // tabPage6
       // 
-      this.deleteDepositButton.Location = new System.Drawing.Point(6, 505);
-      this.deleteDepositButton.Name = "deleteDepositButton";
-      this.deleteDepositButton.Size = new System.Drawing.Size(504, 31);
-      this.deleteDepositButton.TabIndex = 24;
-      this.deleteDepositButton.Text = "Delete selected";
-      this.deleteDepositButton.UseVisualStyleBackColor = true;
+      this.tabPage6.Controls.Add(this.terminateDepositButton);
+      this.tabPage6.Controls.Add(this.terminateCustomerCreditButton);
+      this.tabPage6.Controls.Add(this.groupBox11);
+      this.tabPage6.Controls.Add(this.groupBox12);
+      this.tabPage6.Location = new System.Drawing.Point(4, 25);
+      this.tabPage6.Name = "tabPage6";
+      this.tabPage6.Size = new System.Drawing.Size(1040, 545);
+      this.tabPage6.TabIndex = 5;
+      this.tabPage6.Text = "Customer credit&deposit";
+      this.tabPage6.UseVisualStyleBackColor = true;
       // 
-      // deleteCreditButton
+      // groupBox11
       // 
-      this.deleteCreditButton.Location = new System.Drawing.Point(527, 501);
-      this.deleteCreditButton.Name = "deleteCreditButton";
-      this.deleteCreditButton.Size = new System.Drawing.Size(506, 37);
-      this.deleteCreditButton.TabIndex = 37;
-      this.deleteCreditButton.Text = "Delete selected";
-      this.deleteCreditButton.UseVisualStyleBackColor = true;
+      this.groupBox11.Controls.Add(this.customerDepositDataGridView);
+      this.groupBox11.Location = new System.Drawing.Point(523, 2);
+      this.groupBox11.Name = "groupBox11";
+      this.groupBox11.Size = new System.Drawing.Size(516, 492);
+      this.groupBox11.TabIndex = 12;
+      this.groupBox11.TabStop = false;
+      this.groupBox11.Text = "Customer deposits";
       // 
-      // deleteSecurityButton
+      // customerDepositDataGridView
       // 
-      this.deleteSecurityButton.Location = new System.Drawing.Point(8, 496);
-      this.deleteSecurityButton.Name = "deleteSecurityButton";
-      this.deleteSecurityButton.Size = new System.Drawing.Size(502, 40);
-      this.deleteSecurityButton.TabIndex = 37;
-      this.deleteSecurityButton.Text = "Delete selecyed";
-      this.deleteSecurityButton.UseVisualStyleBackColor = true;
+      this.customerDepositDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.customerDepositDataGridView.Location = new System.Drawing.Point(6, 19);
+      this.customerDepositDataGridView.Name = "customerDepositDataGridView";
+      this.customerDepositDataGridView.RowHeadersWidth = 51;
+      this.customerDepositDataGridView.Size = new System.Drawing.Size(504, 464);
+      this.customerDepositDataGridView.TabIndex = 1;
+      // 
+      // groupBox12
+      // 
+      this.groupBox12.Controls.Add(this.customerCreditsDataGridView);
+      this.groupBox12.Location = new System.Drawing.Point(2, 3);
+      this.groupBox12.Name = "groupBox12";
+      this.groupBox12.Size = new System.Drawing.Size(515, 491);
+      this.groupBox12.TabIndex = 11;
+      this.groupBox12.TabStop = false;
+      this.groupBox12.Text = "Customer credits";
+      // 
+      // customerCreditsDataGridView
+      // 
+      this.customerCreditsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.customerCreditsDataGridView.Location = new System.Drawing.Point(4, 19);
+      this.customerCreditsDataGridView.Name = "customerCreditsDataGridView";
+      this.customerCreditsDataGridView.RowHeadersWidth = 51;
+      this.customerCreditsDataGridView.RowTemplate.Height = 24;
+      this.customerCreditsDataGridView.Size = new System.Drawing.Size(505, 463);
+      this.customerCreditsDataGridView.TabIndex = 0;
+      // 
+      // dsCustomerCredits
+      // 
+      this.dsCustomerCredits.DataSetName = "NewDataSet";
+      // 
+      // dsCustomerDeposits
+      // 
+      this.dsCustomerDeposits.DataSetName = "NewDataSet";
+      // 
+      // terminateCustomerCreditButton
+      // 
+      this.terminateCustomerCreditButton.Location = new System.Drawing.Point(6, 500);
+      this.terminateCustomerCreditButton.Name = "terminateCustomerCreditButton";
+      this.terminateCustomerCreditButton.Size = new System.Drawing.Size(505, 34);
+      this.terminateCustomerCreditButton.TabIndex = 13;
+      this.terminateCustomerCreditButton.Text = "Terminate Credit";
+      this.terminateCustomerCreditButton.UseVisualStyleBackColor = true;
+      // 
+      // terminateDepositButton
+      // 
+      this.terminateDepositButton.Location = new System.Drawing.Point(529, 500);
+      this.terminateDepositButton.Name = "terminateDepositButton";
+      this.terminateDepositButton.Size = new System.Drawing.Size(504, 34);
+      this.terminateDepositButton.TabIndex = 14;
+      this.terminateDepositButton.Text = "Terminate Deposit";
+      this.terminateDepositButton.UseVisualStyleBackColor = true;
       // 
       // Accountant
       // 
@@ -820,11 +916,11 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.customerInfoDataGridView)).EndInit();
       this.tabPage5.ResumeLayout(false);
       this.groupBox8.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.turnOverDataGridView)).EndInit();
       this.groupBox10.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.paymentsDataGridView)).EndInit();
       this.groupBox9.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.shareOfCurrencyDataGridView)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsDepositTypes)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPopularDeposits)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPopularCredits)).EndInit();
@@ -835,6 +931,13 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsShareOfCurrency)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPayments)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTurnover)).EndInit();
+      this.tabPage6.ResumeLayout(false);
+      this.groupBox11.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.customerDepositDataGridView)).EndInit();
+      this.groupBox12.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.customerCreditsDataGridView)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerCredits)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCustomerDeposits)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -898,9 +1001,9 @@ namespace Bank
     private System.Windows.Forms.GroupBox groupBox9;
     private System.Data.OleDb.OleDbConnection connection;
     private System.Windows.Forms.GroupBox groupBox8;
-    private System.Windows.Forms.DataGridView dataGridView3;
+    private System.Windows.Forms.DataGridView turnOverDataGridView;
     private System.Windows.Forms.DataGridView paymentsDataGridView;
-    private System.Windows.Forms.DataGridView dataGridView1;
+    private System.Windows.Forms.DataGridView shareOfCurrencyDataGridView;
     private System.Data.DataSet dsDepositTypes;
     private System.Data.DataSet dsPopularDeposits;
     private System.Data.DataSet dsPopularCredits;
@@ -914,5 +1017,14 @@ namespace Bank
     private System.Windows.Forms.Button deleteDepositButton;
     private System.Windows.Forms.Button deleteCreditButton;
     private System.Windows.Forms.Button deleteSecurityButton;
+    private System.Windows.Forms.TabPage tabPage6;
+    private System.Windows.Forms.GroupBox groupBox11;
+    private System.Windows.Forms.DataGridView customerDepositDataGridView;
+    private System.Windows.Forms.GroupBox groupBox12;
+    private System.Windows.Forms.DataGridView customerCreditsDataGridView;
+    private System.Data.DataSet dsCustomerCredits;
+    private System.Data.DataSet dsCustomerDeposits;
+    private System.Windows.Forms.Button terminateCustomerCreditButton;
+    private System.Windows.Forms.Button terminateDepositButton;
   }
 }

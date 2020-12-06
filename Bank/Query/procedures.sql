@@ -47,3 +47,36 @@ BEGIN
 	ORDER BY Stats.Type
 END
 GO
+
+CREATE PROCEDURE MoneyTurnOver AS
+BEGIN
+	SELECT 
+	Currency.[Name],
+	D.DepositAmount,
+	B.BalanceAmount,
+	C.CreditAmount
+	FROM Currency
+	JOIN
+	(
+		SELECT Currency.CurrencyId, ISNULL(SUM(CustomerDeposit.Amount), 0) AS DepositAmount 
+		FROM CustomerDeposit
+		JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
+		JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
+		GROUP BY Currency.CurrencyId
+	) AS D ON Currency.CurrencyId = D.CurrencyId
+	JOIN
+	(
+		SELECT Currency.CurrencyId, Balance.Cash AS BalanceAmount 
+		FROM Balance
+		JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId
+		GROUP BY Currency.CurrencyId, Balance.Cash
+	) AS B ON Currency.CurrencyId = B.CurrencyId
+	JOIN
+	(
+		SELECT Currency.CurrencyId, ISNULL(SUM(Amount), 0) AS CreditAmount FROM CustomerCredit
+		JOIN InfoCredit ON CustomerCredit.InfoCreditId = InfoCredit.InfoCreditId
+		JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
+		GROUP BY Currency.CurrencyId
+	) AS C ON Currency.CurrencyId = C.CurrencyId
+END
+GO

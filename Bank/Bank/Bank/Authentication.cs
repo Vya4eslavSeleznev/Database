@@ -80,8 +80,9 @@ namespace Bank
           var accountant = new Accountant();
           accountant.Show();
           Visible = false;
+          rdr.Close();
         }
-        catch
+        catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
         }
