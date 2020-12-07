@@ -97,7 +97,7 @@ namespace Bank
     {
       return
         "SELECT InfoCredit.[Name] AS NameOfCredit, Currency.[Name] AS Currency, InfoCredit.[Percent], " +
-        "InfoCredit.Term, InfoCredit.Date " +
+        "InfoCredit.Term " +
         "FROM InfoCredit " +
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
     }
@@ -289,11 +289,11 @@ namespace Bank
         return;
       }
 
-      string addCreditQuery =
+      string addDepositQuery =
         "INSERT INTO InfoDeposit(CurrencyId, Term, Amount, [Percent], DepositName) " +
         "VALUES(?, ?, ?, ?, ?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCreditQuery, connection);
+      OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
       cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
@@ -312,7 +312,7 @@ namespace Bank
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Incorrect parameters!", "Deposit", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect parameters!", "Deposit types", MessageBoxButtons.OK);
       }
     }
 
@@ -328,6 +328,84 @@ namespace Bank
       var dataAdapter = new OleDbDataAdapter(command);
       ds.Clear();
       dataAdapter.Fill(ds, table);
+    }
+
+    private void addCreditButton_Click(object sender, EventArgs e)
+    {
+      var currency = creditCurrencyComboBox.Text;
+      var term = creditTermTextBox.Text;
+      var percent = creditPercentTextBox.Text;
+      var info = creditInfoTextBox.Text;
+
+      if (currency == "" || term == "" || percent == "" || info == "")
+      {
+        MessageBox.Show("Empty test field!", "Credit types", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addCreditTypeQuery =
+        "INSERT INTO InfoCredit([Name], CurrencyId, [Percent], Term) " +
+        "VALUES(?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addCreditTypeQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@Name", info));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@Percent", percent));
+      cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
+
+      parseComboBox(1, currency, cmdIC);
+
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Credit type added successfully!", "Credit type", MessageBoxButtons.OK);
+        string creditTypesQuery = creditTypes();
+        refreshDataSet(creditTypesQuery, dsCreditTypes, "InfoCredit");
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Credit types", MessageBoxButtons.OK);
+      }
+    }
+
+    private void addSecurityButton_Click(object sender, EventArgs e)
+    {
+      var currency = securityCurrencyComboBox.Text;
+      var name = securityNameTextBox.Text;
+      var price = securityPriceTextBox.Text;
+      var percent = percentTextBox.Text;
+
+      if (currency == "" || name == "" || price == "" || percent == "")
+      {
+        MessageBox.Show("Empty test field!", "Credit types", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addSecurityTypeQuery =
+        "INSERT INTO InfoSecurities(CurrencyId, [Name], Price, [Percent rate]) " +
+        "VALUES(?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addSecurityTypeQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@Name", name));
+      cmdIC.Parameters.Add(new OleDbParameter("@Price", price));
+      cmdIC.Parameters.Add(new OleDbParameter("@Percent rate", percent));
+
+      parseComboBox(0, currency, cmdIC);
+
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Security type added successfully!", "Securities", MessageBoxButtons.OK);
+        string securityTypesQuery = securityTypes();
+        refreshDataSet(securityTypesQuery, dsSecurityTypes, "InfoSecurities");
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
+      }
     }
   }
 }
