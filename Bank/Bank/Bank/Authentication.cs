@@ -22,6 +22,14 @@ namespace Bank
       rolesComboBox.Items.Add("Admin");
     }
 
+    private string role()
+    {
+      return
+        "SELECT [Role] " +
+        "FROM [User] " +
+        "WHERE [Login] = ? AND [Password] = ?";
+    }
+
     private void logInButton_Click(object sender, EventArgs e)
     {
       var login = loginTextBox.Text;
@@ -49,18 +57,14 @@ namespace Bank
           user.Show();
           Visible = false;
         }
-        catch
+        catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
         }
       }
-      else if (rolesComboBox.SelectedIndex == 1)
+      else
       {
-        string roleQuery =
-          "SELECT [Role] " +
-          "FROM [User] " +
-          "WHERE [Login] = ? AND [Password] = ?";
-
+        string roleQuery = role();
         OleDbCommand cmdIC = new OleDbCommand(roleQuery, connection);
         cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
         cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
@@ -71,31 +75,28 @@ namespace Bank
         {
           var role = Convert.ToInt32(rdr["Role"]);
 
-          if (role != 1)
+          if (role == 1)
+          {
+            var accountant = new Accountant();
+            accountant.Show();
+            Visible = false;
+          }
+          else if (role == 2)
+          {
+            var admin = new Admin();
+            admin.Show();
+            Visible = false;
+          }
+          else
           {
             MessageBox.Show("Incorrect type of account!", "Authentication", MessageBoxButtons.OK);
             return;
           }
-
-          var accountant = new Accountant();
-          accountant.Show();
-          Visible = false;
-          rdr.Close();
         }
         catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
         }
-      }
-      else if (rolesComboBox.SelectedIndex == 2)
-      {
-        var admin = new Admin();
-        admin.Show();
-        Visible = false;
-      }
-      else
-      {
-        MessageBox.Show("Incorrect type of account!", "Authentication", MessageBoxButtons.OK);
       }
     }
 

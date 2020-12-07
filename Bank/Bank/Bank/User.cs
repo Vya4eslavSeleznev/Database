@@ -243,7 +243,7 @@ namespace Bank
     {
       string myBalanceQuery =
         "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
-        "Balance.Cash, Balance.CardId " +
+        "Balance.Cash " +
         "FROM Balance " +
         "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
         "WHERE CustomerId = " + customerId;
@@ -521,17 +521,17 @@ namespace Bank
       }
 
       string addCardQuery =
-        "INSERT INTO Card (Number, CardServiceId) " +
+        "INSERT INTO Card (Number) " +
         "FROM Card " +
-        "VALUES(?, ?) " +
+        "VALUES(?) " +
         "JOIN BalanceCards ON Card.CardId = BalanceCards.CardId";
 
       OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
-      cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
+      //cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
 
-      parseComboBox(1, service, cmdIC);
+      //parseComboBox(1, service, cmdIC);
 
       try
       {
