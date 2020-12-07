@@ -148,6 +148,9 @@ namespace Bank
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
+      this.currencyStatisticComboBox = new System.Windows.Forms.ComboBox();
+      this.label30 = new System.Windows.Forms.Label();
+      this.dsOperationStatistic = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -194,6 +197,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsCustomer)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsOperationStatistic)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -371,6 +375,8 @@ namespace Bank
       // 
       // tabPage2
       // 
+      this.tabPage2.Controls.Add(this.currencyStatisticComboBox);
+      this.tabPage2.Controls.Add(this.label30);
       this.tabPage2.Controls.Add(this.dateOfOperationPicker);
       this.tabPage2.Controls.Add(this.dateToPicker);
       this.tabPage2.Controls.Add(this.label15);
@@ -1272,6 +1278,27 @@ namespace Bank
       // 
       this.dsCustomer.DataSetName = "NewDataSet";
       // 
+      // currencyStatisticComboBox
+      // 
+      this.currencyStatisticComboBox.FormattingEnabled = true;
+      this.currencyStatisticComboBox.Location = new System.Drawing.Point(684, 78);
+      this.currencyStatisticComboBox.Name = "currencyStatisticComboBox";
+      this.currencyStatisticComboBox.Size = new System.Drawing.Size(345, 24);
+      this.currencyStatisticComboBox.TabIndex = 22;
+      // 
+      // label30
+      // 
+      this.label30.AutoSize = true;
+      this.label30.Location = new System.Drawing.Point(525, 81);
+      this.label30.Name = "label30";
+      this.label30.Size = new System.Drawing.Size(69, 17);
+      this.label30.TabIndex = 21;
+      this.label30.Text = "Currency:";
+      // 
+      // dsOperationStatistic
+      // 
+      this.dsOperationStatistic.DataSetName = "NewDataSet";
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1334,6 +1361,7 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsSecurityInfo)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsTopSecurities)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsCustomer)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsOperationStatistic)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -1459,5 +1487,8 @@ namespace Bank
     private System.Windows.Forms.Button changeLoginAndPasswordButton;
     private System.Windows.Forms.TextBox passwordTextBox;
     private System.Windows.Forms.TextBox securitiesCountTextBox;
+    private System.Windows.Forms.ComboBox currencyStatisticComboBox;
+    private System.Windows.Forms.Label label30;
+    private System.Data.DataSet dsOperationStatistic;
   }
 }

@@ -43,6 +43,15 @@ namespace Bank
       birthdayTimePicker.Value.ToShortDateString();
     }
 
+    private void setCurrencyComboBox(OleDbCommand command, OleDbDataReader rdr, ComboBox comboBox)
+    {
+      command.CommandText = "SELECT CurrencyId, [Name] FROM Currency";
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        comboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
+      rdr.Close();
+    }
+
     private void setComboBox()
     {
       OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
@@ -70,11 +79,8 @@ namespace Bank
         cardServiceComboBox.Items.Add(rdr["CardServiceId"] + " - " + rdr["Name"]);
       rdr.Close();
 
-      command.CommandText = "SELECT CurrencyId, [Name] FROM Currency";
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        currencyBalanceComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      setCurrencyComboBox(command, rdr, currencyBalanceComboBox);
+      setCurrencyComboBox(command, rdr, currencyStatisticComboBox);
 
       /*command.CommandText = 
         "SELECT [Card].Number, " +
@@ -171,8 +177,9 @@ namespace Bank
     {
       return
         "SELECT [Card].Number, CardService.[Name] AS Service " +
-        "FROM[Card] " +
-        "JOIN CardService ON [Card].CardServiceId = CardService.CardServiceId " +
+        "FROM [Card] " +
+        "JOIN CardServices ON [Card].CardId = CardServices.CardId " +
+        "JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId " +
         "JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId " +
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
         "WHERE Balance.CustomerId = " + customerId;
@@ -282,7 +289,7 @@ namespace Bank
     {
       string creditInfoQuery =
         "SELECT InfoCredit.[Name] AS NameOfCredit, Currency.[Name] AS Currency, " +
-        "InfoCredit.[Percent], InfoCredit.Term, InfoCredit.Date " +
+        "InfoCredit.[Percent], InfoCredit.Term " +
         "FROM InfoCredit " +
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
 
@@ -367,6 +374,14 @@ namespace Bank
       dataGrid.DataSource = dataSet;
       dataGrid.DataMember = tableName;
       dataAdapter.Fill(dataSet, tableName);
+    }
+
+    private void setDataInTable(OleDbCommand command, DataSet dataSet, DataGridView dataGrid)
+    {
+      var dataAdapter = new OleDbDataAdapter(command);
+      var dataTable = new DataTable();
+      dataAdapter.Fill(dataTable);
+      dataGrid.DataSource = dataTable;
     }
 
     private void User_FormClosing(object sender, FormClosingEventArgs e)
@@ -511,7 +526,6 @@ namespace Bank
     private void addCardButton_Click(object sender, EventArgs e)
     {
       var number = cardNumberTextBox.Text;
-      //var service = cardServiceComboBox.SelectedItem.ToString();
       var service = cardServiceComboBox.Text;
 
       if (number == "" || service == "")
@@ -522,16 +536,27 @@ namespace Bank
 
       string addCardQuery =
         "INSERT INTO Card (Number) " +
-        "FROM Card " +
-        "VALUES(?) " +
-        "JOIN BalanceCards ON Card.CardId = BalanceCards.CardId";
+        "VALUES(?)";
+
+      string addService =
+        "INSERT INTO CardServices (ServiceId) " +
+        "VALUES(?)";
 
       OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
-
       cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
-      //cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
 
-      //parseComboBox(1, service, cmdIC);
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+      }
+
+      cmdIC.CommandText = addService;
+      cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
+      parseComboBox(1, service, cmdIC);
 
       try
       {
@@ -556,6 +581,42 @@ namespace Bank
 
     private void showButton_Click(object sender, EventArgs e)
     {
+      var dateFrom = dateFromTimePicker.Value.Date.ToString("yyyy-MM-dd");
+      var dateTo = dateToPicker.Value.Date.ToString("yyyy-MM-dd");
+      var currency = currencyStatisticComboBox.Text;
+
+      if (dateFrom == "" || dateTo == "" || currency == "")
+      {
+        MessageBox.Show("Empty test field!", "Statistic", MessageBoxButtons.OK);
+        return;
+      }
+
+      string showStatisticQuery = "OperationStatistic ?, ?, ?, ?";
+
+      OleDbCommand cmdIC = new OleDbCommand(showStatisticQuery, connection);
+
+      var currencyId = int.Parse(currency.Split('-')[0].Trim());
+
+      var startDateParamter = new OleDbParameter("@StartDate", OleDbType.Date);
+      var endDateParameter = new OleDbParameter("@EndDate", OleDbType.Date);
+
+      startDateParamter.Value = dateFrom;
+      endDateParameter.Value = dateTo;
+
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+      cmdIC.Parameters.Add(startDateParamter);
+      cmdIC.Parameters.Add(endDateParameter);
+
+      try
+      {
+        setDataInTable(cmdIC, dsOperationStatistic, statisticDataGridView);
+        MessageBox.Show("Operation Statistic!", "Statistic", MessageBoxButtons.OK);
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Statistic", MessageBoxButtons.OK);
+      }
     }
 
     private void addCreditButton_Click(object sender, EventArgs e)

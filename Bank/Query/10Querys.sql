@@ -4,9 +4,8 @@ USE Bank;
 --Клиенты, у которых есть счет(баланс) с карточкой и с услугой SMS
 SELECT FirstName, LastName, PassportNum, Birthday, Phone
 FROM Customer
-JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
-JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
-JOIN BalanceCards ON Balance.CardId = BalanceCards.CardId
+JOIN Balance ON Customer.CustomerId = Balance.CustomerId
+JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
 JOIN [Card] ON BalanceCards.CardId = [Card].CardId
 JOIN CardServices ON [Card].CardId = CardServices.CardId
 JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
@@ -197,7 +196,8 @@ SELECT TOP(10)
 Info.FirstName,
 Info.LastName,
 Currency.Name,
-SUM(Total) AS Total
+SUM(Total) AS Total,
+Currency.[Name]
 FROM
 (
 	SELECT
@@ -205,7 +205,7 @@ FROM
 	Balance.CurrencyId,
 	Customer.FirstName,
 	Customer.LastName, 
-	SUM(Balance.Credit + Balance.Debit) AS Total
+	SUM(Balance.Cash) AS Total
 	FROM Customer
 	JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
 	JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId

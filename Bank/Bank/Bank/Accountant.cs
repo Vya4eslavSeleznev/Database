@@ -235,7 +235,7 @@ namespace Bank
 
     private void setMoneyTurnover()
     {
-      string moneyTurnoverQuery = "MoneyTurnOver";
+      string moneyTurnoverQuery = "MoneyTurnover";
       setDataInTable(moneyTurnoverQuery, "MoneyStatistics", dsTurnover, turnOverDataGridView);
     }
 

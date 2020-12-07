@@ -149,3 +149,10 @@ FROM Customer
 JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId
 JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
 JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
+
+INSERT [Card] (Number, ServiceId)
+VALUES(111, 1)
+JOIN CardServices ON [Card].CardId = CardServices.CardId
+WHERE ServiceId =
+(
+)

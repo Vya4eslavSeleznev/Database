@@ -48,7 +48,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE MoneyTurnOver AS
+CREATE PROCEDURE MoneyTurnover AS
 BEGIN
 	SELECT 
 	Currency.[Name],
@@ -78,5 +78,33 @@ BEGIN
 		JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
 		GROUP BY Currency.CurrencyId
 	) AS C ON Currency.CurrencyId = C.CurrencyId
+END
+GO
+
+CREATE PROCEDURE OperationStatistic
+	-- Add the parameters for the stored procedure here
+	@CustomerId INT,
+	@CurrencyId INT,
+	@StartDate DATETIME,
+	@EndDate DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT Article.Name, 
+	MONTH(Operation.Date) AS 'Month', 
+	YEAR(Operation.Date) AS 'Year', 
+	SUM(Operation.Cash) AS 'Sum'
+	FROM Article
+	JOIN Operation ON Article.ArticleId = Operation.ArticleId
+	JOIN Balance ON Operation.BalanceId = Balance.BalanceId
+	JOIN Customer ON Balance.CustomerId = Customer.CustomerId
+	JOIN Currency ON Operation.CurrencyId = Currency.CurrencyId
+	WHERE Balance.CustomerId = @CurrencyId AND
+	Currency.CurrencyId = @CurrencyId AND
+	Operation.Date >= @StartDate AND
+	Operation.Date <= @EndDate
+	GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date)
+	ORDER BY SUM(Operation.Cash);
 END
 GO

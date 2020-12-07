@@ -79,6 +79,13 @@ namespace Bank
       this.serviceStatisticComboBox = new System.Windows.Forms.ComboBox();
       this.label12 = new System.Windows.Forms.Label();
       this.connection = new System.Data.OleDb.OleDbConnection();
+      this.dsArticle = new System.Data.DataSet();
+      this.dsCardService = new System.Data.DataSet();
+      this.dsCurrency = new System.Data.DataSet();
+      this.dsAllCustomers = new System.Data.DataSet();
+      this.dsRichestCustomers = new System.Data.DataSet();
+      this.dsPoorestCustomers = new System.Data.DataSet();
+      this.dsServices = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -100,6 +107,13 @@ namespace Bank
       this.tabPage5.SuspendLayout();
       this.groupBox7.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.callCenterServiceDataGridView)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsArticle)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCardService)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCurrency)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsAllCustomers)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsRichestCustomers)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPoorestCustomers)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsServices)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -251,7 +265,7 @@ namespace Bank
       this.serviceDataGridView.Location = new System.Drawing.Point(-3, 19);
       this.serviceDataGridView.Name = "serviceDataGridView";
       this.serviceDataGridView.RowHeadersWidth = 51;
-      this.serviceDataGridView.Size = new System.Drawing.Size(513, 519);
+      this.serviceDataGridView.Size = new System.Drawing.Size(513, 439);
       this.serviceDataGridView.TabIndex = 1;
       // 
       // createCurrencyButton
@@ -534,7 +548,7 @@ namespace Bank
       this.groupBox7.Controls.Add(this.callCenterServiceDataGridView);
       this.groupBox7.Location = new System.Drawing.Point(-4, 60);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(1043, 484);
+      this.groupBox7.Size = new System.Drawing.Size(1043, 482);
       this.groupBox7.TabIndex = 3;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "Services";
@@ -546,7 +560,7 @@ namespace Bank
       this.callCenterServiceDataGridView.Name = "callCenterServiceDataGridView";
       this.callCenterServiceDataGridView.RowHeadersWidth = 51;
       this.callCenterServiceDataGridView.RowTemplate.Height = 24;
-      this.callCenterServiceDataGridView.Size = new System.Drawing.Size(1037, 462);
+      this.callCenterServiceDataGridView.Size = new System.Drawing.Size(1037, 455);
       this.callCenterServiceDataGridView.TabIndex = 0;
       // 
       // showServiceStatisticButton
@@ -557,6 +571,7 @@ namespace Bank
       this.showServiceStatisticButton.TabIndex = 2;
       this.showServiceStatisticButton.Text = "Show";
       this.showServiceStatisticButton.UseVisualStyleBackColor = true;
+      this.showServiceStatisticButton.Click += new System.EventHandler(this.showServiceStatisticButton_Click);
       // 
       // serviceStatisticComboBox
       // 
@@ -574,6 +589,39 @@ namespace Bank
       this.label12.Size = new System.Drawing.Size(59, 17);
       this.label12.TabIndex = 0;
       this.label12.Text = "Service:";
+      // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
+      // dsArticle
+      // 
+      this.dsArticle.DataSetName = "NewDataSet";
+      // 
+      // dsCardService
+      // 
+      this.dsCardService.DataSetName = "NewDataSet";
+      // 
+      // dsCurrency
+      // 
+      this.dsCurrency.DataSetName = "NewDataSet";
+      // 
+      // dsAllCustomers
+      // 
+      this.dsAllCustomers.DataSetName = "NewDataSet";
+      // 
+      // dsRichestCustomers
+      // 
+      this.dsRichestCustomers.DataSetName = "NewDataSet";
+      // 
+      // dsPoorestCustomers
+      // 
+      this.dsPoorestCustomers.DataSetName = "NewDataSet";
+      // 
+      // dsServices
+      // 
+      this.dsServices.DataSetName = "NewDataSet";
       // 
       // Admin
       // 
@@ -610,6 +658,13 @@ namespace Bank
       this.tabPage5.PerformLayout();
       this.groupBox7.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.callCenterServiceDataGridView)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsArticle)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCardService)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsCurrency)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsAllCustomers)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsRichestCustomers)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsPoorestCustomers)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsServices)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -666,5 +721,12 @@ namespace Bank
     private System.Windows.Forms.GroupBox groupBox7;
     private System.Windows.Forms.DataGridView callCenterServiceDataGridView;
     private System.Data.OleDb.OleDbConnection connection;
+    private System.Data.DataSet dsArticle;
+    private System.Data.DataSet dsCardService;
+    private System.Data.DataSet dsCurrency;
+    private System.Data.DataSet dsAllCustomers;
+    private System.Data.DataSet dsRichestCustomers;
+    private System.Data.DataSet dsPoorestCustomers;
+    private System.Data.DataSet dsServices;
   }
 }
