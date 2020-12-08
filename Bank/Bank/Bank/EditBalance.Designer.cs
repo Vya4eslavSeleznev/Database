@@ -40,6 +40,7 @@ namespace Bank
       this.label18 = new System.Windows.Forms.Label();
       this.label17 = new System.Windows.Forms.Label();
       this.label16 = new System.Windows.Forms.Label();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       this.SuspendLayout();
       // 
       // editBalanceButton
@@ -133,6 +134,11 @@ namespace Bank
       this.label16.TabIndex = 15;
       this.label16.Text = "Balance number:";
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
       // EditBalance
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -151,6 +157,7 @@ namespace Bank
       this.Controls.Add(this.label16);
       this.Name = "EditBalance";
       this.Text = "EditBalance";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditBalance_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -169,5 +176,6 @@ namespace Bank
     private System.Windows.Forms.Label label18;
     private System.Windows.Forms.Label label17;
     private System.Windows.Forms.Label label16;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }

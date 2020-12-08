@@ -45,6 +45,7 @@ namespace Bank
       this.editCardButton.TabIndex = 24;
       this.editCardButton.Text = "Save changes";
       this.editCardButton.UseVisualStyleBackColor = true;
+      this.editCardButton.Click += new System.EventHandler(this.editCardButton_Click);
       // 
       // cardNumberTextBox
       // 

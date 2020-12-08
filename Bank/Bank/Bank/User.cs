@@ -73,11 +73,11 @@ namespace Bank
         balanceIdComboBox.Items.Add(rdr["BalanceId"] + " - " + rdr["Number"]);
       rdr.Close();
 
-      command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
+      /*command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
       rdr = command.ExecuteReader();
       while (rdr.Read())
         cardServiceComboBox.Items.Add(rdr["CardServiceId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      rdr.Close();*/
 
       setCurrencyComboBox(command, rdr, currencyBalanceComboBox);
       setCurrencyComboBox(command, rdr, currencyStatisticComboBox);
@@ -544,9 +544,8 @@ namespace Bank
     private void addCardButton_Click(object sender, EventArgs e)
     {
       var number = cardNumberTextBox.Text;
-      var service = cardServiceComboBox.Text;
 
-      if (number == "" || service == "")
+      if (number == "")
       {
         MessageBox.Show("Empty test field!", "Card", MessageBoxButtons.OK);
         return;
@@ -556,31 +555,12 @@ namespace Bank
         "INSERT INTO Card (Number) " +
         "VALUES(?)";
 
-      string addService =
-        "INSERT INTO CardServices (ServiceId) " +
-        "VALUES(?)";
-
-      OleDbCommand cmdIC1 = new OleDbCommand(addCardQuery, connection);
-      cmdIC1.Parameters.Add(new OleDbParameter("@Number", number));
+      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
+      cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
 
       try
       {
-        cmdIC1.ExecuteNonQuery();
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
-      }
-
-      /*cmdIC.CommandText = addService;
-      cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
-      parseComboBox(0, service, cmdIC);*/
-      OleDbCommand cmdIC2 = new OleDbCommand(addService, connection);
-      cmdIC2.Parameters.Add(new OleDbParameter("@ServiceId", number));
-
-      try
-      {
-        cmdIC2.ExecuteNonQuery();
+        cmdIC.ExecuteNonQuery();
         MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
         string myCardsQuery = myCard();
         refreshDataSet(myCardsQuery, dsCard, "Card");
@@ -761,12 +741,30 @@ namespace Bank
       {
         try
         {
-          var editCard = new EditCard();
+          var editCard = new EditCard(customerId);
           editCard.Show();
         }
         catch
         {
           MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        }
+      }
+    }
+
+    private void balancesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var editBalance = new EditBalance(customerId);
+          editBalance.Show();
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
         }
       }
     }

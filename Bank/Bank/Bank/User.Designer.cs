@@ -78,8 +78,6 @@ namespace Bank
       this.deleteBalanceButton = new System.Windows.Forms.Button();
       this.addCardButton = new System.Windows.Forms.Button();
       this.cardNumberTextBox = new System.Windows.Forms.TextBox();
-      this.cardServiceComboBox = new System.Windows.Forms.ComboBox();
-      this.label22 = new System.Windows.Forms.Label();
       this.label21 = new System.Windows.Forms.Label();
       this.addBalanceButton = new System.Windows.Forms.Button();
       this.cardComboBox = new System.Windows.Forms.ComboBox();
@@ -629,8 +627,6 @@ namespace Bank
       this.tabPage3.Controls.Add(this.deleteBalanceButton);
       this.tabPage3.Controls.Add(this.addCardButton);
       this.tabPage3.Controls.Add(this.cardNumberTextBox);
-      this.tabPage3.Controls.Add(this.cardServiceComboBox);
-      this.tabPage3.Controls.Add(this.label22);
       this.tabPage3.Controls.Add(this.label21);
       this.tabPage3.Controls.Add(this.addBalanceButton);
       this.tabPage3.Controls.Add(this.cardComboBox);
@@ -673,7 +669,7 @@ namespace Bank
       // 
       // addCardButton
       // 
-      this.addCardButton.Location = new System.Drawing.Point(3, 53);
+      this.addCardButton.Location = new System.Drawing.Point(3, 39);
       this.addCardButton.Name = "addCardButton";
       this.addCardButton.Size = new System.Drawing.Size(524, 30);
       this.addCardButton.TabIndex = 19;
@@ -685,25 +681,8 @@ namespace Bank
       // 
       this.cardNumberTextBox.Location = new System.Drawing.Point(106, 6);
       this.cardNumberTextBox.Name = "cardNumberTextBox";
-      this.cardNumberTextBox.Size = new System.Drawing.Size(154, 22);
+      this.cardNumberTextBox.Size = new System.Drawing.Size(418, 22);
       this.cardNumberTextBox.TabIndex = 18;
-      // 
-      // cardServiceComboBox
-      // 
-      this.cardServiceComboBox.FormattingEnabled = true;
-      this.cardServiceComboBox.Location = new System.Drawing.Point(331, 4);
-      this.cardServiceComboBox.Name = "cardServiceComboBox";
-      this.cardServiceComboBox.Size = new System.Drawing.Size(180, 24);
-      this.cardServiceComboBox.TabIndex = 17;
-      // 
-      // label22
-      // 
-      this.label22.AutoSize = true;
-      this.label22.Location = new System.Drawing.Point(266, 11);
-      this.label22.Name = "label22";
-      this.label22.Size = new System.Drawing.Size(59, 17);
-      this.label22.TabIndex = 16;
-      this.label22.Text = "Service:";
       // 
       // label21
       // 
@@ -808,9 +787,9 @@ namespace Bank
       // groupBox3
       // 
       this.groupBox3.Controls.Add(this.cardsDataGridView);
-      this.groupBox3.Location = new System.Drawing.Point(3, 89);
+      this.groupBox3.Location = new System.Drawing.Point(3, 75);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(524, 184);
+      this.groupBox3.Size = new System.Drawing.Size(524, 198);
       this.groupBox3.TabIndex = 3;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Available cards";
@@ -822,7 +801,7 @@ namespace Bank
       this.cardsDataGridView.Name = "cardsDataGridView";
       this.cardsDataGridView.RowHeadersWidth = 51;
       this.cardsDataGridView.RowTemplate.Height = 24;
-      this.cardsDataGridView.Size = new System.Drawing.Size(518, 160);
+      this.cardsDataGridView.Size = new System.Drawing.Size(518, 174);
       this.cardsDataGridView.TabIndex = 0;
       this.cardsDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cardsDataGridView_CellContentClick);
       // 
@@ -864,6 +843,7 @@ namespace Bank
       this.balancesDataGridView.RowTemplate.Height = 24;
       this.balancesDataGridView.Size = new System.Drawing.Size(508, 348);
       this.balancesDataGridView.TabIndex = 1;
+      this.balancesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.balancesDataGridView_CellContentClick);
       // 
       // tabPage4
       // 
@@ -1431,8 +1411,6 @@ namespace Bank
     private System.Windows.Forms.Button addBalanceButton;
     private System.Windows.Forms.Button addCardButton;
     private System.Windows.Forms.TextBox cardNumberTextBox;
-    private System.Windows.Forms.ComboBox cardServiceComboBox;
-    private System.Windows.Forms.Label label22;
     private System.Windows.Forms.Label label21;
     private System.Windows.Forms.GroupBox groupBox6;
     private System.Windows.Forms.DataGridView creditInfoDataGridView;
