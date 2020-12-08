@@ -9,7 +9,7 @@ JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
 JOIN [Card] ON BalanceCards.CardId = [Card].CardId
 JOIN CardServices ON [Card].CardId = CardServices.CardId
 JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
-WHERE CardService.[Name] = 'SMS';
+WHERE CardService.[Name] = 'Call';
 
 /*2*/
 --Топ акций: количество купленных, процентная ставка
@@ -77,10 +77,11 @@ SUM(Operation.Cash) AS 'Sum'
 FROM Article
 JOIN Operation ON Article.ArticleId = Operation.ArticleId
 JOIN Balance ON Operation.BalanceId = Balance.BalanceId
-JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
+JOIN Customer ON Balance.CustomerId = Customer.CustomerId
 JOIN Currency ON Operation.CurrencyId = Currency.CurrencyId
-WHERE CustomerBalances.CustomerId = 1 AND
-Currency.Name = 'Ruble'
+WHERE Balance.CustomerId = 1 AND
+Currency.CurrencyId = 1
+AND Operation.Date >= '2020-01-01' AND Operation.Date <= '2020-12-12'
 GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date)
 ORDER BY SUM(Operation.Cash);
 

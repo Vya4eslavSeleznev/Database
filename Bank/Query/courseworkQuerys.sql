@@ -156,3 +156,6 @@ JOIN CardServices ON [Card].CardId = CardServices.CardId
 WHERE ServiceId =
 (
 )
+
+
+SELECT * FROM Article

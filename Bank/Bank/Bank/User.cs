@@ -87,11 +87,11 @@ namespace Bank
         "FROM [Card] " +
         "JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId " +
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
-        "WHERE Balance.CustomerId = VALUES(?)";
+        "WHERE Balance.CustomerId = ?";
       //command.Parameters.Add("@CustomerId", OleDbType.Integer);
       //command.Parameters[0].Value = customerId;
       command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      rdr = command.ExecuteReader();
+      //rdr = command.ExecuteReader();
       rdr = command.ExecuteReader();
       while (rdr.Read())
         cardComboBox.Items.Add(rdr["Number"]);
@@ -119,6 +119,7 @@ namespace Bank
     private void ShowRow()
     {
       dRow = dTable.Rows[iRowID];
+      //dRow = dTable.Rows[customerId];
 
       firstNameTextBox.Text = dRow["FirstName"].ToString();
       lastNameTextBox.Text = dRow["LastName"].ToString();
@@ -153,15 +154,31 @@ namespace Bank
 
       if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
       {
-        //TEST
-        MessageBox.Show("Incorrect type of account!" + e.RowIndex, "Authentication", MessageBoxButtons.OK);
+        try
+        {
+          var operationId = (int)operationDataGridView["OperationId", e.RowIndex].Value;
+
+          //MessageBox.Show("Incorrect type of account!" + e.RowIndex, "Authentication", MessageBoxButtons.OK);
+          string operation = myOperation();
+          var editOperation = new EditOperation(dsOperation, operationId, customerId, operation, operationDataGridView);
+          editOperation.Show();
+          //refreshDataSet(operation, dsOperation, "Operation");
+        }
+        catch
+        {
+          MessageBox.Show("Incorrect parameters!", "Operation", MessageBoxButtons.OK);
+        }
       }
     }
 
     private string myOperation()
     {
       return
-        "SELECT Operation. OperationId, Article.[Name] AS Article, Currency.[Name] AS Currency, Balance.Number, " +
+        "SELECT Operation.OperationId, " +
+        "Article.[Name] AS Article, " +
+        "Currency.[Name] AS Currency, " +
+        "Balance.Number, " +
+        "Balance.BalanceId, " +
         "Operation.Cash, Operation.[Date], Operation.WhoseBalance " +
         "FROM Operation " +
         "JOIN Article " +
@@ -243,7 +260,7 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to delete", operationDataGridView);
       setDataInTable(myOperationQuery, "Operation", dsOperation, operationDataGridView);
-      addButtonInDataGrid(operationDataGridView);
+      addButtonInDataGrid(operationDataGridView, "Click to edit", "Edit");
     }
 
     private void setBalance()
@@ -257,7 +274,8 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
       setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
-      addButtonInDataGrid(balancesDataGridView);
+      addButtonInDataGrid(balancesDataGridView, "Click to edit", "Edit");
+      addButtonInDataGrid(balancesDataGridView, "Click to add card", "Add card");
     }
 
     private void setMyCards()
@@ -266,7 +284,8 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to delete", cardsDataGridView);
       setDataInTable(myCardsQuery, "Card", dsCard, cardsDataGridView);
-      addButtonInDataGrid(cardsDataGridView);
+      addButtonInDataGrid(cardsDataGridView, "Click to edit", "Edit");
+      addButtonInDataGrid(cardsDataGridView, "Click to add service", "Add service");
     }
 
     private void setCardServices()
@@ -281,7 +300,6 @@ namespace Bank
     private void setMyCredit()
     {
       string myCreditQuery = myCredit();
-
       setDataInTable(myCreditQuery, "CustomerCredit", dsCredit, myCreditDataGridView);
     }
 
@@ -355,12 +373,12 @@ namespace Bank
       dataGrid.Columns.Insert(0, check);
     }
 
-    private void addButtonInDataGrid(DataGridView dataGrid)
+    private void addButtonInDataGrid(DataGridView dataGrid, string headerText, string textButton)
     {
       DataGridViewButtonColumn button = new DataGridViewButtonColumn();
       dataGrid.Columns.Add(button);
-      button.HeaderText = "Click to edit";
-      button.Text = "Edit";
+      button.HeaderText = headerText;//"Click to edit";
+      button.Text = textButton;// "Edit";
       button.Name = "editButton";
       button.UseColumnTextForButtonValue = true;
     }
@@ -542,30 +560,32 @@ namespace Bank
         "INSERT INTO CardServices (ServiceId) " +
         "VALUES(?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
-      cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
+      OleDbCommand cmdIC1 = new OleDbCommand(addCardQuery, connection);
+      cmdIC1.Parameters.Add(new OleDbParameter("@Number", number));
 
       try
       {
-        cmdIC.ExecuteNonQuery();
+        cmdIC1.ExecuteNonQuery();
       }
-      catch
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
       }
 
-      cmdIC.CommandText = addService;
+      /*cmdIC.CommandText = addService;
       cmdIC.Parameters.Add(new OleDbParameter("@CardServiceId", service));
-      parseComboBox(1, service, cmdIC);
+      parseComboBox(0, service, cmdIC);*/
+      OleDbCommand cmdIC2 = new OleDbCommand(addService, connection);
+      cmdIC2.Parameters.Add(new OleDbParameter("@ServiceId", number));
 
       try
       {
-        cmdIC.ExecuteNonQuery();
+        cmdIC2.ExecuteNonQuery();
         MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
         string myCardsQuery = myCard();
         refreshDataSet(myCardsQuery, dsCard, "Card");
       }
-      catch
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
       }
@@ -730,6 +750,24 @@ namespace Bank
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
+      }
+    }
+
+    private void cardsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var editCard = new EditCard();
+          editCard.Show();
+        }
+        catch
+        {
+          MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        }
       }
     }
   }

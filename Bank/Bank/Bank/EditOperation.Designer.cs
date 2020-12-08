@@ -180,6 +180,7 @@ namespace Bank
       this.Name = "EditOperation";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "EditOperation";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditOperation_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 

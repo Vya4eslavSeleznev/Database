@@ -48,6 +48,8 @@ namespace Bank
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
       this.tabPage2 = new System.Windows.Forms.TabPage();
+      this.currencyStatisticComboBox = new System.Windows.Forms.ComboBox();
+      this.label30 = new System.Windows.Forms.Label();
       this.dateOfOperationPicker = new System.Windows.Forms.DateTimePicker();
       this.dateToPicker = new System.Windows.Forms.DateTimePicker();
       this.label15 = new System.Windows.Forms.Label();
@@ -148,8 +150,6 @@ namespace Bank
       this.dsSecurityInfo = new System.Data.DataSet();
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
-      this.currencyStatisticComboBox = new System.Windows.Forms.ComboBox();
-      this.label30 = new System.Windows.Forms.Label();
       this.dsOperationStatistic = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
@@ -404,6 +404,23 @@ namespace Bank
       this.tabPage2.TabIndex = 1;
       this.tabPage2.Text = "Operation";
       this.tabPage2.UseVisualStyleBackColor = true;
+      // 
+      // currencyStatisticComboBox
+      // 
+      this.currencyStatisticComboBox.FormattingEnabled = true;
+      this.currencyStatisticComboBox.Location = new System.Drawing.Point(684, 78);
+      this.currencyStatisticComboBox.Name = "currencyStatisticComboBox";
+      this.currencyStatisticComboBox.Size = new System.Drawing.Size(345, 24);
+      this.currencyStatisticComboBox.TabIndex = 22;
+      // 
+      // label30
+      // 
+      this.label30.AutoSize = true;
+      this.label30.Location = new System.Drawing.Point(525, 81);
+      this.label30.Name = "label30";
+      this.label30.Size = new System.Drawing.Size(69, 17);
+      this.label30.TabIndex = 21;
+      this.label30.Text = "Currency:";
       // 
       // dateOfOperationPicker
       // 
@@ -807,6 +824,7 @@ namespace Bank
       this.cardsDataGridView.RowTemplate.Height = 24;
       this.cardsDataGridView.Size = new System.Drawing.Size(518, 160);
       this.cardsDataGridView.TabIndex = 0;
+      this.cardsDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.cardsDataGridView_CellContentClick);
       // 
       // groupBox5
       // 
@@ -1277,23 +1295,6 @@ namespace Bank
       // dsCustomer
       // 
       this.dsCustomer.DataSetName = "NewDataSet";
-      // 
-      // currencyStatisticComboBox
-      // 
-      this.currencyStatisticComboBox.FormattingEnabled = true;
-      this.currencyStatisticComboBox.Location = new System.Drawing.Point(684, 78);
-      this.currencyStatisticComboBox.Name = "currencyStatisticComboBox";
-      this.currencyStatisticComboBox.Size = new System.Drawing.Size(345, 24);
-      this.currencyStatisticComboBox.TabIndex = 22;
-      // 
-      // label30
-      // 
-      this.label30.AutoSize = true;
-      this.label30.Location = new System.Drawing.Point(525, 81);
-      this.label30.Name = "label30";
-      this.label30.Size = new System.Drawing.Size(69, 17);
-      this.label30.TabIndex = 21;
-      this.label30.Text = "Currency:";
       // 
       // dsOperationStatistic
       // 
