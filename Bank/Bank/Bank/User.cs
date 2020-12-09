@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Models;
 
 namespace Bank
 {
@@ -52,6 +53,16 @@ namespace Bank
       rdr.Close();
     }
 
+    private void setBalanceIdComboBox(OleDbCommand command, OleDbDataReader rdr, ComboBox comboBox)
+    {
+      command.CommandText = "SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?";
+      command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      rdr = command.ExecuteReader();
+      while (rdr.Read())
+        comboBox.Items.Add(rdr["BalanceId"] + " - " + rdr["Number"]);
+      rdr.Close();
+    }
+
     private void setComboBox()
     {
       OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
@@ -66,12 +77,20 @@ namespace Bank
         currencyOperationComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
       rdr.Close();
 
-      command.CommandText = "SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?";
-      command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        balanceIdComboBox.Items.Add(rdr["BalanceId"] + " - " + rdr["Number"]);
-      rdr.Close();
+      setBalanceIdComboBox(command, rdr, balanceIdComboBox);
+      //setBalanceIdComboBox(command, rdr, cardBalanceIdComboBox);
+
+      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            cardBalanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
+
 
       /*command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
       rdr = command.ExecuteReader();
@@ -264,6 +283,16 @@ namespace Bank
         "ORDER BY COUNT(*)";
     }
 
+    private string myBalance()
+    {
+      return
+        "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
+        "Balance.Cash " +
+        "FROM Balance " +
+        "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
+        "WHERE CustomerId = " + customerId;
+    }
+
     private void setOperation()
     {
       string myOperationQuery = myOperation();
@@ -275,12 +304,7 @@ namespace Bank
 
     private void setBalance()
     {
-      string myBalanceQuery =
-        "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
-        "Balance.Cash " +
-        "FROM Balance " +
-        "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
-        "WHERE CustomerId = " + customerId;
+      string myBalanceQuery = myBalance();
 
       addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
       setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
@@ -554,6 +578,7 @@ namespace Bank
     private void addCardButton_Click(object sender, EventArgs e)
     {
       var number = cardNumberTextBox.Text;
+      var balanceId = ((Balance)cardBalanceIdComboBox.SelectedItem).Id;
 
       if (number == "")
       {
@@ -565,12 +590,54 @@ namespace Bank
         "INSERT INTO Card (Number) " +
         "VALUES(?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCardQuery, connection);
-      cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
+      OleDbCommand cardNumberCommand = new OleDbCommand(addCardQuery, connection);
+      cardNumberCommand.Parameters.Add(new OleDbParameter("@Number", number));
+
+      /*string getCardIdQuery =
+        "SELECT CardId FROM [Card] WHERE Number = ?";
+
+      OleDbCommand getCardIdCommand = new OleDbCommand(getCardIdQuery, connection);
+      getCardIdCommand.Parameters.Add(new OleDbParameter("@Number", number));
+      OleDbDataReader rdr = getCardIdCommand.ExecuteReader();
+      rdr.Read();
+      int cardId = 0;*/
 
       try
       {
-        cmdIC.ExecuteNonQuery();
+        cardNumberCommand.ExecuteNonQuery();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect card number!", "Card", MessageBoxButtons.OK);
+      }
+
+      /*try
+      {
+        cardId = Convert.ToInt32(rdr["CardId"]);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect card id!", "Card", MessageBoxButtons.OK);
+        return;
+      }
+
+      if (cardId == 0)
+      {
+        MessageBox.Show("Incorrect card id!", "Card", MessageBoxButtons.OK);
+        return;
+      }*/
+
+      string addBalance =
+        "INSERT INTO BalanceCards (BalanceId, CardId) " +
+        "VALUES(?, (SELECT CardId FROM [Card] WHERE Number = ?))";
+
+      OleDbCommand balanceIdCommand = new OleDbCommand(addBalance, connection);
+      balanceIdCommand.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+      balanceIdCommand.Parameters.Add(new OleDbParameter("@Number", number));
+
+      try
+      {
+        balanceIdCommand.ExecuteNonQuery();
         MessageBox.Show("Card added successfully!", "Card", MessageBoxButtons.OK);
         string myCardsQuery = myCard();
         refreshDataSet(myCardsQuery, dsCard, "Card");
@@ -798,6 +865,46 @@ namespace Bank
       }
 
       RefreshOperationDataGrid();
+    }
+
+    private void addBalanceButton_Click(object sender, EventArgs e)
+    {
+      var number = balanceNumTextBox.Text;
+      var date = balanceDatePicker.Value.Date.ToString("yyyy-MM -dd"); ;
+      var cash = balanceCashTextBox.Text;
+      var currency = currencyBalanceComboBox.Text;
+
+      if (number == "" || date == "" || cash == "" || currency == "")
+      {
+        MessageBox.Show("Empty test field!", "Balance", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addBalanceQuery =
+        "INSERT INTO Balance(Number, Date, CurrencyId, CustomerId, Cash) " +
+        "VALUES(?, ?, ?, ?, ?)";
+
+      OleDbCommand cmdIC = new OleDbCommand(addBalanceQuery, connection);
+
+      cmdIC.Parameters.Add(new OleDbParameter("@Number", number));
+      cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+      cmdIC.Parameters.Add(new OleDbParameter("@Cash", cash));
+
+      parseComboBox(2, currency, cmdIC);
+
+      try
+      {
+        cmdIC.ExecuteNonQuery();
+        MessageBox.Show("Balance added successfully!", "Balance", MessageBoxButtons.OK);
+        string myBalanceQuery = myBalance();
+        refreshDataSet(myBalanceQuery, dsBalance, "Balance");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
+      }
     }
   }
 }
