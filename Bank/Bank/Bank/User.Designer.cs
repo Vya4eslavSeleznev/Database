@@ -609,6 +609,7 @@ namespace Bank
       this.deleteOperationButton.TabIndex = 1;
       this.deleteOperationButton.Text = "Delete selected";
       this.deleteOperationButton.UseVisualStyleBackColor = true;
+      this.deleteOperationButton.Click += new System.EventHandler(this.deleteOperationButton_Click);
       // 
       // operationDataGridView
       // 

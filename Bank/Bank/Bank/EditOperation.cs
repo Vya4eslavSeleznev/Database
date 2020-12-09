@@ -8,66 +8,62 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Models;
 
 namespace Bank
 {
   public partial class EditOperation : Form
   {
-    private System.Data.DataRow dRow;
-    private System.Data.DataTable dTable;
-    private System.Data.OleDb.OleDbDataAdapter dAdapter;
-    private int operationId;
-    private DataSet dsOperation;
-    private int customerId;
-    private string query;
-    private DataGridView dataGridView;
+    private DataRow dRow;
+    private DataTable dTable;
+    private OleDbDataAdapter dAdapter;
+    private readonly int operationId;
+    private readonly int customerId;
+    private readonly User userForm;
 
-    public EditOperation(DataSet dsOperation, int operationId, int customerId,
-                         string query, DataGridView dataGridView)
+    public EditOperation(int operationId, int customerId, User userForm)
     {
       InitializeComponent();
       connection.Open();
-      this.dsOperation = dsOperation;
       this.operationId = operationId;
       this.customerId = customerId;
-      this.query = query;
-      this.dataGridView = dataGridView;
-      setData();
-      setComboBox();
+      this.userForm = userForm;
+      SetComboBox();
+      SetData();
     }
 
     private void ShowRow()
     {
       dRow = dTable.Rows[0];
 
-      //articleComboBox.Text = dRow["ArticleId"].ToString();
-      //currencyOperationComboBox.Text = dRow["CurrencyId"].ToString();
+      articleComboBox.SelectedItem = GetSelectedItem((int)dRow["ArticleId"], articleComboBox.Items);
+      balanceIdComboBox.SelectedItem = GetSelectedItem((int)dRow["BalanceId"], balanceIdComboBox.Items);
+      currencyOperationComboBox.SelectedItem = GetSelectedItem((int)dRow["CurrencyId"], currencyOperationComboBox.Items);
 
-      articleComboBox.Text = dRow["Article"].ToString();
-      currencyOperationComboBox.Text = dRow["Currency"].ToString();
-      balanceIdComboBox.Text = dRow["BalanceId"].ToString();
       operationCashTextBox.Text = dRow["Cash"].ToString();
       dateOfOperationPicker.Text = dRow["Date"].ToString();
       whoseBalanceTextBox.Text = dRow["WhoseBalance"].ToString();
     }
 
+    private object GetSelectedItem(int selectedId, ComboBox.ObjectCollection items)
+    {
+      return items.Cast<IEntity>()
+        .FirstOrDefault(x => x.Id == selectedId);
+    }
+
     private void FillDataTable()
     {
       var operation =
-        "SELECT Article.[Name] AS Article, " +
-        "Currency.[Name] AS Currency, " +
-        "Balance.Number, " +
+        "SELECT Article.ArticleId, " +
         "Balance.BalanceId, " +
+        "Currency.CurrencyId, " +
         "Operation.Cash, " +
         "Operation.[Date], " +
         "Operation.WhoseBalance " +
         "FROM Operation " +
-        "JOIN Article " +
-        "ON Operation.ArticleId = Article.ArticleId " +
-        "JOIN Currency " +
-        "ON Operation.CurrencyId = Currency.CurrencyId " +
-        "JOIN Balance " +
-        "ON Operation.BalanceId = Balance.BalanceId " +
+        "JOIN Article ON Operation.ArticleId = Article.ArticleId " +
+        "JOIN Currency ON Operation.CurrencyId = Currency.CurrencyId " +
+        "JOIN Balance ON Operation.BalanceId = Balance.BalanceId " +
         "WHERE Operation.OperationId = " + operationId;
 
       dAdapter = new OleDbDataAdapter(operation, connection);
@@ -75,25 +71,19 @@ namespace Bank
       dAdapter.Fill(dTable);
     }
 
-    private void setData()
+    private void SetData()
     {
       FillDataTable();
       ShowRow();
     }
 
-    private void parseComboBox(int index, string data, OleDbCommand cmdIC)
-    {
-      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
-        data.Length - data.IndexOf("-") + 1);
-    }
-
     private void editOperationButton_Click(object sender, EventArgs e)
     {
-      var articleId = articleComboBox.Text;
-      var currencyId = currencyOperationComboBox.Text;
-      var balanceId = balanceIdComboBox.Text;
+      var articleId = ((Article)articleComboBox.SelectedItem).Id;
+      var currencyId = ((Currency)currencyOperationComboBox.SelectedItem).Id;
+      var balanceId = ((Balance)balanceIdComboBox.SelectedItem).Id;
       var cash = operationCashTextBox.Text;
-      var date = dateOfOperationPicker.Value.Date.ToString("yyyy - MM - dd");
+      var date = dateOfOperationPicker.Value.Date.ToString("yyyy-MM-dd");
       var whoseBalance = whoseBalanceTextBox.Text;
 
       string updateProfileQuery =
@@ -117,36 +107,36 @@ namespace Bank
       cmdIC.Parameters.Add(new OleDbParameter("@WhoseBalance", whoseBalance));
       cmdIC.Parameters.Add(new OleDbParameter("@OperationId", operationId));
 
-      parseComboBox(0, articleId, cmdIC);
-      parseComboBox(1, currencyId, cmdIC);
-      parseComboBox(2, balanceId, cmdIC);
-
       cmdIC.ExecuteNonQuery();
       MessageBox.Show("Operation updated!", "Operation", MessageBoxButtons.OK);
     }
 
-    private void setComboBox()
+    private void SetComboBox()
     {
-      OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
-      OleDbDataReader rdr = command.ExecuteReader();
-      while (rdr.Read())
-        articleComboBox.Items.Add(rdr["ArticleId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      using (var cmd = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          articleComboBox.Items.Add(new Article(reader.GetInt32(0), reader.GetString(1)));
+      }
 
-      command.CommandText = "SELECT CurrencyId, [Name] FROM Currency";
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        currencyOperationComboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      using (var cmd = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          currencyOperationComboBox.Items.Add(new Currency(reader.GetInt32(0), reader.GetString(1)));
+      }
 
-      command.CommandText = "SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?";
-      command.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      rdr = command.ExecuteReader();
+      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
 
-      while (rdr.Read())
-        balanceIdComboBox.Items.Add(rdr["BalanceId"] + " - " + rdr["Number"]);
-
-      rdr.Close();
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            balanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
     }
 
     private void refreshDataSet(string query, DataSet ds, string table)
@@ -159,7 +149,7 @@ namespace Bank
     private void EditOperation_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
-      refreshDataSet(query, dsOperation, "Opeartion");
+      this.userForm.RefreshOperationDataGrid();
     }
   }
 }

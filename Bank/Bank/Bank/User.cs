@@ -160,15 +160,25 @@ namespace Bank
 
           //MessageBox.Show("Incorrect type of account!" + e.RowIndex, "Authentication", MessageBoxButtons.OK);
           string operation = myOperation();
-          var editOperation = new EditOperation(dsOperation, operationId, customerId, operation, operationDataGridView);
-          editOperation.Show();
-          //refreshDataSet(operation, dsOperation, "Operation");
+          
+          using (var editOperation = new EditOperation(operationId, customerId, this))
+          {
+            editOperation.ShowDialog();
+          }
         }
-        catch
+        catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Operation", MessageBoxButtons.OK);
         }
       }
+    }
+
+    public void RefreshOperationDataGrid()
+    {
+      operationDataGridView.Columns.Clear();
+      dsOperation = new DataSet();
+
+      setOperation();
     }
 
     private string myOperation()
@@ -767,6 +777,27 @@ namespace Bank
           MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
         }
       }
+    }
+
+    private void deleteOperationButton_Click(object sender, EventArgs e)
+    {
+      var operationIds = (from DataGridViewRow r in operationDataGridView.Rows
+                          where (string)r.Cells[0].Value == "1"
+                          select (int)r.Cells["OperationId"].Value).ToList();
+
+      var parametersPart = string.Join(",", operationIds.Select(x => "?"));
+
+      var query = $"DELETE FROM Operation WHERE OperationId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for(var i = 0; i < operationIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@OperationId{i}", operationIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshOperationDataGrid();
     }
   }
 }
