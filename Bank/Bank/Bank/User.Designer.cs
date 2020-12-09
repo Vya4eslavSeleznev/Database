@@ -80,12 +80,10 @@ namespace Bank
       this.cardNumberTextBox = new System.Windows.Forms.TextBox();
       this.label21 = new System.Windows.Forms.Label();
       this.addBalanceButton = new System.Windows.Forms.Button();
-      this.cardComboBox = new System.Windows.Forms.ComboBox();
       this.balanceCashTextBox = new System.Windows.Forms.TextBox();
       this.currencyBalanceComboBox = new System.Windows.Forms.ComboBox();
       this.balanceDatePicker = new System.Windows.Forms.DateTimePicker();
       this.balanceNumTextBox = new System.Windows.Forms.TextBox();
-      this.label20 = new System.Windows.Forms.Label();
       this.label19 = new System.Windows.Forms.Label();
       this.label18 = new System.Windows.Forms.Label();
       this.label17 = new System.Windows.Forms.Label();
@@ -149,6 +147,8 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
       this.dsOperationStatistic = new System.Data.DataSet();
+      this.label20 = new System.Windows.Forms.Label();
+      this.cardBalanceIdComboBox = new System.Windows.Forms.ComboBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -406,7 +406,7 @@ namespace Bank
       // currencyStatisticComboBox
       // 
       this.currencyStatisticComboBox.FormattingEnabled = true;
-      this.currencyStatisticComboBox.Location = new System.Drawing.Point(684, 78);
+      this.currencyStatisticComboBox.Location = new System.Drawing.Point(684, 58);
       this.currencyStatisticComboBox.Name = "currencyStatisticComboBox";
       this.currencyStatisticComboBox.Size = new System.Drawing.Size(345, 24);
       this.currencyStatisticComboBox.TabIndex = 22;
@@ -414,7 +414,7 @@ namespace Bank
       // label30
       // 
       this.label30.AutoSize = true;
-      this.label30.Location = new System.Drawing.Point(525, 81);
+      this.label30.Location = new System.Drawing.Point(525, 61);
       this.label30.Name = "label30";
       this.label30.Size = new System.Drawing.Size(69, 17);
       this.label30.TabIndex = 21;
@@ -422,14 +422,14 @@ namespace Bank
       // 
       // dateOfOperationPicker
       // 
-      this.dateOfOperationPicker.Location = new System.Drawing.Point(321, 54);
+      this.dateOfOperationPicker.Location = new System.Drawing.Point(321, 34);
       this.dateOfOperationPicker.Name = "dateOfOperationPicker";
       this.dateOfOperationPicker.Size = new System.Drawing.Size(189, 22);
       this.dateOfOperationPicker.TabIndex = 20;
       // 
       // dateToPicker
       // 
-      this.dateToPicker.Location = new System.Drawing.Point(684, 54);
+      this.dateToPicker.Location = new System.Drawing.Point(684, 30);
       this.dateToPicker.Name = "dateToPicker";
       this.dateToPicker.Size = new System.Drawing.Size(345, 22);
       this.dateToPicker.TabIndex = 19;
@@ -437,7 +437,7 @@ namespace Bank
       // label15
       // 
       this.label15.AutoSize = true;
-      this.label15.Location = new System.Drawing.Point(525, 53);
+      this.label15.Location = new System.Drawing.Point(525, 33);
       this.label15.Name = "label15";
       this.label15.Size = new System.Drawing.Size(58, 17);
       this.label15.TabIndex = 18;
@@ -445,7 +445,7 @@ namespace Bank
       // 
       // showButton
       // 
-      this.showButton.Location = new System.Drawing.Point(528, 106);
+      this.showButton.Location = new System.Drawing.Point(528, 86);
       this.showButton.Name = "showButton";
       this.showButton.Size = new System.Drawing.Size(501, 26);
       this.showButton.TabIndex = 17;
@@ -455,14 +455,14 @@ namespace Bank
       // 
       // whoseBalanceTextBox
       // 
-      this.whoseBalanceTextBox.Location = new System.Drawing.Point(382, 82);
+      this.whoseBalanceTextBox.Location = new System.Drawing.Point(382, 62);
       this.whoseBalanceTextBox.Name = "whoseBalanceTextBox";
       this.whoseBalanceTextBox.Size = new System.Drawing.Size(128, 22);
       this.whoseBalanceTextBox.TabIndex = 16;
       // 
       // operationCashTextBox
       // 
-      this.operationCashTextBox.Location = new System.Drawing.Point(320, 26);
+      this.operationCashTextBox.Location = new System.Drawing.Point(320, 6);
       this.operationCashTextBox.Name = "operationCashTextBox";
       this.operationCashTextBox.Size = new System.Drawing.Size(190, 22);
       this.operationCashTextBox.TabIndex = 14;
@@ -470,7 +470,7 @@ namespace Bank
       // balanceIdComboBox
       // 
       this.balanceIdComboBox.FormattingEnabled = true;
-      this.balanceIdComboBox.Location = new System.Drawing.Point(79, 82);
+      this.balanceIdComboBox.Location = new System.Drawing.Point(79, 62);
       this.balanceIdComboBox.Name = "balanceIdComboBox";
       this.balanceIdComboBox.Size = new System.Drawing.Size(157, 24);
       this.balanceIdComboBox.TabIndex = 13;
@@ -478,7 +478,7 @@ namespace Bank
       // currencyOperationComboBox
       // 
       this.currencyOperationComboBox.FormattingEnabled = true;
-      this.currencyOperationComboBox.Location = new System.Drawing.Point(79, 52);
+      this.currencyOperationComboBox.Location = new System.Drawing.Point(79, 32);
       this.currencyOperationComboBox.Name = "currencyOperationComboBox";
       this.currencyOperationComboBox.Size = new System.Drawing.Size(157, 24);
       this.currencyOperationComboBox.TabIndex = 12;
@@ -486,14 +486,14 @@ namespace Bank
       // articleComboBox
       // 
       this.articleComboBox.FormattingEnabled = true;
-      this.articleComboBox.Location = new System.Drawing.Point(79, 22);
+      this.articleComboBox.Location = new System.Drawing.Point(79, 2);
       this.articleComboBox.Name = "articleComboBox";
       this.articleComboBox.Size = new System.Drawing.Size(157, 24);
       this.articleComboBox.TabIndex = 11;
       // 
       // addOperationButton
       // 
-      this.addOperationButton.Location = new System.Drawing.Point(8, 109);
+      this.addOperationButton.Location = new System.Drawing.Point(8, 89);
       this.addOperationButton.Name = "addOperationButton";
       this.addOperationButton.Size = new System.Drawing.Size(502, 26);
       this.addOperationButton.TabIndex = 10;
@@ -504,7 +504,7 @@ namespace Bank
       // label14
       // 
       this.label14.AutoSize = true;
-      this.label14.Location = new System.Drawing.Point(273, 85);
+      this.label14.Location = new System.Drawing.Point(273, 65);
       this.label14.Name = "label14";
       this.label14.Size = new System.Drawing.Size(110, 17);
       this.label14.TabIndex = 9;
@@ -513,7 +513,7 @@ namespace Bank
       // label13
       // 
       this.label13.AutoSize = true;
-      this.label13.Location = new System.Drawing.Point(273, 57);
+      this.label13.Location = new System.Drawing.Point(273, 37);
       this.label13.Name = "label13";
       this.label13.Size = new System.Drawing.Size(42, 17);
       this.label13.TabIndex = 8;
@@ -522,7 +522,7 @@ namespace Bank
       // label12
       // 
       this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(273, 29);
+      this.label12.Location = new System.Drawing.Point(273, 9);
       this.label12.Name = "label12";
       this.label12.Size = new System.Drawing.Size(44, 17);
       this.label12.TabIndex = 7;
@@ -531,7 +531,7 @@ namespace Bank
       // label11
       // 
       this.label11.AutoSize = true;
-      this.label11.Location = new System.Drawing.Point(8, 85);
+      this.label11.Location = new System.Drawing.Point(8, 65);
       this.label11.Name = "label11";
       this.label11.Size = new System.Drawing.Size(63, 17);
       this.label11.TabIndex = 6;
@@ -540,7 +540,7 @@ namespace Bank
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(8, 57);
+      this.label10.Location = new System.Drawing.Point(8, 37);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(69, 17);
       this.label10.TabIndex = 5;
@@ -549,7 +549,7 @@ namespace Bank
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(8, 29);
+      this.label9.Location = new System.Drawing.Point(8, 9);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(51, 17);
       this.label9.TabIndex = 4;
@@ -558,7 +558,7 @@ namespace Bank
       // label8
       // 
       this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(525, 29);
+      this.label8.Location = new System.Drawing.Point(525, 9);
       this.label8.Name = "label8";
       this.label8.Size = new System.Drawing.Size(74, 17);
       this.label8.TabIndex = 3;
@@ -566,7 +566,7 @@ namespace Bank
       // 
       // dateFromTimePicker
       // 
-      this.dateFromTimePicker.Location = new System.Drawing.Point(684, 23);
+      this.dateFromTimePicker.Location = new System.Drawing.Point(684, 3);
       this.dateFromTimePicker.Name = "dateFromTimePicker";
       this.dateFromTimePicker.Size = new System.Drawing.Size(345, 22);
       this.dateFromTimePicker.TabIndex = 2;
@@ -574,9 +574,9 @@ namespace Bank
       // groupBox2
       // 
       this.groupBox2.Controls.Add(this.statisticDataGridView);
-      this.groupBox2.Location = new System.Drawing.Point(522, 141);
+      this.groupBox2.Location = new System.Drawing.Point(522, 118);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(516, 403);
+      this.groupBox2.Size = new System.Drawing.Size(516, 426);
       this.groupBox2.TabIndex = 1;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Operation statistic";
@@ -587,23 +587,23 @@ namespace Bank
       this.statisticDataGridView.Location = new System.Drawing.Point(6, 19);
       this.statisticDataGridView.Name = "statisticDataGridView";
       this.statisticDataGridView.RowHeadersWidth = 51;
-      this.statisticDataGridView.Size = new System.Drawing.Size(504, 378);
+      this.statisticDataGridView.Size = new System.Drawing.Size(504, 400);
       this.statisticDataGridView.TabIndex = 1;
       // 
       // groupBox1
       // 
       this.groupBox1.Controls.Add(this.deleteOperationButton);
       this.groupBox1.Controls.Add(this.operationDataGridView);
-      this.groupBox1.Location = new System.Drawing.Point(1, 141);
+      this.groupBox1.Location = new System.Drawing.Point(1, 118);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(515, 403);
+      this.groupBox1.Size = new System.Drawing.Size(515, 426);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "My Operations";
       // 
       // deleteOperationButton
       // 
-      this.deleteOperationButton.Location = new System.Drawing.Point(5, 364);
+      this.deleteOperationButton.Location = new System.Drawing.Point(4, 384);
       this.deleteOperationButton.Name = "deleteOperationButton";
       this.deleteOperationButton.Size = new System.Drawing.Size(503, 32);
       this.deleteOperationButton.TabIndex = 1;
@@ -618,24 +618,24 @@ namespace Bank
       this.operationDataGridView.Name = "operationDataGridView";
       this.operationDataGridView.RowHeadersWidth = 51;
       this.operationDataGridView.RowTemplate.Height = 24;
-      this.operationDataGridView.Size = new System.Drawing.Size(505, 339);
+      this.operationDataGridView.Size = new System.Drawing.Size(505, 359);
       this.operationDataGridView.TabIndex = 0;
       this.operationDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.operationDataGridView_CellContentClick);
       // 
       // tabPage3
       // 
+      this.tabPage3.Controls.Add(this.cardBalanceIdComboBox);
+      this.tabPage3.Controls.Add(this.label20);
       this.tabPage3.Controls.Add(this.deleteCardButton);
       this.tabPage3.Controls.Add(this.deleteBalanceButton);
       this.tabPage3.Controls.Add(this.addCardButton);
       this.tabPage3.Controls.Add(this.cardNumberTextBox);
       this.tabPage3.Controls.Add(this.label21);
       this.tabPage3.Controls.Add(this.addBalanceButton);
-      this.tabPage3.Controls.Add(this.cardComboBox);
       this.tabPage3.Controls.Add(this.balanceCashTextBox);
       this.tabPage3.Controls.Add(this.currencyBalanceComboBox);
       this.tabPage3.Controls.Add(this.balanceDatePicker);
       this.tabPage3.Controls.Add(this.balanceNumTextBox);
-      this.tabPage3.Controls.Add(this.label20);
       this.tabPage3.Controls.Add(this.label19);
       this.tabPage3.Controls.Add(this.label18);
       this.tabPage3.Controls.Add(this.label17);
@@ -658,12 +658,13 @@ namespace Bank
       this.deleteCardButton.TabIndex = 21;
       this.deleteCardButton.Text = "Delete selected";
       this.deleteCardButton.UseVisualStyleBackColor = true;
+      this.deleteCardButton.Click += new System.EventHandler(this.deleteCardButton_Click);
       // 
       // deleteBalanceButton
       // 
-      this.deleteBalanceButton.Location = new System.Drawing.Point(536, 503);
+      this.deleteBalanceButton.Location = new System.Drawing.Point(531, 503);
       this.deleteBalanceButton.Name = "deleteBalanceButton";
-      this.deleteBalanceButton.Size = new System.Drawing.Size(503, 32);
+      this.deleteBalanceButton.Size = new System.Drawing.Size(508, 32);
       this.deleteBalanceButton.TabIndex = 20;
       this.deleteBalanceButton.Text = "Delete selected";
       this.deleteBalanceButton.UseVisualStyleBackColor = true;
@@ -682,7 +683,7 @@ namespace Bank
       // 
       this.cardNumberTextBox.Location = new System.Drawing.Point(106, 6);
       this.cardNumberTextBox.Name = "cardNumberTextBox";
-      this.cardNumberTextBox.Size = new System.Drawing.Size(418, 22);
+      this.cardNumberTextBox.Size = new System.Drawing.Size(147, 22);
       this.cardNumberTextBox.TabIndex = 18;
       // 
       // label21
@@ -696,20 +697,13 @@ namespace Bank
       // 
       // addBalanceButton
       // 
-      this.addBalanceButton.Location = new System.Drawing.Point(533, 92);
+      this.addBalanceButton.Location = new System.Drawing.Point(533, 66);
       this.addBalanceButton.Name = "addBalanceButton";
       this.addBalanceButton.Size = new System.Drawing.Size(497, 30);
       this.addBalanceButton.TabIndex = 14;
       this.addBalanceButton.Text = "Add Balance";
       this.addBalanceButton.UseVisualStyleBackColor = true;
-      // 
-      // cardComboBox
-      // 
-      this.cardComboBox.FormattingEnabled = true;
-      this.cardComboBox.Location = new System.Drawing.Point(891, 36);
-      this.cardComboBox.Name = "cardComboBox";
-      this.cardComboBox.Size = new System.Drawing.Size(139, 24);
-      this.cardComboBox.TabIndex = 13;
+      this.addBalanceButton.Click += new System.EventHandler(this.addBalanceButton_Click);
       // 
       // balanceCashTextBox
       // 
@@ -721,7 +715,7 @@ namespace Bank
       // currencyBalanceComboBox
       // 
       this.currencyBalanceComboBox.FormattingEnabled = true;
-      this.currencyBalanceComboBox.Location = new System.Drawing.Point(651, 62);
+      this.currencyBalanceComboBox.Location = new System.Drawing.Point(891, 36);
       this.currencyBalanceComboBox.Name = "currencyBalanceComboBox";
       this.currencyBalanceComboBox.Size = new System.Drawing.Size(139, 24);
       this.currencyBalanceComboBox.TabIndex = 11;
@@ -740,15 +734,6 @@ namespace Bank
       this.balanceNumTextBox.Size = new System.Drawing.Size(139, 22);
       this.balanceNumTextBox.TabIndex = 9;
       // 
-      // label20
-      // 
-      this.label20.AutoSize = true;
-      this.label20.Location = new System.Drawing.Point(808, 39);
-      this.label20.Name = "label20";
-      this.label20.Size = new System.Drawing.Size(42, 17);
-      this.label20.TabIndex = 8;
-      this.label20.Text = "Card:";
-      // 
       // label19
       // 
       this.label19.AutoSize = true;
@@ -761,7 +746,7 @@ namespace Bank
       // label18
       // 
       this.label18.AutoSize = true;
-      this.label18.Location = new System.Drawing.Point(533, 66);
+      this.label18.Location = new System.Drawing.Point(808, 39);
       this.label18.Name = "label18";
       this.label18.Size = new System.Drawing.Size(69, 17);
       this.label18.TabIndex = 6;
@@ -828,9 +813,9 @@ namespace Bank
       // groupBox4
       // 
       this.groupBox4.Controls.Add(this.balancesDataGridView);
-      this.groupBox4.Location = new System.Drawing.Point(533, 128);
+      this.groupBox4.Location = new System.Drawing.Point(533, 102);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(508, 375);
+      this.groupBox4.Size = new System.Drawing.Size(508, 401);
       this.groupBox4.TabIndex = 1;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "My Balances";
@@ -842,7 +827,7 @@ namespace Bank
       this.balancesDataGridView.Name = "balancesDataGridView";
       this.balancesDataGridView.RowHeadersWidth = 51;
       this.balancesDataGridView.RowTemplate.Height = 24;
-      this.balancesDataGridView.Size = new System.Drawing.Size(508, 348);
+      this.balancesDataGridView.Size = new System.Drawing.Size(508, 374);
       this.balancesDataGridView.TabIndex = 1;
       this.balancesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.balancesDataGridView_CellContentClick);
       // 
@@ -1281,6 +1266,23 @@ namespace Bank
       // 
       this.dsOperationStatistic.DataSetName = "NewDataSet";
       // 
+      // label20
+      // 
+      this.label20.AutoSize = true;
+      this.label20.Location = new System.Drawing.Point(259, 9);
+      this.label20.Name = "label20";
+      this.label20.Size = new System.Drawing.Size(63, 17);
+      this.label20.TabIndex = 22;
+      this.label20.Text = "Balance:";
+      // 
+      // cardBalanceIdComboBox
+      // 
+      this.cardBalanceIdComboBox.FormattingEnabled = true;
+      this.cardBalanceIdComboBox.Location = new System.Drawing.Point(328, 4);
+      this.cardBalanceIdComboBox.Name = "cardBalanceIdComboBox";
+      this.cardBalanceIdComboBox.Size = new System.Drawing.Size(196, 24);
+      this.cardBalanceIdComboBox.TabIndex = 23;
+      // 
       // User
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1399,7 +1401,6 @@ namespace Bank
     private System.Windows.Forms.DataGridView cardsDataGridView;
     private System.Windows.Forms.DataGridView servicesDataGridView;
     private System.Windows.Forms.DataGridView balancesDataGridView;
-    private System.Windows.Forms.Label label20;
     private System.Windows.Forms.Label label19;
     private System.Windows.Forms.Label label18;
     private System.Windows.Forms.Label label17;
@@ -1408,7 +1409,6 @@ namespace Bank
     private System.Windows.Forms.DateTimePicker balanceDatePicker;
     private System.Windows.Forms.TextBox balanceNumTextBox;
     private System.Windows.Forms.TextBox balanceCashTextBox;
-    private System.Windows.Forms.ComboBox cardComboBox;
     private System.Windows.Forms.Button addBalanceButton;
     private System.Windows.Forms.Button addCardButton;
     private System.Windows.Forms.TextBox cardNumberTextBox;
@@ -1470,5 +1470,7 @@ namespace Bank
     private System.Windows.Forms.ComboBox currencyStatisticComboBox;
     private System.Windows.Forms.Label label30;
     private System.Data.DataSet dsOperationStatistic;
+    private System.Windows.Forms.ComboBox cardBalanceIdComboBox;
+    private System.Windows.Forms.Label label20;
   }
 }

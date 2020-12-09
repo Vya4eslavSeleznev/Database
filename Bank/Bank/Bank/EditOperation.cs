@@ -86,7 +86,7 @@ namespace Bank
       var date = dateOfOperationPicker.Value.Date.ToString("yyyy-MM-dd");
       var whoseBalance = whoseBalanceTextBox.Text;
 
-      string updateProfileQuery =
+      string updateOperationQuery =
         "UPDATE Operation " +
         "SET " +
           "ArticleId = ?, " +
@@ -97,7 +97,7 @@ namespace Bank
           "WhoseBalance = ? " +
         "WHERE OperationId = ?";
 
-      OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
+      OleDbCommand cmdIC = new OleDbCommand(updateOperationQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
       cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));

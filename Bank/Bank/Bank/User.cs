@@ -222,11 +222,10 @@ namespace Bank
     private string myCard()
     {
       return
-        "SELECT [Card].Number, CardService.[Name] AS Service " +
-        "FROM [Card] " +
-        "JOIN CardServices ON [Card].CardId = CardServices.CardId " +
-        "JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId " +
-        "JOIN BalanceCards ON [Card].CardId = BalanceCards.BalanceId " +
+        "SELECT [Card].CardId, " +
+        "[Card].Number " +
+        "FROM[Card] " +
+        "JOIN BalanceCards ON[Card].CardId = BalanceCards.CardId " +
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
         "WHERE Balance.CustomerId = " + customerId;
     }
@@ -593,15 +592,6 @@ namespace Bank
       OleDbCommand cardNumberCommand = new OleDbCommand(addCardQuery, connection);
       cardNumberCommand.Parameters.Add(new OleDbParameter("@Number", number));
 
-      /*string getCardIdQuery =
-        "SELECT CardId FROM [Card] WHERE Number = ?";
-
-      OleDbCommand getCardIdCommand = new OleDbCommand(getCardIdQuery, connection);
-      getCardIdCommand.Parameters.Add(new OleDbParameter("@Number", number));
-      OleDbDataReader rdr = getCardIdCommand.ExecuteReader();
-      rdr.Read();
-      int cardId = 0;*/
-
       try
       {
         cardNumberCommand.ExecuteNonQuery();
@@ -610,22 +600,6 @@ namespace Bank
       {
         MessageBox.Show("Incorrect card number!", "Card", MessageBoxButtons.OK);
       }
-
-      /*try
-      {
-        cardId = Convert.ToInt32(rdr["CardId"]);
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Incorrect card id!", "Card", MessageBoxButtons.OK);
-        return;
-      }
-
-      if (cardId == 0)
-      {
-        MessageBox.Show("Incorrect card id!", "Card", MessageBoxButtons.OK);
-        return;
-      }*/
 
       string addBalance =
         "INSERT INTO BalanceCards (BalanceId, CardId) " +
@@ -818,10 +792,15 @@ namespace Bank
       {
         try
         {
-          var editCard = new EditCard(customerId);
-          editCard.Show();
+          var cardId = (int)cardsDataGridView["CardId", e.RowIndex].Value;
+          string card = myCard();
+
+          using (var editCard = new EditCard(cardId, customerId, this))
+          {
+            editCard.ShowDialog();
+          }
         }
-        catch
+        catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
         }
@@ -905,6 +884,11 @@ namespace Bank
       {
         MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
       }
+    }
+
+    private void deleteCardButton_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }
