@@ -784,6 +784,7 @@ namespace Bank
       this.terminateDepositButton.TabIndex = 14;
       this.terminateDepositButton.Text = "Terminate Deposit";
       this.terminateDepositButton.UseVisualStyleBackColor = true;
+      this.terminateDepositButton.Click += new System.EventHandler(this.terminateDepositButton_Click);
       // 
       // terminateCustomerCreditButton
       // 
@@ -793,6 +794,7 @@ namespace Bank
       this.terminateCustomerCreditButton.TabIndex = 13;
       this.terminateCustomerCreditButton.Text = "Terminate Credit";
       this.terminateCustomerCreditButton.UseVisualStyleBackColor = true;
+      this.terminateCustomerCreditButton.Click += new System.EventHandler(this.terminateCustomerCreditButton_Click);
       // 
       // groupBox11
       // 

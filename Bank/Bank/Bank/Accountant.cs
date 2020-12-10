@@ -162,7 +162,8 @@ namespace Bank
     private string customerCredit()
     {
       return
-        "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, InfoCredit.[Name], " +
+        "SELECT CustomerCredit.CustomerCreditId, Customer.FirstName, Customer.LastName, " +
+        "Customer.Phone, InfoCredit.[Name], " +
         "Currency.[Name], CustomerCredit.Amount, InfoCredit.[Percent] " +
         "FROM Customer " +
         "JOIN CustomerCredit ON Customer.CustomerId = CustomerCredit.CustomerId " +
@@ -173,8 +174,10 @@ namespace Bank
     private string customerDeposit()
     {
       return
-        "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, " +
-        "InfoDeposit.DepositName, Currency.[Name], CustomerDeposit.Amount, InfoDeposit.[Percent] " +
+        "SELECT CustomerDeposit.CustomerDepositId, Customer.FirstName, " +
+        "Customer.LastName, Customer.Phone, " +
+        "InfoDeposit.DepositName, Currency.[Name], " +
+        "CustomerDeposit.Amount, InfoDeposit.[Percent] " +
         "FROM Customer " +
         "JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId " +
         "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
@@ -256,14 +259,16 @@ namespace Bank
     {
       addCheckBoxInDataGrid("Select to terminate credit", customerCreditsDataGridView);
       string customerCreditsQuery = customerCredit();
-      setDataInTable(customerCreditsQuery, "InfoCredit", dsCustomerCredits, customerCreditsDataGridView);
+      setDataInTable(customerCreditsQuery, "CustomerCredits", dsCustomerCredits, customerCreditsDataGridView);
+      customerCreditsDataGridView.Columns["CustomerCreditId"].Visible = false;
     }
 
     private void setCustomerDeposits()
     {
       addCheckBoxInDataGrid("Select to terminate deposit", customerDepositDataGridView);
       string customerDepositsQuery = customerDeposit();
-      setDataInTable(customerDepositsQuery, "InfoDeposit", dsCustomerDeposits, customerDepositDataGridView);
+      setDataInTable(customerDepositsQuery, "CustomerDeposit", dsCustomerDeposits, customerDepositDataGridView);
+      customerDepositDataGridView.Columns["CustomerDepositId"].Visible = false;
     }
 
     private void setCurrencyComboBox(ComboBox comboBox)
@@ -439,6 +444,22 @@ namespace Bank
       setSecurityTypes();
     }
 
+    public void RefreshCustomerCreditsInfoDataGrid()
+    {
+      customerCreditsDataGridView.Columns.Clear();
+      dsCustomerCredits = new DataSet();
+
+      setCustomerCredits();
+    }
+
+    public void RefreshCustomerDepositInfoDataGrid()
+    {
+      customerDepositDataGridView.Columns.Clear();
+      dsCustomerDeposits = new DataSet();
+
+      setCustomerDeposits();
+    }
+
     private void deleteDepositButton_Click(object sender, EventArgs e)
     {
       List<int> depositIds = null;
@@ -527,6 +548,71 @@ namespace Bank
       }
 
       RefreshSecurityInfoDataGrid();
+    }
+
+    private void terminateCustomerCreditButton_Click(object sender, EventArgs e)
+    {
+      List<int> customerCreditIds = null;
+
+      try
+      {
+        customerCreditIds = (from DataGridViewRow r in customerCreditsDataGridView.Rows
+                       where (string)r.Cells[0].Value == "1"
+                       select (int)r.Cells["CustomerCreditId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect customer!", "Debit", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", customerCreditIds.Select(x => "?"));
+      var query = $"DELETE FROM CustomerCredit WHERE CustomerCreditId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < customerCreditIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CustomerCreditId{i}", customerCreditIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshCustomerCreditsInfoDataGrid();
+    }
+
+    private void terminateDepositButton_Click(object sender, EventArgs e)
+    {
+      List<int> customerDepositIds = null;
+
+      try
+      {
+        customerDepositIds = (from DataGridViewRow r in customerDepositDataGridView.Rows
+                             where (string)r.Cells[0].Value == "1"
+                             select (int)r.Cells["CustomerDepositId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect customer!", "Debit", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", customerDepositIds.Select(x => "?"));
+      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < customerDepositIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", customerDepositIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+
+      //GET MONEY
+
+
+
+      RefreshCustomerDepositInfoDataGrid();
     }
   }
 }
