@@ -8,27 +8,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Models;
 
 namespace Bank
 {
   public partial class EditBalance : Form
   {
-    private System.Data.DataRow dRow;
-    private System.Data.DataTable dTable;
-    private System.Data.OleDb.OleDbDataAdapter dAdapter;
-    private int customerId;
+    private DataRow dRow;
+    private DataTable dTable;
+    private OleDbDataAdapter dAdapter;
+    private readonly int balanceId;
+    private readonly int customerId;
+    private readonly User userForm;
 
-    public EditBalance(int customerId)
+    public EditBalance(int balanceId, int customerId, User userForm)
     {
       InitializeComponent();
       connection.Open();
+      this.balanceId = balanceId;
       this.customerId = customerId;
-      setData();
+      this.userForm = userForm;
+      //SetComboBox();
+      SetData();
     }
 
     private void EditBalance_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
+      this.userForm.RefreshBalanceDataGrid();
     }
 
     private void ShowRow()
@@ -37,26 +44,27 @@ namespace Bank
 
       balanceNumTextBox.Text = dRow["Number"].ToString();
       balanceDatePicker.Text = dRow["Date"].ToString();
-      currencyBalanceComboBox.Text = dRow["CurrencyId"].ToString();
+      currencyBalanceComboBox.SelectedItem = GetSelectedItem((int)dRow["CurrencyId"], currencyBalanceComboBox.Items);
       balanceCashTextBox.Text = dRow["Cash"].ToString();
-      cardComboBox.Text = dRow["Card"].ToString();
+      cardComboBox.SelectedItem = GetSelectedItem((int)dRow["CardId"], cardComboBox.Items);
+    }
+
+    private object GetSelectedItem(int selectedId, ComboBox.ObjectCollection items)
+    {
+      return items.Cast<IEntity>()
+        .FirstOrDefault(x => x.Id == selectedId);
     }
 
     private void FillDataTable()
     {
-      var balance =
-        "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
-        "Balance.Cash " +
-        "FROM Balance " +
-        "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
-        "WHERE CustomerId = " + customerId;
+      var balance = this.userForm.myBalance(); ;
 
       dAdapter = new OleDbDataAdapter(balance, connection);
       dTable = new DataTable();
       dAdapter.Fill(dTable);
     }
 
-    private void setData()
+    private void SetData()
     {
       FillDataTable();
       ShowRow();

@@ -97,17 +97,17 @@ namespace Bank
           "WhoseBalance = ? " +
         "WHERE OperationId = ?";
 
-      OleDbCommand cmdIC = new OleDbCommand(updateOperationQuery, connection);
+      OleDbCommand cmd = new OleDbCommand(updateOperationQuery, connection);
 
-      cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
-      cmdIC.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
-      cmdIC.Parameters.Add(new OleDbParameter("@Cash", cash));
-      cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
-      cmdIC.Parameters.Add(new OleDbParameter("@WhoseBalance", whoseBalance));
-      cmdIC.Parameters.Add(new OleDbParameter("@OperationId", operationId));
+      cmd.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
+      cmd.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+      cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+      cmd.Parameters.Add(new OleDbParameter("@Cash", cash));
+      cmd.Parameters.Add(new OleDbParameter("@Date", date));
+      cmd.Parameters.Add(new OleDbParameter("@WhoseBalance", whoseBalance));
+      cmd.Parameters.Add(new OleDbParameter("@OperationId", operationId));
 
-      cmdIC.ExecuteNonQuery();
+      cmd.ExecuteNonQuery();
       MessageBox.Show("Operation updated!", "Operation", MessageBoxButtons.OK);
     }
 

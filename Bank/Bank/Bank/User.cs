@@ -27,7 +27,7 @@ namespace Bank
       InitializeComponent();
       connection.Open();
       setOperation();
-      setBalance();
+      setMyBalance();
       setMyCards();
       setCardServices();
       setMyCredit();
@@ -200,6 +200,22 @@ namespace Bank
       setOperation();
     }
 
+    public void RefreshCardDataGrid()
+    {
+      cardsDataGridView.Columns.Clear();
+      dsCard = new DataSet();
+
+      setMyCards();
+    }
+
+    public void RefreshBalanceDataGrid()
+    {
+      balancesDataGridView.Columns.Clear();
+      dsBalance = new DataSet();
+
+      setMyBalance();
+    }
+
     private string myOperation()
     {
       return
@@ -282,7 +298,9 @@ namespace Bank
         "ORDER BY COUNT(*)";
     }
 
-    private string myBalance()
+
+    //PUBLIC
+    public string myBalance()
     {
       return
         "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
@@ -301,7 +319,7 @@ namespace Bank
       addButtonInDataGrid(operationDataGridView, "Click to edit", "Edit");
     }
 
-    private void setBalance()
+    private void setMyBalance()
     {
       string myBalanceQuery = myBalance();
 
@@ -416,7 +434,8 @@ namespace Bank
       button.UseColumnTextForButtonValue = true;
     }
 
-    private void setDataInTable(string query, string tableName, DataSet dataSet, DataGridView dataGrid)
+    //PUBLIC
+    public void setDataInTable(string query, string tableName, DataSet dataSet, DataGridView dataGrid)
     {
       var dataAdapter = new OleDbDataAdapter(query, connection);
       DataTable table = new DataTable(tableName);
@@ -548,22 +567,22 @@ namespace Bank
         "INSERT INTO Operation (ArticleId, CurrencyId, BalanceId, Cash, [Date], WhoseBalance) " +
         "VALUES(?, ?, ?, ?, ?, ?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addOperationQuery, connection);
+      OleDbCommand cmd = new OleDbCommand(addOperationQuery, connection);
 
-      cmdIC.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
-      cmdIC.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
-      cmdIC.Parameters.Add(new OleDbParameter("@Cash", cash));
-      cmdIC.Parameters.Add(new OleDbParameter("@Date", date));
-      cmdIC.Parameters.Add(new OleDbParameter("@BalanWhoseBalanceceId", whoseBalance));
+      cmd.Parameters.Add(new OleDbParameter("@ArticleId", articleId));
+      cmd.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+      cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+      cmd.Parameters.Add(new OleDbParameter("@Cash", cash));
+      cmd.Parameters.Add(new OleDbParameter("@Date", date));
+      cmd.Parameters.Add(new OleDbParameter("@WhoseBalance", whoseBalance));
 
-      parseComboBox(0, articleId, cmdIC);
-      parseComboBox(1, currencyId, cmdIC);
-      parseComboBox(2, balanceId, cmdIC);
+      parseComboBox(0, articleId, cmd);
+      parseComboBox(1, currencyId, cmd);
+      parseComboBox(2, balanceId, cmd);
 
       try
       {
-        cmdIC.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
         MessageBox.Show("Operation added successfully!", "Operation", MessageBoxButtons.OK);
         string myOperationQuery = myOperation();
         refreshDataSet(myOperationQuery, dsOperation, "Operation");
@@ -815,8 +834,13 @@ namespace Bank
       {
         try
         {
-          var editBalance = new EditBalance(customerId);
-          editBalance.Show();
+          var balanceId = (int)balancesDataGridView["BalanceId", e.RowIndex].Value;
+          string balance = myBalance();
+
+          using (var editBalance = new EditBalance(balanceId, customerId, this))
+          {
+            editBalance.ShowDialog();
+          }
         }
         catch (Exception ex)
         {
@@ -827,12 +851,21 @@ namespace Bank
 
     private void deleteOperationButton_Click(object sender, EventArgs e)
     {
-      var operationIds = (from DataGridViewRow r in operationDataGridView.Rows
-                          where (string)r.Cells[0].Value == "1"
-                          select (int)r.Cells["OperationId"].Value).ToList();
+      List<int> operationIds = null;
+
+      try
+      {
+        operationIds = (from DataGridViewRow r in operationDataGridView.Rows
+                            where (string)r.Cells[0].Value == "1"
+                            select (int)r.Cells["OperationId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        return;
+      }
 
       var parametersPart = string.Join(",", operationIds.Select(x => "?"));
-
       var query = $"DELETE FROM Operation WHERE OperationId IN ({parametersPart})";
 
       using (var cmd = new OleDbCommand(query, connection))
@@ -888,7 +921,77 @@ namespace Bank
 
     private void deleteCardButton_Click(object sender, EventArgs e)
     {
+      var cardIds = (from DataGridViewRow r in cardsDataGridView.Rows
+                          where (string)r.Cells[0].Value == "1"
+                          select (int)r.Cells["CardId"].Value).ToList();
 
+      var parametersPart = string.Join(",", cardIds.Select(x => "?"));
+
+      var cardQuery = $"DELETE FROM Card WHERE CardId IN ({parametersPart})";
+      var balanceQuery = $"DELETE FROM BalanceCards WHERE CardId IN ({parametersPart})";
+      var cardServiceQuery = $"DELETE FROM CardServices WHERE CardId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(balanceQuery, connection))
+      {
+        for (var i = 0; i < cardIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      using (var cmd = new OleDbCommand(cardServiceQuery, connection))
+      {
+        for (var i = 0; i < cardIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      using (var cmd = new OleDbCommand(cardQuery, connection))
+      {
+        for (var i = 0; i < cardIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshCardDataGrid();
+    }
+
+    private void deleteBalanceButton_Click(object sender, EventArgs e)
+    {
+      /*List<int> operationIds = null;
+
+      try
+      {
+        operationIds = (from DataGridViewRow r in operationDataGridView.Rows
+                        where (string)r.Cells[0].Value == "1"
+                        select (int)r.Cells["OperationId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", operationIds.Select(x => "?"));
+      var query = $"DELETE FROM Operation WHERE OperationId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < operationIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@OperationId{i}", operationIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshOperationDataGrid();*/
+    }
+
+    private void showMyServicesButton_Click(object sender, EventArgs e)
+    {
+      var myServices = new MyServices(this, customerId);
+      myServices.Show();
     }
   }
 }

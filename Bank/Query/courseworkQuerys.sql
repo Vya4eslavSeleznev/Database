@@ -150,12 +150,35 @@ JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId
 JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
 JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
 
-INSERT [Card] (Number, ServiceId)
-VALUES(111, 1)
+
+
+SELECT Balance.BalanceId, Balance.Number
+FROM Balance
+JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
+WHERE BalanceCards.CardId = 9
+
+SELECT [Card].Number--, CardService.[Name] AS Service 
+FROM [Card] 
+--JOIN CardServices ON [Card].CardId = CardServices.CardId 
+--JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId 
+JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId 
+JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId 
+WHERE Balance.CustomerId = 1
+
+SELECT [Card].Number, CardService.[Name]
+FROM CardService
+JOIN CardServices ON CardService.CardServiceId = CardServices.ServiceId
+JOIN [Card] ON CardServices.CardId = [Card].CardId
+JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
+JOIN Balance ON Balance.BalanceId = BalanceCards.BalanceId
+WHERE Balance.CustomerId = 1
+
+SELECT Balance.BalanceId
+FROM Balance
+JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
+JOIN [Card] ON BalanceCards.CardId = [Card].CardId
 JOIN CardServices ON [Card].CardId = CardServices.CardId
-WHERE ServiceId =
-(
-)
+JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId
+WHERE Balance.CustomerId = 1
 
 
-SELECT * FROM Article

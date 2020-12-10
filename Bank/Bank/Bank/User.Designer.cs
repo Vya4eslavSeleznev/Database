@@ -74,6 +74,8 @@ namespace Bank
       this.deleteOperationButton = new System.Windows.Forms.Button();
       this.operationDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.cardBalanceIdComboBox = new System.Windows.Forms.ComboBox();
+      this.label20 = new System.Windows.Forms.Label();
       this.deleteCardButton = new System.Windows.Forms.Button();
       this.deleteBalanceButton = new System.Windows.Forms.Button();
       this.addCardButton = new System.Windows.Forms.Button();
@@ -147,8 +149,7 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
       this.dsOperationStatistic = new System.Data.DataSet();
-      this.label20 = new System.Windows.Forms.Label();
-      this.cardBalanceIdComboBox = new System.Windows.Forms.ComboBox();
+      this.showMyServicesButton = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -624,6 +625,7 @@ namespace Bank
       // 
       // tabPage3
       // 
+      this.tabPage3.Controls.Add(this.showMyServicesButton);
       this.tabPage3.Controls.Add(this.cardBalanceIdComboBox);
       this.tabPage3.Controls.Add(this.label20);
       this.tabPage3.Controls.Add(this.deleteCardButton);
@@ -650,9 +652,26 @@ namespace Bank
       this.tabPage3.Text = "Balance";
       this.tabPage3.UseVisualStyleBackColor = true;
       // 
+      // cardBalanceIdComboBox
+      // 
+      this.cardBalanceIdComboBox.FormattingEnabled = true;
+      this.cardBalanceIdComboBox.Location = new System.Drawing.Point(328, 4);
+      this.cardBalanceIdComboBox.Name = "cardBalanceIdComboBox";
+      this.cardBalanceIdComboBox.Size = new System.Drawing.Size(196, 24);
+      this.cardBalanceIdComboBox.TabIndex = 23;
+      // 
+      // label20
+      // 
+      this.label20.AutoSize = true;
+      this.label20.Location = new System.Drawing.Point(259, 9);
+      this.label20.Name = "label20";
+      this.label20.Size = new System.Drawing.Size(63, 17);
+      this.label20.TabIndex = 22;
+      this.label20.Text = "Balance:";
+      // 
       // deleteCardButton
       // 
-      this.deleteCardButton.Location = new System.Drawing.Point(7, 280);
+      this.deleteCardButton.Location = new System.Drawing.Point(7, 273);
       this.deleteCardButton.Name = "deleteCardButton";
       this.deleteCardButton.Size = new System.Drawing.Size(520, 32);
       this.deleteCardButton.TabIndex = 21;
@@ -668,6 +687,7 @@ namespace Bank
       this.deleteBalanceButton.TabIndex = 20;
       this.deleteBalanceButton.Text = "Delete selected";
       this.deleteBalanceButton.UseVisualStyleBackColor = true;
+      this.deleteBalanceButton.Click += new System.EventHandler(this.deleteBalanceButton_Click);
       // 
       // addCardButton
       // 
@@ -794,9 +814,9 @@ namespace Bank
       // groupBox5
       // 
       this.groupBox5.Controls.Add(this.servicesDataGridView);
-      this.groupBox5.Location = new System.Drawing.Point(3, 318);
+      this.groupBox5.Location = new System.Drawing.Point(3, 311);
       this.groupBox5.Name = "groupBox5";
-      this.groupBox5.Size = new System.Drawing.Size(524, 223);
+      this.groupBox5.Size = new System.Drawing.Size(524, 192);
       this.groupBox5.TabIndex = 2;
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Card Services";
@@ -807,15 +827,15 @@ namespace Bank
       this.servicesDataGridView.Location = new System.Drawing.Point(3, 19);
       this.servicesDataGridView.Name = "servicesDataGridView";
       this.servicesDataGridView.RowHeadersWidth = 51;
-      this.servicesDataGridView.Size = new System.Drawing.Size(519, 204);
+      this.servicesDataGridView.Size = new System.Drawing.Size(519, 167);
       this.servicesDataGridView.TabIndex = 1;
       // 
       // groupBox4
       // 
       this.groupBox4.Controls.Add(this.balancesDataGridView);
-      this.groupBox4.Location = new System.Drawing.Point(533, 102);
+      this.groupBox4.Location = new System.Drawing.Point(533, 93);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(508, 401);
+      this.groupBox4.Size = new System.Drawing.Size(508, 410);
       this.groupBox4.TabIndex = 1;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "My Balances";
@@ -827,7 +847,7 @@ namespace Bank
       this.balancesDataGridView.Name = "balancesDataGridView";
       this.balancesDataGridView.RowHeadersWidth = 51;
       this.balancesDataGridView.RowTemplate.Height = 24;
-      this.balancesDataGridView.Size = new System.Drawing.Size(508, 374);
+      this.balancesDataGridView.Size = new System.Drawing.Size(508, 383);
       this.balancesDataGridView.TabIndex = 1;
       this.balancesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.balancesDataGridView_CellContentClick);
       // 
@@ -1266,22 +1286,15 @@ namespace Bank
       // 
       this.dsOperationStatistic.DataSetName = "NewDataSet";
       // 
-      // label20
+      // showMyServicesButton
       // 
-      this.label20.AutoSize = true;
-      this.label20.Location = new System.Drawing.Point(259, 9);
-      this.label20.Name = "label20";
-      this.label20.Size = new System.Drawing.Size(63, 17);
-      this.label20.TabIndex = 22;
-      this.label20.Text = "Balance:";
-      // 
-      // cardBalanceIdComboBox
-      // 
-      this.cardBalanceIdComboBox.FormattingEnabled = true;
-      this.cardBalanceIdComboBox.Location = new System.Drawing.Point(328, 4);
-      this.cardBalanceIdComboBox.Name = "cardBalanceIdComboBox";
-      this.cardBalanceIdComboBox.Size = new System.Drawing.Size(196, 24);
-      this.cardBalanceIdComboBox.TabIndex = 23;
+      this.showMyServicesButton.Location = new System.Drawing.Point(7, 503);
+      this.showMyServicesButton.Name = "showMyServicesButton";
+      this.showMyServicesButton.Size = new System.Drawing.Size(520, 32);
+      this.showMyServicesButton.TabIndex = 24;
+      this.showMyServicesButton.Text = "Show my services";
+      this.showMyServicesButton.UseVisualStyleBackColor = true;
+      this.showMyServicesButton.Click += new System.EventHandler(this.showMyServicesButton_Click);
       // 
       // User
       // 
@@ -1472,5 +1485,6 @@ namespace Bank
     private System.Data.DataSet dsOperationStatistic;
     private System.Windows.Forms.ComboBox cardBalanceIdComboBox;
     private System.Windows.Forms.Label label20;
+    private System.Windows.Forms.Button showMyServicesButton;
   }
 }

@@ -35,6 +35,7 @@ namespace Bank
     private void EditCard_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
+      this.userForm.RefreshCardDataGrid();
     }
 
     private void ShowRow()
@@ -88,21 +89,33 @@ namespace Bank
 
     private void editCardButton_Click(object sender, EventArgs e)
     {
-      // НЕ РАБОТАЕТ. РЕАЛИЗОВАТЬ КНОПКУ
-
       var balance = ((Balance)cardBalanceIdComboBox.SelectedItem).Id;
       var cardNumber = cardNumberTextBox.Text;
 
       string updateCardQuery =
-        "UPDATE Operation " +
+        "UPDATE Card " +
         "SET " +
-          "ArticleId = ?, " +
-          "CurrencyId = ?, " +
-          "BalanceId = ?, " +
-          "Cash = ?, " +
-          "Date = ?, " +
-          "WhoseBalance = ? " +
-        "WHERE OperationId = ?";
+          "Number = ? " +
+        "WHERE CardId = ?";
+
+      string updateBalanceCardQuery =
+        "UPDATE BalanceCards " +
+        "SET " +
+          "BalanceId = ? " +
+        "WHERE CardId = ?";
+
+      OleDbCommand cardCmd = new OleDbCommand(updateCardQuery, connection);
+      OleDbCommand balanceCardCmd = new OleDbCommand(updateBalanceCardQuery, connection);
+
+      cardCmd.Parameters.Add(new OleDbParameter("@Number", cardNumber));
+      cardCmd.Parameters.Add(new OleDbParameter("@CardId", cardId));
+
+      balanceCardCmd.Parameters.Add(new OleDbParameter("@BalanceId", balance));
+      balanceCardCmd.Parameters.Add(new OleDbParameter("@CardId", cardId));
+
+      cardCmd.ExecuteNonQuery();
+      balanceCardCmd.ExecuteNonQuery();
+      MessageBox.Show("Card updated!", "Card", MessageBoxButtons.OK);
     }
   }
 }
