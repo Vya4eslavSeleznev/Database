@@ -55,11 +55,11 @@ namespace Bank
     private void FillDataTable()
     {
       var card =
-        " SELECT [Card].Number " +
+        "SELECT [Card].Number, Balance.BalanceId " +
         "FROM [Card] " +
         "JOIN BalanceCards ON[Card].CardId = BalanceCards.CardId " +
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
-        "WHERE [Card].CardId = " + customerId;
+        "WHERE [Card].CardId = " + cardId;
 
       dAdapter = new OleDbDataAdapter(card, connection);
       dTable = new DataTable();
@@ -77,17 +77,16 @@ namespace Bank
       using (var cmd = new OleDbCommand(
         "SELECT Balance.BalanceId, Balance.Number " +
         "FROM Balance " +
-        "JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId " +
-        "WHERE BalanceCards.CardId = " + cardId, connection))
+        "WHERE Balance.CustomerId = " + customerId, connection))
 
       using (var reader = cmd.ExecuteReader())
       {
         while (reader.Read())
-          cardBalanceIdComboBox.Items.Add(new Article(reader.GetInt32(0), reader.GetString(1)));
+          cardBalanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
       }
     }
 
-    private void editCardButton_Click(object sender, EventArgs e)
+    private void editCardButton_Click_1(object sender, EventArgs e)
     {
       var balance = ((Balance)cardBalanceIdComboBox.SelectedItem).Id;
       var cardNumber = cardNumberTextBox.Text;

@@ -173,7 +173,7 @@ JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
 JOIN Balance ON Balance.BalanceId = BalanceCards.BalanceId
 WHERE Balance.CustomerId = 1
 
-SELECT Balance.BalanceId
+SELECT *
 FROM Balance
 JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
 JOIN [Card] ON BalanceCards.CardId = [Card].CardId
@@ -181,4 +181,10 @@ JOIN CardServices ON [Card].CardId = CardServices.CardId
 JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId
 WHERE Balance.CustomerId = 1
 
+INSERT INTO CardServices (CardId, ServiceId) 
+VALUES (1, 1)
+
+SELECT [Card].Number
+FROM [Card]
+JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
 

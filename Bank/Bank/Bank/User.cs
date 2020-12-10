@@ -91,6 +91,28 @@ namespace Bank
         }
       }
 
+      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            depositBalanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
+
+      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            securitiesBalanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
+
 
       /*command.CommandText = "SELECT CardServiceId, [Name] FROM CardService";
       rdr = command.ExecuteReader();
@@ -154,7 +176,8 @@ namespace Bank
       var profile =
         "SELECT FirstName, LastName, Birthday, PassportNum, Phone, [Login], [Password] " +
         "FROM Customer " +
-        "JOIN [User] ON Customer.UserId = [User].Id";
+        "JOIN [User] ON Customer.UserId = [User].Id " +
+        $"WHERE Customer.CustomerId = {customerId}";
 
       dAdapter = new OleDbDataAdapter(profile, connection);
       dAdapter.Fill(dsCustomer, "Customer");
@@ -239,7 +262,8 @@ namespace Bank
     {
       return
         "SELECT [Card].CardId, " +
-        "[Card].Number " +
+        "[Card].Number AS 'Card Number', " +
+        "Balance.Number AS 'Balance Number' " +
         "FROM[Card] " +
         "JOIN BalanceCards ON[Card].CardId = BalanceCards.CardId " +
         "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
@@ -303,7 +327,7 @@ namespace Bank
     public string myBalance()
     {
       return
-        "SELECT Balance.Number, Balance.[Date], Currency.[Name], " +
+        "SELECT Balance.BalanceId, Balance.Number, Balance.[Date], Currency.[Name], " +
         "Balance.Cash " +
         "FROM Balance " +
         "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId " +
@@ -317,6 +341,7 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", operationDataGridView);
       setDataInTable(myOperationQuery, "Operation", dsOperation, operationDataGridView);
       addButtonInDataGrid(operationDataGridView, "Click to edit", "Edit");
+      operationDataGridView.Columns["OperationId"].Visible = false;
     }
 
     private void setMyBalance()
@@ -326,7 +351,8 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
       setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
       addButtonInDataGrid(balancesDataGridView, "Click to edit", "Edit");
-      addButtonInDataGrid(balancesDataGridView, "Click to add card", "Add card");
+
+      balancesDataGridView.Columns["BalanceId"].Visible = false;
     }
 
     private void setMyCards()
@@ -337,6 +363,8 @@ namespace Bank
       setDataInTable(myCardsQuery, "Card", dsCard, cardsDataGridView);
       addButtonInDataGrid(cardsDataGridView, "Click to edit", "Edit");
       addButtonInDataGrid(cardsDataGridView, "Click to add service", "Add service");
+
+      cardsDataGridView.Columns["CardId"].Visible = false;
     }
 
     private void setCardServices()
@@ -346,6 +374,7 @@ namespace Bank
         "FROM CardService";
 
       setDataInTable(cardServiceQuery, "CardService", dsCardService, servicesDataGridView);
+      servicesDataGridView.ReadOnly = true;
     }
 
     private void setMyCredit()
@@ -731,6 +760,7 @@ namespace Bank
     {
       var depositType = depositTypeComboBox.Text;
       var amount = depositAmountTextBox.Text;
+     
 
       if (depositType == "" || amount == "")
       {
@@ -807,13 +837,18 @@ namespace Bank
     {
       var senderGrid = (DataGridView)sender;
 
-      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      if (!(senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn) || e.RowIndex < 0)
+        return;
+
+      var cardId = (int)cardsDataGridView["CardId", e.RowIndex].Value;
+
+      var isEdit = senderGrid.Columns[e.ColumnIndex].HeaderText.Contains("edit");
+      var isAdd = senderGrid.Columns[e.ColumnIndex].HeaderText.Contains("add");
+
+      if (isEdit)
       {
         try
         {
-          var cardId = (int)cardsDataGridView["CardId", e.RowIndex].Value;
-          string card = myCard();
-
           using (var editCard = new EditCard(cardId, customerId, this))
           {
             editCard.ShowDialog();
@@ -824,28 +859,51 @@ namespace Bank
           MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
         }
       }
+      else if (isAdd)
+      {
+        try
+        {
+          using (var addService = new AddService(cardId, customerId))
+          {
+            addService.ShowDialog();
+          }
+        }
+        catch (OleDbException ex)
+        {
+          if (ex.Errors[0].NativeError == 50000)
+          {
+            MessageBox.Show(ex.Errors[0].Message, "Service", MessageBoxButtons.OK);
+            return;
+          }
+
+          throw;
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Service", MessageBoxButtons.OK);
+        }
+      }
     }
 
     private void balancesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
     {
       var senderGrid = (DataGridView)sender;
 
-      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
-      {
-        try
-        {
-          var balanceId = (int)balancesDataGridView["BalanceId", e.RowIndex].Value;
-          string balance = myBalance();
+      if (!(senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn) || e.RowIndex < 0)
+        return;
 
-          using (var editBalance = new EditBalance(balanceId, customerId, this))
-          {
-            editBalance.ShowDialog();
-          }
-        }
-        catch (Exception ex)
+      var balanceId = (int)balancesDataGridView["BalanceId", e.RowIndex].Value;
+
+      try
+      {
+        using (var editBalance = new EditBalance(balanceId, customerId, this))
         {
-          MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
+          editBalance.ShowDialog();
         }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
       }
     }
 
@@ -922,30 +980,12 @@ namespace Bank
     private void deleteCardButton_Click(object sender, EventArgs e)
     {
       var cardIds = (from DataGridViewRow r in cardsDataGridView.Rows
-                          where (string)r.Cells[0].Value == "1"
-                          select (int)r.Cells["CardId"].Value).ToList();
+                     where (string)r.Cells[0].Value == "1"
+                     select (int)r.Cells["CardId"].Value).ToList();
 
       var parametersPart = string.Join(",", cardIds.Select(x => "?"));
 
       var cardQuery = $"DELETE FROM Card WHERE CardId IN ({parametersPart})";
-      var balanceQuery = $"DELETE FROM BalanceCards WHERE CardId IN ({parametersPart})";
-      var cardServiceQuery = $"DELETE FROM CardServices WHERE CardId IN ({parametersPart})";
-
-      using (var cmd = new OleDbCommand(balanceQuery, connection))
-      {
-        for (var i = 0; i < cardIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
-
-        cmd.ExecuteNonQuery();
-      }
-
-      using (var cmd = new OleDbCommand(cardServiceQuery, connection))
-      {
-        for (var i = 0; i < cardIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
-
-        cmd.ExecuteNonQuery();
-      }
 
       using (var cmd = new OleDbCommand(cardQuery, connection))
       {
@@ -991,7 +1031,7 @@ namespace Bank
     private void showMyServicesButton_Click(object sender, EventArgs e)
     {
       var myServices = new MyServices(this, customerId);
-      myServices.Show();
+      myServices.ShowDialog();
     }
   }
 }

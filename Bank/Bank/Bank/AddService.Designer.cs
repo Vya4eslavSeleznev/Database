@@ -34,6 +34,7 @@ namespace Bank
       this.label22 = new System.Windows.Forms.Label();
       this.label21 = new System.Windows.Forms.Label();
       this.cardComboBox = new System.Windows.Forms.ComboBox();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       this.SuspendLayout();
       // 
       // addServiceButton
@@ -44,6 +45,7 @@ namespace Bank
       this.addServiceButton.TabIndex = 24;
       this.addServiceButton.Text = "Add Service";
       this.addServiceButton.UseVisualStyleBackColor = true;
+      this.addServiceButton.Click += new System.EventHandler(this.addServiceButton_Click);
       // 
       // cardServiceComboBox
       // 
@@ -79,6 +81,11 @@ namespace Bank
       this.cardComboBox.Size = new System.Drawing.Size(212, 24);
       this.cardComboBox.TabIndex = 25;
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
       // AddService
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -92,6 +99,7 @@ namespace Bank
       this.Name = "AddService";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "AddService";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddService_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -104,5 +112,6 @@ namespace Bank
     private System.Windows.Forms.Label label22;
     private System.Windows.Forms.Label label21;
     private System.Windows.Forms.ComboBox cardComboBox;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }

@@ -9,7 +9,7 @@ JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
 JOIN [Card] ON BalanceCards.CardId = [Card].CardId
 JOIN CardServices ON [Card].CardId = CardServices.CardId
 JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
-WHERE CardService.[Name] = 'Call';
+WHERE CardService.[Name] = 'Call'
 
 /*2*/
 --Топ акций: количество купленных, процентная ставка
@@ -179,10 +179,9 @@ EXISTS
 (
 	SELECT *
 	FROM Balance
-	JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
-	WHERE CustomerBalances.CustomerId = Customer.CustomerId
-	GROUP BY CustomerBalances.CustomerId
-	HAVING SUM(Balance.Debit) + SUM(Balance.Credit) = 0
+	WHERE Balance.CustomerId = Customer.CustomerId
+	GROUP BY Balance.CustomerId
+	HAVING SUM(Balance.Cash) <= 0
 )
 AND EXISTS
 (

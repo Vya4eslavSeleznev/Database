@@ -22,30 +22,49 @@ namespace Bank
       setCurrency();
       setCustomer();
       setServiceComboBox();
+      setUser();
+      setInactiveCustomers();
+      setRichestCustomers();
     }
 
     private string article()
     {
       return
-        "SELECT * FROM Article";
+        "SELECT [Name] FROM Article";
     }
 
     private string cardService()
     {
       return
-        "SELECT * FROM CardService";
+        "SELECT [Name], Price FROM CardService";
     }
 
     private string currency()
     {
       return
-        "SELECT * FROM Currency";
+        "SELECT [Name] FROM Currency";
     }
 
     private string customer()
     {
       return
-        "SELECT * FROM Customer";
+        "SELECT " +
+        "Customer.FirstName, " +
+        "Customer.LastName, " +
+        "Customer.PassportNum, " +
+        "Customer.Birthday, " +
+        "Customer.Phone, " +
+        "[User].Login, " +
+        "[User].Password " +
+        "FROM Customer " +
+        "JOIN [User] ON Customer.UserId = [User].Id";
+    }
+
+    private string user()
+    {
+      return
+        "SELECT [Login], [Password], Role " +
+        "FROM [User]";
     }
 
     private void setArticle()
@@ -78,6 +97,26 @@ namespace Bank
       string customerQuery = customer();
       setDataInTable(customerQuery, "Customer", dsAllCustomers, customerDataGridView);
       addButtonInDataGrid(customerDataGridView);
+    }
+
+    private void setUser()
+    {
+      addCheckBoxInDataGrid("Select to delete", usersDataGridView);
+      string usersQuery = user();
+      setDataInTable(usersQuery, "User", dsUser, usersDataGridView);
+      addButtonInDataGrid(usersDataGridView);
+    }
+
+    private void setInactiveCustomers()
+    {
+      string inactiveCustomersQuery = "InactiveCustomers";
+      setDataInTable(inactiveCustomersQuery, "CustomerStatistic", dsInactiveCustomers, inactiveCustomersDataGridView);
+    }
+
+    private void setRichestCustomers()
+    {
+      string richestCustomersQuery = "RichestCustomers";
+      setDataInTable(richestCustomersQuery, "RichestCustomers", dsRichestCustomers, richestCustomersDataGridView);
     }
 
     private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
@@ -143,36 +182,27 @@ namespace Bank
     {
       var service = serviceStatisticComboBox.Text;
 
-      /*if (service == "")
+      if (service == "")
       {
-        MessageBox.Show("Empty test field!", "Credit types", MessageBoxButtons.OK);
+        MessageBox.Show("Empty text field!", "Call center", MessageBoxButtons.OK);
         return;
       }
 
-      string addCreditTypeQuery =
-        "INSERT INTO InfoCredit([Name], CurrencyId, [Percent], Term) " +
-        "VALUES(?, ?, ?, ?)";
+      string getCustomersWithServiceQuery = "ServiceStatistic ?";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCreditTypeQuery, connection);
-
-      cmdIC.Parameters.Add(new OleDbParameter("@Name", info));
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
-      cmdIC.Parameters.Add(new OleDbParameter("@Percent", percent));
-      cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
-
-      parseComboBox(1, currency, cmdIC);
+      OleDbCommand cmd = new OleDbCommand(getCustomersWithServiceQuery, connection);
+      cmd.Parameters.Add(new OleDbParameter("@Name", service));
 
       try
       {
-        cmdIC.ExecuteNonQuery();
-        MessageBox.Show("Credit type added successfully!", "Credit type", MessageBoxButtons.OK);
-        string creditTypesQuery = creditTypes();
-        refreshDataSet(creditTypesQuery, dsCreditTypes, "InfoCredit");
+        cmd.ExecuteNonQuery();
+        MessageBox.Show("Service statistic!", "Call center", MessageBoxButtons.OK);
+        setDataInTable(getCustomersWithServiceQuery, "Service", dsServices, callCenterServiceDataGridView);
       }
       catch (Exception ex)
       {
-        MessageBox.Show("Incorrect parameters!", "Credit types", MessageBoxButtons.OK);
-      }*/
+        MessageBox.Show("Incorrect parameters!", "Call center", MessageBoxButtons.OK);
+      }
     }
   }
 }

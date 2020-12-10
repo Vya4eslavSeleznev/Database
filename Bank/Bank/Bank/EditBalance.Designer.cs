@@ -156,6 +156,7 @@ namespace Bank
       this.Controls.Add(this.label17);
       this.Controls.Add(this.label16);
       this.Name = "EditBalance";
+      this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "EditBalance";
       this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditBalance_FormClosing);
       this.ResumeLayout(false);

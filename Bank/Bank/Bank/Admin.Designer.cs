@@ -86,6 +86,25 @@ namespace Bank
       this.dsRichestCustomers = new System.Data.DataSet();
       this.dsPoorestCustomers = new System.Data.DataSet();
       this.dsServices = new System.Data.DataSet();
+      this.deleteArticleButton = new System.Windows.Forms.Button();
+      this.deleteCardServiceButton = new System.Windows.Forms.Button();
+      this.deleteCurrencyButton = new System.Windows.Forms.Button();
+      this.tabPage6 = new System.Windows.Forms.TabPage();
+      this.label13 = new System.Windows.Forms.Label();
+      this.deleteCustomerButton = new System.Windows.Forms.Button();
+      this.comboBox1 = new System.Windows.Forms.ComboBox();
+      this.label14 = new System.Windows.Forms.Label();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.textBox2 = new System.Windows.Forms.TextBox();
+      this.label15 = new System.Windows.Forms.Label();
+      this.addUserButton = new System.Windows.Forms.Button();
+      this.groupBox8 = new System.Windows.Forms.GroupBox();
+      this.usersDataGridView = new System.Windows.Forms.DataGridView();
+      this.deleteUserButton = new System.Windows.Forms.Button();
+      this.dsUser = new System.Data.DataSet();
+      this.groupBox9 = new System.Windows.Forms.GroupBox();
+      this.inactiveCustomersDataGridView = new System.Windows.Forms.DataGridView();
+      this.dsInactiveCustomers = new System.Data.DataSet();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -114,6 +133,13 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsRichestCustomers)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPoorestCustomers)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsServices)).BeginInit();
+      this.tabPage6.SuspendLayout();
+      this.groupBox8.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsUser)).BeginInit();
+      this.groupBox9.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.inactiveCustomersDataGridView)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsInactiveCustomers)).BeginInit();
       this.SuspendLayout();
       // 
       // tabControl1
@@ -123,6 +149,7 @@ namespace Bank
       this.tabControl1.Controls.Add(this.tabPage3);
       this.tabControl1.Controls.Add(this.tabPage4);
       this.tabControl1.Controls.Add(this.tabPage5);
+      this.tabControl1.Controls.Add(this.tabPage6);
       this.tabControl1.Location = new System.Drawing.Point(1, 0);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
@@ -131,6 +158,7 @@ namespace Bank
       // 
       // tabPage1
       // 
+      this.tabPage1.Controls.Add(this.deleteArticleButton);
       this.tabPage1.Controls.Add(this.createArticleButton);
       this.tabPage1.Controls.Add(this.nameArticleTextBox);
       this.tabPage1.Controls.Add(this.label1);
@@ -173,7 +201,7 @@ namespace Bank
       this.groupBox1.Controls.Add(this.articleDataGridView);
       this.groupBox1.Location = new System.Drawing.Point(4, 43);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(1035, 501);
+      this.groupBox1.Size = new System.Drawing.Size(1035, 459);
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Article";
@@ -185,11 +213,13 @@ namespace Bank
       this.articleDataGridView.Name = "articleDataGridView";
       this.articleDataGridView.RowHeadersWidth = 51;
       this.articleDataGridView.RowTemplate.Height = 24;
-      this.articleDataGridView.Size = new System.Drawing.Size(1034, 483);
+      this.articleDataGridView.Size = new System.Drawing.Size(1034, 436);
       this.articleDataGridView.TabIndex = 0;
       // 
       // tabPage2
       // 
+      this.tabPage2.Controls.Add(this.deleteCurrencyButton);
+      this.tabPage2.Controls.Add(this.deleteCardServiceButton);
       this.tabPage2.Controls.Add(this.createServiceButton);
       this.tabPage2.Controls.Add(this.servicePriceNumericUpDown);
       this.tabPage2.Controls.Add(this.label6);
@@ -254,7 +284,7 @@ namespace Bank
       this.groupBox2.Controls.Add(this.serviceDataGridView);
       this.groupBox2.Location = new System.Drawing.Point(3, 76);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(516, 465);
+      this.groupBox2.Size = new System.Drawing.Size(516, 432);
       this.groupBox2.TabIndex = 38;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Card service";
@@ -265,7 +295,7 @@ namespace Bank
       this.serviceDataGridView.Location = new System.Drawing.Point(-3, 19);
       this.serviceDataGridView.Name = "serviceDataGridView";
       this.serviceDataGridView.RowHeadersWidth = 51;
-      this.serviceDataGridView.Size = new System.Drawing.Size(513, 439);
+      this.serviceDataGridView.Size = new System.Drawing.Size(513, 407);
       this.serviceDataGridView.TabIndex = 1;
       // 
       // createCurrencyButton
@@ -298,7 +328,7 @@ namespace Bank
       this.groupBox3.Controls.Add(this.currencyDataGridView);
       this.groupBox3.Location = new System.Drawing.Point(522, 76);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(515, 468);
+      this.groupBox3.Size = new System.Drawing.Size(515, 432);
       this.groupBox3.TabIndex = 37;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Currency";
@@ -310,11 +340,12 @@ namespace Bank
       this.currencyDataGridView.Name = "currencyDataGridView";
       this.currencyDataGridView.RowHeadersWidth = 51;
       this.currencyDataGridView.RowTemplate.Height = 24;
-      this.currencyDataGridView.Size = new System.Drawing.Size(505, 446);
+      this.currencyDataGridView.Size = new System.Drawing.Size(505, 407);
       this.currencyDataGridView.TabIndex = 0;
       // 
       // tabPage3
       // 
+      this.tabPage3.Controls.Add(this.deleteCustomerButton);
       this.tabPage3.Controls.Add(this.groupBox4);
       this.tabPage3.Controls.Add(this.saveChangesButton);
       this.tabPage3.Controls.Add(this.birthdayTimePicker);
@@ -341,9 +372,9 @@ namespace Bank
       // groupBox4
       // 
       this.groupBox4.Controls.Add(this.customerDataGridView);
-      this.groupBox4.Location = new System.Drawing.Point(10, 132);
+      this.groupBox4.Location = new System.Drawing.Point(-4, 132);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(1020, 412);
+      this.groupBox4.Size = new System.Drawing.Size(1048, 375);
       this.groupBox4.TabIndex = 66;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = "Customer";
@@ -355,7 +386,7 @@ namespace Bank
       this.customerDataGridView.Name = "customerDataGridView";
       this.customerDataGridView.RowHeadersWidth = 51;
       this.customerDataGridView.RowTemplate.Height = 24;
-      this.customerDataGridView.Size = new System.Drawing.Size(1014, 390);
+      this.customerDataGridView.Size = new System.Drawing.Size(1036, 350);
       this.customerDataGridView.TabIndex = 0;
       // 
       // saveChangesButton
@@ -527,11 +558,12 @@ namespace Bank
       this.debtorsDataGridView.Name = "debtorsDataGridView";
       this.debtorsDataGridView.RowHeadersWidth = 51;
       this.debtorsDataGridView.RowTemplate.Height = 24;
-      this.debtorsDataGridView.Size = new System.Drawing.Size(505, 512);
+      this.debtorsDataGridView.Size = new System.Drawing.Size(518, 512);
       this.debtorsDataGridView.TabIndex = 0;
       // 
       // tabPage5
       // 
+      this.tabPage5.Controls.Add(this.groupBox9);
       this.tabPage5.Controls.Add(this.groupBox7);
       this.tabPage5.Controls.Add(this.showServiceStatisticButton);
       this.tabPage5.Controls.Add(this.serviceStatisticComboBox);
@@ -546,9 +578,9 @@ namespace Bank
       // groupBox7
       // 
       this.groupBox7.Controls.Add(this.callCenterServiceDataGridView);
-      this.groupBox7.Location = new System.Drawing.Point(-4, 60);
+      this.groupBox7.Location = new System.Drawing.Point(-4, 38);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(1043, 482);
+      this.groupBox7.Size = new System.Drawing.Size(527, 504);
       this.groupBox7.TabIndex = 3;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "Services";
@@ -560,14 +592,14 @@ namespace Bank
       this.callCenterServiceDataGridView.Name = "callCenterServiceDataGridView";
       this.callCenterServiceDataGridView.RowHeadersWidth = 51;
       this.callCenterServiceDataGridView.RowTemplate.Height = 24;
-      this.callCenterServiceDataGridView.Size = new System.Drawing.Size(1037, 455);
+      this.callCenterServiceDataGridView.Size = new System.Drawing.Size(518, 486);
       this.callCenterServiceDataGridView.TabIndex = 0;
       // 
       // showServiceStatisticButton
       // 
-      this.showServiceStatisticButton.Location = new System.Drawing.Point(664, 21);
+      this.showServiceStatisticButton.Location = new System.Drawing.Point(238, 5);
       this.showServiceStatisticButton.Name = "showServiceStatisticButton";
-      this.showServiceStatisticButton.Size = new System.Drawing.Size(303, 31);
+      this.showServiceStatisticButton.Size = new System.Drawing.Size(285, 29);
       this.showServiceStatisticButton.TabIndex = 2;
       this.showServiceStatisticButton.Text = "Show";
       this.showServiceStatisticButton.UseVisualStyleBackColor = true;
@@ -576,15 +608,15 @@ namespace Bank
       // serviceStatisticComboBox
       // 
       this.serviceStatisticComboBox.FormattingEnabled = true;
-      this.serviceStatisticComboBox.Location = new System.Drawing.Point(252, 25);
+      this.serviceStatisticComboBox.Location = new System.Drawing.Point(72, 8);
       this.serviceStatisticComboBox.Name = "serviceStatisticComboBox";
-      this.serviceStatisticComboBox.Size = new System.Drawing.Size(303, 24);
+      this.serviceStatisticComboBox.Size = new System.Drawing.Size(160, 24);
       this.serviceStatisticComboBox.TabIndex = 1;
       // 
       // label12
       // 
       this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(69, 28);
+      this.label12.Location = new System.Drawing.Point(7, 11);
       this.label12.Name = "label12";
       this.label12.Size = new System.Drawing.Size(59, 17);
       this.label12.TabIndex = 0;
@@ -622,6 +654,176 @@ namespace Bank
       // dsServices
       // 
       this.dsServices.DataSetName = "NewDataSet";
+      // 
+      // deleteArticleButton
+      // 
+      this.deleteArticleButton.Location = new System.Drawing.Point(7, 503);
+      this.deleteArticleButton.Name = "deleteArticleButton";
+      this.deleteArticleButton.Size = new System.Drawing.Size(1034, 36);
+      this.deleteArticleButton.TabIndex = 4;
+      this.deleteArticleButton.Text = "Delete Article";
+      this.deleteArticleButton.UseVisualStyleBackColor = true;
+      // 
+      // deleteCardServiceButton
+      // 
+      this.deleteCardServiceButton.Location = new System.Drawing.Point(3, 514);
+      this.deleteCardServiceButton.Name = "deleteCardServiceButton";
+      this.deleteCardServiceButton.Size = new System.Drawing.Size(510, 27);
+      this.deleteCardServiceButton.TabIndex = 53;
+      this.deleteCardServiceButton.Text = "Delete Card Service";
+      this.deleteCardServiceButton.UseVisualStyleBackColor = true;
+      // 
+      // deleteCurrencyButton
+      // 
+      this.deleteCurrencyButton.Location = new System.Drawing.Point(526, 514);
+      this.deleteCurrencyButton.Name = "deleteCurrencyButton";
+      this.deleteCurrencyButton.Size = new System.Drawing.Size(511, 27);
+      this.deleteCurrencyButton.TabIndex = 54;
+      this.deleteCurrencyButton.Text = "Delete Currency";
+      this.deleteCurrencyButton.UseVisualStyleBackColor = true;
+      // 
+      // tabPage6
+      // 
+      this.tabPage6.Controls.Add(this.deleteUserButton);
+      this.tabPage6.Controls.Add(this.groupBox8);
+      this.tabPage6.Controls.Add(this.addUserButton);
+      this.tabPage6.Controls.Add(this.label15);
+      this.tabPage6.Controls.Add(this.textBox2);
+      this.tabPage6.Controls.Add(this.textBox1);
+      this.tabPage6.Controls.Add(this.label14);
+      this.tabPage6.Controls.Add(this.comboBox1);
+      this.tabPage6.Controls.Add(this.label13);
+      this.tabPage6.Location = new System.Drawing.Point(4, 25);
+      this.tabPage6.Name = "tabPage6";
+      this.tabPage6.Size = new System.Drawing.Size(1040, 545);
+      this.tabPage6.TabIndex = 5;
+      this.tabPage6.Text = "Add user";
+      this.tabPage6.UseVisualStyleBackColor = true;
+      // 
+      // label13
+      // 
+      this.label13.AutoSize = true;
+      this.label13.Location = new System.Drawing.Point(7, 15);
+      this.label13.Name = "label13";
+      this.label13.Size = new System.Drawing.Size(70, 17);
+      this.label13.TabIndex = 0;
+      this.label13.Text = "User role:";
+      // 
+      // deleteCustomerButton
+      // 
+      this.deleteCustomerButton.Location = new System.Drawing.Point(0, 509);
+      this.deleteCustomerButton.Name = "deleteCustomerButton";
+      this.deleteCustomerButton.Size = new System.Drawing.Size(1040, 33);
+      this.deleteCustomerButton.TabIndex = 67;
+      this.deleteCustomerButton.Text = "Delete Customer";
+      this.deleteCustomerButton.UseVisualStyleBackColor = true;
+      // 
+      // comboBox1
+      // 
+      this.comboBox1.FormattingEnabled = true;
+      this.comboBox1.Location = new System.Drawing.Point(104, 12);
+      this.comboBox1.Name = "comboBox1";
+      this.comboBox1.Size = new System.Drawing.Size(137, 24);
+      this.comboBox1.TabIndex = 1;
+      // 
+      // label14
+      // 
+      this.label14.AutoSize = true;
+      this.label14.Location = new System.Drawing.Point(256, 15);
+      this.label14.Name = "label14";
+      this.label14.Size = new System.Drawing.Size(47, 17);
+      this.label14.TabIndex = 2;
+      this.label14.Text = "Login:";
+      // 
+      // textBox1
+      // 
+      this.textBox1.Location = new System.Drawing.Point(309, 12);
+      this.textBox1.Name = "textBox1";
+      this.textBox1.Size = new System.Drawing.Size(137, 22);
+      this.textBox1.TabIndex = 3;
+      // 
+      // textBox2
+      // 
+      this.textBox2.Location = new System.Drawing.Point(541, 12);
+      this.textBox2.Name = "textBox2";
+      this.textBox2.Size = new System.Drawing.Size(137, 22);
+      this.textBox2.TabIndex = 4;
+      this.textBox2.UseSystemPasswordChar = true;
+      // 
+      // label15
+      // 
+      this.label15.AutoSize = true;
+      this.label15.Location = new System.Drawing.Point(462, 15);
+      this.label15.Name = "label15";
+      this.label15.Size = new System.Drawing.Size(73, 17);
+      this.label15.TabIndex = 5;
+      this.label15.Text = "Password:";
+      // 
+      // addUserButton
+      // 
+      this.addUserButton.Location = new System.Drawing.Point(698, 9);
+      this.addUserButton.Name = "addUserButton";
+      this.addUserButton.Size = new System.Drawing.Size(333, 28);
+      this.addUserButton.TabIndex = 6;
+      this.addUserButton.Text = "button1";
+      this.addUserButton.UseVisualStyleBackColor = true;
+      // 
+      // groupBox8
+      // 
+      this.groupBox8.Controls.Add(this.usersDataGridView);
+      this.groupBox8.Location = new System.Drawing.Point(4, 40);
+      this.groupBox8.Name = "groupBox8";
+      this.groupBox8.Size = new System.Drawing.Size(1035, 463);
+      this.groupBox8.TabIndex = 7;
+      this.groupBox8.TabStop = false;
+      this.groupBox8.Text = "Users";
+      // 
+      // usersDataGridView
+      // 
+      this.usersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.usersDataGridView.Location = new System.Drawing.Point(3, 18);
+      this.usersDataGridView.Name = "usersDataGridView";
+      this.usersDataGridView.RowHeadersWidth = 51;
+      this.usersDataGridView.RowTemplate.Height = 24;
+      this.usersDataGridView.Size = new System.Drawing.Size(1032, 434);
+      this.usersDataGridView.TabIndex = 0;
+      // 
+      // deleteUserButton
+      // 
+      this.deleteUserButton.Location = new System.Drawing.Point(8, 509);
+      this.deleteUserButton.Name = "deleteUserButton";
+      this.deleteUserButton.Size = new System.Drawing.Size(1032, 33);
+      this.deleteUserButton.TabIndex = 8;
+      this.deleteUserButton.Text = "DeleteUser";
+      this.deleteUserButton.UseVisualStyleBackColor = true;
+      // 
+      // dsUser
+      // 
+      this.dsUser.DataSetName = "NewDataSet";
+      // 
+      // groupBox9
+      // 
+      this.groupBox9.Controls.Add(this.inactiveCustomersDataGridView);
+      this.groupBox9.Location = new System.Drawing.Point(527, 5);
+      this.groupBox9.Name = "groupBox9";
+      this.groupBox9.Size = new System.Drawing.Size(512, 539);
+      this.groupBox9.TabIndex = 4;
+      this.groupBox9.TabStop = false;
+      this.groupBox9.Text = "Inactive customers";
+      // 
+      // inactiveCustomersDataGridView
+      // 
+      this.inactiveCustomersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.inactiveCustomersDataGridView.Location = new System.Drawing.Point(3, 18);
+      this.inactiveCustomersDataGridView.Name = "inactiveCustomersDataGridView";
+      this.inactiveCustomersDataGridView.RowHeadersWidth = 51;
+      this.inactiveCustomersDataGridView.RowTemplate.Height = 24;
+      this.inactiveCustomersDataGridView.Size = new System.Drawing.Size(510, 519);
+      this.inactiveCustomersDataGridView.TabIndex = 0;
+      // 
+      // dsInactiveCustomers
+      // 
+      this.dsInactiveCustomers.DataSetName = "NewDataSet";
       // 
       // Admin
       // 
@@ -665,6 +867,14 @@ namespace Bank
       ((System.ComponentModel.ISupportInitialize)(this.dsRichestCustomers)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsPoorestCustomers)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsServices)).EndInit();
+      this.tabPage6.ResumeLayout(false);
+      this.tabPage6.PerformLayout();
+      this.groupBox8.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsUser)).EndInit();
+      this.groupBox9.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.inactiveCustomersDataGridView)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dsInactiveCustomers)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -728,5 +938,24 @@ namespace Bank
     private System.Data.DataSet dsRichestCustomers;
     private System.Data.DataSet dsPoorestCustomers;
     private System.Data.DataSet dsServices;
+    private System.Windows.Forms.Button deleteArticleButton;
+    private System.Windows.Forms.Button deleteCurrencyButton;
+    private System.Windows.Forms.Button deleteCardServiceButton;
+    private System.Windows.Forms.TabPage tabPage6;
+    private System.Windows.Forms.Label label13;
+    private System.Windows.Forms.Button deleteCustomerButton;
+    private System.Windows.Forms.TextBox textBox1;
+    private System.Windows.Forms.Label label14;
+    private System.Windows.Forms.ComboBox comboBox1;
+    private System.Windows.Forms.GroupBox groupBox8;
+    private System.Windows.Forms.Button addUserButton;
+    private System.Windows.Forms.Label label15;
+    private System.Windows.Forms.TextBox textBox2;
+    private System.Windows.Forms.DataGridView usersDataGridView;
+    private System.Windows.Forms.Button deleteUserButton;
+    private System.Data.DataSet dsUser;
+    private System.Windows.Forms.GroupBox groupBox9;
+    private System.Windows.Forms.DataGridView inactiveCustomersDataGridView;
+    private System.Data.DataSet dsInactiveCustomers;
   }
 }

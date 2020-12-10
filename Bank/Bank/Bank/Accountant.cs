@@ -223,6 +223,7 @@ namespace Bank
     private void setCustomerInformation()
     {
       string customerInformationQuery = customerInformation();
+      addCheckBoxInDataGrid("Select to update cash", customerInfoDataGridView);
       setDataInTable(customerInformationQuery, "Customer", dsCustomerInformation, customerInfoDataGridView);
     }
 

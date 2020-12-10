@@ -82,7 +82,6 @@ END
 GO
 
 CREATE PROCEDURE OperationStatistic
-	-- Add the parameters for the stored procedure here
 	@CustomerId INT,
 	@CurrencyId INT,
 	@StartDate DATETIME,
@@ -106,5 +105,111 @@ BEGIN
 	Operation.Date <= @EndDate
 	GROUP BY Article.Name, MONTH(Operation.Date), YEAR(Operation.Date)
 	ORDER BY SUM(Operation.Cash);
+END
+GO
+
+CREATE PROCEDURE ServiceStatistic
+	@ServiceName VARCHAR
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT FirstName, LastName, PassportNum, Birthday, Phone
+	FROM Customer
+	JOIN Balance ON Customer.CustomerId = Balance.CustomerId
+	JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId
+	JOIN [Card] ON BalanceCards.CardId = [Card].CardId
+	JOIN CardServices ON [Card].CardId = CardServices.CardId
+	JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
+	WHERE CardService.[Name] = @ServiceName
+END
+GO
+
+CREATE PROCEDURE InactiveCustomers AS
+BEGIN
+	SELECT Customer.FirstName, Customer.LastName, Customer.Phone
+	FROM Customer
+	LEFT JOIN
+	(
+		SELECT CustomerBalances.CustomerId
+		FROM Balance
+		JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
+		WHERE Balance.Date >= DATEADD(MONTH, -2, GETDATE())
+		GROUP BY CustomerBalances.CustomerId
+	) AS ActiveCustomerBalances
+	ON Customer.CustomerId = ActiveCustomerBalances.CustomerId
+	WHERE ActiveCustomerBalances.CustomerId IS NULL
+END
+GO
+
+CREATE PROCEDURE RichestCustomers AS
+BEGIN
+	SELECT TOP(10)
+	Info.FirstName,
+	Info.LastName,
+	Currency.Name,
+	SUM(Total) AS Total,
+	Currency.[Name]
+	FROM
+	(
+		SELECT
+		Customer.CustomerId,
+		Balance.CurrencyId,
+		Customer.FirstName,
+		Customer.LastName, 
+		SUM(Balance.Cash) AS Total
+		FROM Customer
+		JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
+		JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
+		GROUP BY Customer.CustomerId, Balance.CurrencyId, Customer.FirstName, Customer.LastName
+		UNION
+		SELECT
+		Customer.CustomerId,
+		InfoSecurities.CurrencyId,
+		Customer.FirstName,
+		Customer.LastName,
+		SUM(CustomerSecurities.Count * InfoSecurities.Price) AS Total
+		FROM Customer
+		JOIN CustomerSecurities ON Customer.CustomerId = CustomerSecurities.CustomerId
+		JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId
+		GROUP BY Customer.CustomerId, InfoSecurities.CurrencyId, Customer.FirstName, Customer.LastName
+		UNION
+		SELECT
+		Customer.CustomerId,
+		InfoDeposit.CurrencyId,
+		Customer.FirstName,
+		Customer.LastName,
+		SUM(CustomerDeposit.Amount * ((CAST(InfoDeposit.[Percent] AS DECIMAL) / 100) + 1)) AS Total
+		FROM Customer
+		JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId
+		JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId
+		GROUP BY Customer.CustomerId, InfoDeposit.CurrencyId, Customer.FirstName, Customer.LastName
+	) AS Info
+	JOIN Currency ON Info.CurrencyId = Currency.CurrencyId
+	GROUP BY Info.CustomerId, Info.FirstName, Info.LastName, Currency.Name
+	ORDER BY Currency.Name, Total DESC
+END
+GO
+
+CREATE PROCEDURE PoorestCustomers AS
+BEGIN
+	SELECT 
+	Customer.FirstName, Customer.LastName, Customer.Phone
+	FROM Customer
+	WHERE 
+	EXISTS
+	(
+		SELECT *
+		FROM Balance
+		WHERE Balance.CustomerId = Customer.CustomerId
+		GROUP BY Balance.CustomerId
+		HAVING SUM(Balance.Cash) <= 0
+	)
+	AND EXISTS
+	(
+		SELECT *
+		FROM CustomerCredit
+		WHERE CustomerCredit.CustomerId = Customer.CustomerId
+	)
 END
 GO

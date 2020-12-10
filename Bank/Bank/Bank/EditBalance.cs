@@ -29,7 +29,7 @@ namespace Bank
       this.customerId = customerId;
       this.userForm = userForm;
       //SetComboBox();
-      SetData();
+      //SetData();
     }
 
     private void EditBalance_FormClosing(object sender, FormClosingEventArgs e)
@@ -68,6 +68,19 @@ namespace Bank
     {
       FillDataTable();
       ShowRow();
+    }
+
+
+
+
+    private void SetComboBox()
+    {
+      using (var cmd = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          currencyBalanceComboBox.Items.Add(new Currency(reader.GetInt32(0), reader.GetString(1)));
+      }
     }
   }
 }

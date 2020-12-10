@@ -32,7 +32,7 @@ namespace Bank
       this.connection = new System.Data.OleDb.OleDbConnection();
       this.cardBalanceIdComboBox = new System.Windows.Forms.ComboBox();
       this.label20 = new System.Windows.Forms.Label();
-      this.addCardButton = new System.Windows.Forms.Button();
+      this.editCardButton = new System.Windows.Forms.Button();
       this.cardNumberTextBox = new System.Windows.Forms.TextBox();
       this.label21 = new System.Windows.Forms.Label();
       this.SuspendLayout();
@@ -59,14 +59,15 @@ namespace Bank
       this.label20.TabIndex = 27;
       this.label20.Text = "Balance:";
       // 
-      // addCardButton
+      // editCardButton
       // 
-      this.addCardButton.Location = new System.Drawing.Point(78, 157);
-      this.addCardButton.Name = "addCardButton";
-      this.addCardButton.Size = new System.Drawing.Size(524, 30);
-      this.addCardButton.TabIndex = 26;
-      this.addCardButton.Text = "Add Card";
-      this.addCardButton.UseVisualStyleBackColor = true;
+      this.editCardButton.Location = new System.Drawing.Point(78, 157);
+      this.editCardButton.Name = "editCardButton";
+      this.editCardButton.Size = new System.Drawing.Size(524, 30);
+      this.editCardButton.TabIndex = 26;
+      this.editCardButton.Text = "Edit Card";
+      this.editCardButton.UseVisualStyleBackColor = true;
+      this.editCardButton.Click += new System.EventHandler(this.editCardButton_Click_1);
       // 
       // cardNumberTextBox
       // 
@@ -91,7 +92,7 @@ namespace Bank
       this.ClientSize = new System.Drawing.Size(680, 309);
       this.Controls.Add(this.cardBalanceIdComboBox);
       this.Controls.Add(this.label20);
-      this.Controls.Add(this.addCardButton);
+      this.Controls.Add(this.editCardButton);
       this.Controls.Add(this.cardNumberTextBox);
       this.Controls.Add(this.label21);
       this.Name = "EditCard";
@@ -107,7 +108,7 @@ namespace Bank
     private System.Data.OleDb.OleDbConnection connection;
     private System.Windows.Forms.ComboBox cardBalanceIdComboBox;
     private System.Windows.Forms.Label label20;
-    private System.Windows.Forms.Button addCardButton;
+    private System.Windows.Forms.Button editCardButton;
     private System.Windows.Forms.TextBox cardNumberTextBox;
     private System.Windows.Forms.Label label21;
   }
