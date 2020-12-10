@@ -202,6 +202,7 @@ namespace Bank
       this.deleteDepositButton.TabIndex = 24;
       this.deleteDepositButton.Text = "Delete selected";
       this.deleteDepositButton.UseVisualStyleBackColor = true;
+      this.deleteDepositButton.Click += new System.EventHandler(this.deleteDepositButton_Click);
       // 
       // depositInfoTextBox
       // 
@@ -363,6 +364,7 @@ namespace Bank
       this.deleteCreditButton.TabIndex = 37;
       this.deleteCreditButton.Text = "Delete selected";
       this.deleteCreditButton.UseVisualStyleBackColor = true;
+      this.deleteCreditButton.Click += new System.EventHandler(this.deleteCreditButton_Click);
       // 
       // creditInfoTextBox
       // 
@@ -507,6 +509,7 @@ namespace Bank
       this.deleteSecurityButton.TabIndex = 37;
       this.deleteSecurityButton.Text = "Delete selecyed";
       this.deleteSecurityButton.UseVisualStyleBackColor = true;
+      this.deleteSecurityButton.Click += new System.EventHandler(this.deleteSecurityButton_Click);
       // 
       // percentTextBox
       // 

@@ -67,7 +67,8 @@ namespace Bank
     private string depositTypes()
     {
       return
-        "SELECT Currency.[Name] AS Currency, InfoDeposit.Term, InfoDeposit.Amount, " +
+        "SELECT InfoDeposit.InfoDepositId, Currency.[Name] AS Currency, " +
+        "InfoDeposit.Term, InfoDeposit.Amount, " +
         "InfoDeposit.[Percent], InfoDeposit.DepositName " +
         "FROM InfoDeposit " +
         "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId";
@@ -96,7 +97,8 @@ namespace Bank
     private string creditTypes()
     {
       return
-        "SELECT InfoCredit.[Name] AS NameOfCredit, Currency.[Name] AS Currency, InfoCredit.[Percent], " +
+        "SELECT InfoCredit.InfoCreditId, InfoCredit.[Name] AS NameOfCredit, " +
+        "Currency.[Name] AS Currency, InfoCredit.[Percent], " +
         "InfoCredit.Term " +
         "FROM InfoCredit " +
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
@@ -105,7 +107,8 @@ namespace Bank
     private string securityTypes()
     {
       return
-        "SELECT InfoSecurities.[Name], InfoSecurities.Price, Currency.[Name] AS Currency, " +
+        "SELECT InfoSecurities.InfoSecuritiesId, InfoSecurities.[Name], " +
+        "InfoSecurities.Price, Currency.[Name] AS Currency, " +
         "InfoSecurities.[Percent rate] " +
         "FROM InfoSecurities " +
         "JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId";
@@ -184,6 +187,7 @@ namespace Bank
       string depositTypesQuery = depositTypes();
       setDataInTable(depositTypesQuery, "InfoDeposit", dsDepositTypes, depositDataGridView);
       addButtonInDataGrid(depositDataGridView);
+      depositDataGridView.Columns["InfoDepositId"].Visible = false;
     }
 
     private void setTopDeposits()
@@ -198,6 +202,7 @@ namespace Bank
       string creditTypesQuery = creditTypes();
       setDataInTable(creditTypesQuery, "InfoCredit", dsCreditTypes, creditTypesDataGridView);
       addButtonInDataGrid(creditTypesDataGridView);
+      creditTypesDataGridView.Columns["InfoCreditId"].Visible = false;
     }
 
     private void setSecurityTypes()
@@ -206,6 +211,7 @@ namespace Bank
       string securityTypesQuery = securityTypes();
       setDataInTable(securityTypesQuery, "InfoSecurities", dsSecurityTypes, securityTypesDataGridView);
       addButtonInDataGrid(securityTypesDataGridView);
+      securityTypesDataGridView.Columns["InfoSecuritiesId"].Visible = false;
     }
 
     private void setTopSecurities()
@@ -407,6 +413,120 @@ namespace Bank
       {
         MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
       }
+    }
+
+    public void RefreshDepositInfoDataGrid()
+    {
+      depositDataGridView.Columns.Clear();
+      dsDepositTypes = new DataSet();
+
+      setDepositTypes();
+    }
+
+    public void RefreshCreditInfoDataGrid()
+    {
+      creditTypesDataGridView.Columns.Clear();
+      dsCreditTypes = new DataSet();
+
+      setCreditTypes();
+    }
+
+    public void RefreshSecurityInfoDataGrid()
+    {
+      securityTypesDataGridView.Columns.Clear();
+      dsSecurityTypes = new DataSet();
+
+      setSecurityTypes();
+    }
+
+    private void deleteDepositButton_Click(object sender, EventArgs e)
+    {
+      List<int> depositIds = null;
+
+      try
+      {
+        depositIds = (from DataGridViewRow r in depositDataGridView.Rows
+                         where (string)r.Cells[0].Value == "1"
+                         select (int)r.Cells["InfoDepositId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of deposit!", "Deposit", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", depositIds.Select(x => "?"));
+      var query = $"DELETE FROM InfoDeposit WHERE InfoDepositId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < depositIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@InfoDepositId{i}", depositIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshDepositInfoDataGrid();
+    }
+
+    private void deleteCreditButton_Click(object sender, EventArgs e)
+    {
+      List<int> creditIds = null;
+
+      try
+      {
+        creditIds = (from DataGridViewRow r in creditTypesDataGridView.Rows
+                      where (string)r.Cells[0].Value == "1"
+                      select (int)r.Cells["InfoCreditId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of credit!", "Credit", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", creditIds.Select(x => "?"));
+      var query = $"DELETE FROM InfoCredit WHERE InfoCreditId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < creditIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@InfoCreditId{i}", creditIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshCreditInfoDataGrid();
+    }
+
+    private void deleteSecurityButton_Click(object sender, EventArgs e)
+    {
+      List<int> securityIds = null;
+
+      try
+      {
+        securityIds = (from DataGridViewRow r in securityTypesDataGridView.Rows
+                     where (string)r.Cells[0].Value == "1"
+                     select (int)r.Cells["InfoSecuritiesId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of security!", "Security", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", securityIds.Select(x => "?"));
+      var query = $"DELETE FROM InfoSecurities WHERE InfoSecuritiesId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < securityIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@InfoSecuritiesId{i}", securityIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshSecurityInfoDataGrid();
     }
   }
 }
