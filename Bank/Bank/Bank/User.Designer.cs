@@ -999,6 +999,7 @@ namespace Bank
       this.terminateDepositButton.TabIndex = 23;
       this.terminateDepositButton.Text = "Terminate deposit";
       this.terminateDepositButton.UseVisualStyleBackColor = true;
+      this.terminateDepositButton.Click += new System.EventHandler(this.terminateDepositButton_Click);
       // 
       // addDepositButton
       // 
@@ -1137,6 +1138,7 @@ namespace Bank
       this.sellSecuritiesButton.TabIndex = 31;
       this.sellSecuritiesButton.Text = "Sell now";
       this.sellSecuritiesButton.UseVisualStyleBackColor = true;
+      this.sellSecuritiesButton.Click += new System.EventHandler(this.sellSecuritiesButton_Click);
       // 
       // buySecurityButton
       // 

@@ -239,6 +239,22 @@ namespace Bank
       setMyBalance();
     }
 
+    public void RefreshDepositDataGrid()
+    {
+      myDepositsDataGridView.Columns.Clear();
+      dsMyDeposit = new DataSet();
+
+      setMyDeposit();
+    }
+
+    public void RefreshSecurityDataGrid()
+    {
+      mySecuritiesDataGridView.Columns.Clear();
+      dsMySecurities = new DataSet();
+
+      setMySecurities();
+    }
+
     private string myOperation()
     {
       return
@@ -284,7 +300,7 @@ namespace Bank
     private string myDeposit()
     {
       return
-        "SELECT InfoDeposit.DepositName, CustomerDeposit.Amount " +
+        "SELECT CustomerDeposit.CustomerDepositId, InfoDeposit.DepositName, CustomerDeposit.Amount " +
         "FROM CustomerDeposit " +
         "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
         "WHERE CustomerId = " + customerId;
@@ -293,7 +309,7 @@ namespace Bank
     private string mySecurities()
     {
       return
-        "SELECT InfoSecurities.[Name], CustomerSecurities.Count " +
+        "SELECT CustomerSecurities.SecuritiesId, InfoSecurities.[Name], CustomerSecurities.Count " +
         "FROM CustomerSecurities " +
         "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
         "WHERE CustomerId = " + customerId;
@@ -400,6 +416,8 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to terminate", myDepositsDataGridView);
       setDataInTable(myDepositQuery, "CustomerDeposit", dsMyDeposit, myDepositsDataGridView);
+
+      myDepositsDataGridView.Columns["CustomerDepositId"].Visible = false;
     }
 
     private void setDepositInfo()
@@ -425,6 +443,8 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to sell", mySecuritiesDataGridView);
       setDataInTable(mySecuritiesQuery, "CustomerSecurities", dsMySecurities, mySecuritiesDataGridView);
+
+      mySecuritiesDataGridView.Columns["SecuritiesId"].Visible = false;
     }
 
     private void setSecurityInfo()
@@ -1000,38 +1020,98 @@ namespace Bank
 
     private void deleteBalanceButton_Click(object sender, EventArgs e)
     {
-      /*List<int> operationIds = null;
+      List<int> balanceIds = null;
 
       try
       {
-        operationIds = (from DataGridViewRow r in operationDataGridView.Rows
+        balanceIds = (from DataGridViewRow r in balancesDataGridView.Rows
                         where (string)r.Cells[0].Value == "1"
-                        select (int)r.Cells["OperationId"].Value).ToList();
+                        select (int)r.Cells["BalanceId"].Value).ToList();
       }
       catch
       {
-        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        MessageBox.Show("Incorrect balance!", "Balance", MessageBoxButtons.OK);
         return;
       }
 
-      var parametersPart = string.Join(",", operationIds.Select(x => "?"));
-      var query = $"DELETE FROM Operation WHERE OperationId IN ({parametersPart})";
+      var parametersPart = string.Join(",", balanceIds.Select(x => "?"));
+      var query = $"DELETE FROM Balance WHERE BalanceId IN ({parametersPart})";
 
       using (var cmd = new OleDbCommand(query, connection))
       {
-        for (var i = 0; i < operationIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@OperationId{i}", operationIds[i]));
+        for (var i = 0; i < balanceIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@BalanceId{i}", balanceIds[i]));
 
         cmd.ExecuteNonQuery();
       }
 
-      RefreshOperationDataGrid();*/
+      RefreshBalanceDataGrid();
     }
 
     private void showMyServicesButton_Click(object sender, EventArgs e)
     {
       var myServices = new MyServices(this, customerId);
       myServices.ShowDialog();
+    }
+
+    private void terminateDepositButton_Click(object sender, EventArgs e)
+    {
+     List<int> depositIds = null;
+
+      try
+      {
+        depositIds = (from DataGridViewRow r in myDepositsDataGridView.Rows
+                      where (string)r.Cells[0].Value == "1"
+                      select (int)r.Cells["CustomerDepositId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect Deposit!", "Deposit", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", depositIds.Select(x => "?"));
+      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < depositIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", depositIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshDepositDataGrid();
+    }
+
+    private void sellSecuritiesButton_Click(object sender, EventArgs e)
+    {
+      List<int> securitiesIds = null;
+
+      try
+      {
+        securitiesIds = (from DataGridViewRow r in mySecuritiesDataGridView.Rows
+                      where (string)r.Cells[0].Value == "1"
+                      select (int)r.Cells["SecuritiesId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect Security!", "Security", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", securitiesIds.Select(x => "?"));
+      var query = $"DELETE FROM CustomerSecurities WHERE SecuritiesId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < securitiesIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", securitiesIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshSecurityDataGrid();
     }
   }
 }

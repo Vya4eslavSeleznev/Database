@@ -28,8 +28,8 @@ namespace Bank
       this.balanceId = balanceId;
       this.customerId = customerId;
       this.userForm = userForm;
-      //SetComboBox();
-      //SetData();
+      SetComboBox();
+      SetData();
     }
 
     private void EditBalance_FormClosing(object sender, FormClosingEventArgs e)
@@ -42,11 +42,12 @@ namespace Bank
     {
       dRow = dTable.Rows[0];
 
+      cardComboBox.SelectedItem = GetSelectedItem((int)dRow["Number"], cardComboBox.Items);
+      currencyBalanceComboBox.SelectedItem = GetSelectedItem((int)dRow["CurrencyId"], currencyBalanceComboBox.Items);
+
       balanceNumTextBox.Text = dRow["Number"].ToString();
       balanceDatePicker.Text = dRow["Date"].ToString();
-      currencyBalanceComboBox.SelectedItem = GetSelectedItem((int)dRow["CurrencyId"], currencyBalanceComboBox.Items);
       balanceCashTextBox.Text = dRow["Cash"].ToString();
-      cardComboBox.SelectedItem = GetSelectedItem((int)dRow["CardId"], cardComboBox.Items);
     }
 
     private object GetSelectedItem(int selectedId, ComboBox.ObjectCollection items)
@@ -57,7 +58,7 @@ namespace Bank
 
     private void FillDataTable()
     {
-      var balance = this.userForm.myBalance(); ;
+      var balance = this.userForm.myBalance();
 
       dAdapter = new OleDbDataAdapter(balance, connection);
       dTable = new DataTable();
@@ -70,9 +71,6 @@ namespace Bank
       ShowRow();
     }
 
-
-
-
     private void SetComboBox()
     {
       using (var cmd = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection))
@@ -80,6 +78,19 @@ namespace Bank
       {
         while (reader.Read())
           currencyBalanceComboBox.Items.Add(new Currency(reader.GetInt32(0), reader.GetString(1)));
+      }
+
+      using (var cmd = new OleDbCommand(
+        "SELECT [Card].CardId, [Card].Number " +
+        "FROM [Card] " +
+        "JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId " +
+        "JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId " +
+        "WHERE Balance.CustomerId = " + customerId, connection))
+
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          cardComboBox.Items.Add(new Card(reader.GetInt32(0), reader.GetString(1)));
       }
     }
   }

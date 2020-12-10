@@ -187,4 +187,11 @@ VALUES (1, 1)
 SELECT [Card].Number
 FROM [Card]
 JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
+JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
+WHERE Balance.CustomerId = 1
 
+SELECT [Card].Number
+FROM [Card]
+JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
+JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
+WHERE Balance.CustomerId = 1
