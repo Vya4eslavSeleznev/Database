@@ -98,6 +98,8 @@ namespace Bank
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.balancesDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage4 = new System.Windows.Forms.TabPage();
+      this.balanceCreditComboBox = new System.Windows.Forms.ComboBox();
+      this.label32 = new System.Windows.Forms.Label();
       this.addCreditButton = new System.Windows.Forms.Button();
       this.amountCreditTextBox = new System.Windows.Forms.TextBox();
       this.forWhatCreditTextBox = new System.Windows.Forms.TextBox();
@@ -154,8 +156,6 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
       this.dsOperationStatistic = new System.Data.DataSet();
-      this.label32 = new System.Windows.Forms.Label();
-      this.balanceCreditComboBox = new System.Windows.Forms.ComboBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -887,6 +887,23 @@ namespace Bank
       this.tabPage4.Text = "Credit";
       this.tabPage4.UseVisualStyleBackColor = true;
       // 
+      // balanceCreditComboBox
+      // 
+      this.balanceCreditComboBox.FormattingEnabled = true;
+      this.balanceCreditComboBox.Location = new System.Drawing.Point(367, 33);
+      this.balanceCreditComboBox.Name = "balanceCreditComboBox";
+      this.balanceCreditComboBox.Size = new System.Drawing.Size(146, 24);
+      this.balanceCreditComboBox.TabIndex = 12;
+      // 
+      // label32
+      // 
+      this.label32.AutoSize = true;
+      this.label32.Location = new System.Drawing.Point(288, 38);
+      this.label32.Name = "label32";
+      this.label32.Size = new System.Drawing.Size(63, 17);
+      this.label32.TabIndex = 11;
+      this.label32.Text = "Balance:";
+      // 
       // addCreditButton
       // 
       this.addCreditButton.Location = new System.Drawing.Point(9, 61);
@@ -1343,23 +1360,6 @@ namespace Bank
       // dsOperationStatistic
       // 
       this.dsOperationStatistic.DataSetName = "NewDataSet";
-      // 
-      // label32
-      // 
-      this.label32.AutoSize = true;
-      this.label32.Location = new System.Drawing.Point(288, 38);
-      this.label32.Name = "label32";
-      this.label32.Size = new System.Drawing.Size(63, 17);
-      this.label32.TabIndex = 11;
-      this.label32.Text = "Balance:";
-      // 
-      // balanceCreditComboBox
-      // 
-      this.balanceCreditComboBox.FormattingEnabled = true;
-      this.balanceCreditComboBox.Location = new System.Drawing.Point(367, 33);
-      this.balanceCreditComboBox.Name = "balanceCreditComboBox";
-      this.balanceCreditComboBox.Size = new System.Drawing.Size(146, 24);
-      this.balanceCreditComboBox.TabIndex = 12;
       // 
       // User
       // 

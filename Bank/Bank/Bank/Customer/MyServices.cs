@@ -28,18 +28,21 @@ namespace Bank
     private void setService()
     {
       string myServiceQuery =
-        "SELECT CardServices.CardId, [Card].Number, CardService.[Name] " +
+        "SELECT CardService.CardServiceId, " +
+        "[Card].CardId, " +
+        "[Card].Number AS 'Card Number', " +
+        "CardService.[Name] AS 'Service Name'" +
         "FROM CardService " +
         "JOIN CardServices ON CardService.CardServiceId = CardServices.ServiceId " +
-        "JOIN[Card] ON CardServices.CardId = [Card].CardId " +
+        "JOIN [Card] ON CardServices.CardId = [Card].CardId " +
         "JOIN BalanceCards ON[Card].CardId = BalanceCards.CardId " +
         "JOIN Balance ON Balance.BalanceId = BalanceCards.BalanceId " +
         "WHERE Balance.CustomerId = " + customerId;
 
       this.userForm.addCheckBoxInDataGrid("Select to delete", myServicesDataGridView);
       this.userForm.setDataInTable(myServiceQuery, "Service", dsMyServices, myServicesDataGridView);
-      this.userForm.addButtonInDataGrid(myServicesDataGridView, "Edit Service", "Edit");
       myServicesDataGridView.Columns["CardId"].Visible = false;
+      myServicesDataGridView.Columns["CardServiceId"].Visible = false;
     }
 
     public void RefreshCardServiceDataGrid()
@@ -56,13 +59,34 @@ namespace Bank
 
     private void deleteMyServiceButton_Click(object sender, EventArgs e)
     {
-      List<int> cardServiceIds = null;
-
       try
       {
-        cardServiceIds = (from DataGridViewRow r in myServicesDataGridView.Rows
-                         where (string)r.Cells[0].Value == "1"
-                         select (int)r.Cells["CardId"].Value).ToList();
+        var cardServices = (from DataGridViewRow r in myServicesDataGridView.Rows
+                            where (string)r.Cells[0].Value == "1"
+                            select new
+                            {
+                              CardId = (int)r.Cells["CardId"].Value,
+                              ServiceId = (int)r.Cells["CardServiceId"].Value
+                            })
+                            .GroupBy(x => x.CardId)
+                            .ToDictionary(x => x.Key, x => x.Select(y => y.ServiceId).ToList());
+
+        foreach (var cardService in cardServices)
+        {
+          var serviceIdsParameters = string.Join(",", cardService.Value.Select(x => "?"));
+
+          var query = $"DELETE FROM CardServices WHERE CardId = ? AND ServiceId IN ({serviceIdsParameters})";
+
+          using (var cmd = new OleDbCommand(query, connection))
+          {
+            cmd.Parameters.Add(new OleDbParameter("@CardId", cardService.Key));
+
+            for (var i = 0; i < cardService.Value.Count; i++)
+              cmd.Parameters.Add(new OleDbParameter($"@CardServiceId{i}", cardService.Value[i]));
+
+            cmd.ExecuteNonQuery();
+          }
+        }
       }
       catch
       {
@@ -70,40 +94,7 @@ namespace Bank
         return;
       }
 
-      var parametersPart = string.Join(",", cardServiceIds.Select(x => "?"));
-      var query = $"DELETE FROM CardServices WHERE CardId IN ({parametersPart})";
-
-      using (var cmd = new OleDbCommand(query, connection))
-      {
-        for (var i = 0; i < cardServiceIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardServiceIds[i]));
-
-        cmd.ExecuteNonQuery();
-      }
-
       RefreshCardServiceDataGrid();
-    }
-
-    private void myServicesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-    {
-      var senderGrid = (DataGridView)sender;
-
-      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
-      {
-        try
-        {
-          var cardId = (int)myServicesDataGridView["CardId", e.RowIndex].Value;
-
-          using (var editService = new EditService(customerId))
-          {
-            editService.ShowDialog();
-          }
-        }
-        catch (Exception ex)
-        {
-          MessageBox.Show("Incorrect parameters!", "Service", MessageBoxButtons.OK);
-        }
-      }
     }
   }
 }

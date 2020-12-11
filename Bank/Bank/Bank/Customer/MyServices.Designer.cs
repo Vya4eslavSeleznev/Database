@@ -46,7 +46,6 @@ namespace Bank
       this.myServicesDataGridView.RowTemplate.Height = 24;
       this.myServicesDataGridView.Size = new System.Drawing.Size(678, 272);
       this.myServicesDataGridView.TabIndex = 0;
-      this.myServicesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myServicesDataGridView_CellContentClick);
       // 
       // connection
       // 
@@ -71,7 +70,7 @@ namespace Bank
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(680, 309);
+      this.ClientSize = new System.Drawing.Size(680, 311);
       this.Controls.Add(this.deleteMyServiceButton);
       this.Controls.Add(this.myServicesDataGridView);
       this.Name = "MyServices";

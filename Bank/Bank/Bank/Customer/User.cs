@@ -63,6 +63,26 @@ namespace Bank
       rdr.Close();
     }
 
+    private void SetBalanceIdComboBox2(ComboBox comboBox)
+    {
+      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            comboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
+    }
+
+    private void RefreshBalanceIdCombobox(ComboBox comboBox)
+    {
+      comboBox.Items.Clear();
+      SetBalanceIdComboBox2(comboBox);
+    }
+
     private void setComboBox()
     {
       OleDbCommand command = new OleDbCommand("SELECT ArticleId, [Name] FROM Article", connection);
@@ -78,18 +98,7 @@ namespace Bank
       rdr.Close();
 
       setBalanceIdComboBox(command, rdr, balanceIdComboBox);
-      //setBalanceIdComboBox(command, rdr, cardBalanceIdComboBox);
-
-      using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
-      {
-        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-
-        using (var reader = cmd.ExecuteReader())
-        {
-          while (reader.Read())
-            cardBalanceIdComboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
-        }
-      }
+      SetBalanceIdComboBox2(cardBalanceIdComboBox);
 
       using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
       {
@@ -882,7 +891,7 @@ namespace Bank
       {
         try
         {
-          using (var addService = new AddService(cardId, customerId))
+          using (var addService = new AddService(cardId))
           {
             addService.ShowDialog();
           }
@@ -1017,6 +1026,35 @@ namespace Bank
       RefreshCardDataGrid();
     }
 
+    private void DeleteCardsByBalanceIds(IList<int> balanceIds)
+    {
+      var parametersPart = string.Join(",", balanceIds.Select(x => "?"));
+      var query = $"SELECT DISTINCT CardId FROM BalanceCards WHERE BalanceId IN ({parametersPart})";
+
+      var cardIds = new List<int>();
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < balanceIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@BalanceId{i}", balanceIds[i]));
+
+        var reader = cmd.ExecuteReader();
+
+        while (reader.Read())
+          cardIds.Add(reader.GetInt32(0));
+      }
+
+      var deleteQuery = $"DELETE FROM Card WHERE CardId IN ({string.Join(",", cardIds.Select(x => "?"))})";
+
+      using (var cmd = new OleDbCommand(deleteQuery, connection))
+      {
+        for (var i = 0; i < cardIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+    }
+
     private void deleteBalanceButton_Click(object sender, EventArgs e)
     {
       List<int> balanceIds = null;
@@ -1033,6 +1071,10 @@ namespace Bank
         return;
       }
 
+      var cardIdsToDelete = new List<int>();
+
+      DeleteCardsByBalanceIds(balanceIds);
+
       var parametersPart = string.Join(",", balanceIds.Select(x => "?"));
       var query = $"DELETE FROM Balance WHERE BalanceId IN ({parametersPart})";
 
@@ -1044,7 +1086,9 @@ namespace Bank
         cmd.ExecuteNonQuery();
       }
 
+      RefreshCardDataGrid();
       RefreshBalanceDataGrid();
+      RefreshBalanceIdCombobox(cardBalanceIdComboBox);
     }
 
     private void showMyServicesButton_Click(object sender, EventArgs e)
