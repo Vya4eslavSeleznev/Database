@@ -99,6 +99,7 @@ namespace Bank
 
       setBalanceIdComboBox(command, rdr, balanceIdComboBox);
       SetBalanceIdComboBox2(cardBalanceIdComboBox);
+      SetBalanceIdComboBox2(balanceCreditComboBox);
 
       using (var cmd = new OleDbCommand("SELECT BalanceId, Number FROM Balance WHERE CustomerId = ?", connection))
       {
@@ -147,17 +148,19 @@ namespace Bank
         cardComboBox.Items.Add(rdr["Number"]);
       rdr.Close();*/
 
-      command.CommandText = "SELECT InfoCreditId, [Name] FROM InfoCredit";
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        typeCreditComboBox.Items.Add(rdr["InfoCreditId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      using (var cmd = new OleDbCommand("SELECT InfoCreditId, [Name] FROM InfoCredit", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          typeCreditComboBox.Items.Add(new Credit(reader.GetInt32(0), reader.GetString(1)));
+      }
 
-      command.CommandText = "SELECT InfoDepositId, DepositName FROM InfoDeposit";
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        depositTypeComboBox.Items.Add(rdr["InfoDepositId"] + " - " + rdr["DepositName"]);
-      rdr.Close();
+      using (var cmd = new OleDbCommand("SELECT InfoDepositId, DepositName FROM InfoDeposit", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          depositTypeComboBox.Items.Add(new Deposite(reader.GetInt32(0), reader.GetString(1)));
+      }
 
       command.CommandText = "SELECT InfoSecuritiesId, [Name] FROM InfoSecurities";
       rdr = command.ExecuteReader();
@@ -375,7 +378,6 @@ namespace Bank
 
       addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
       setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
-      addButtonInDataGrid(balancesDataGridView, "Click to edit", "Edit");
 
       balancesDataGridView.Columns["BalanceId"].Visible = false;
     }
@@ -749,78 +751,104 @@ namespace Bank
 
     private void addCreditButton_Click(object sender, EventArgs e)
     {
-      var typeOfCredit = typeCreditComboBox.Text;
-      var amount = amountCreditTextBox.Text;
-      var forWhat = forWhatCreditTextBox.Text;
-
-      if (typeOfCredit == "" || amount == "" || forWhat == "")
+      if (typeCreditComboBox.SelectedItem == null || balanceCreditComboBox.SelectedItem == null)
       {
         MessageBox.Show("Empty test field!", "Credit", MessageBoxButtons.OK);
         return;
       }
+ 
+      var typeOfCreditId = ((Credit)typeCreditComboBox.SelectedItem).Id;
+      var balanceId = ((Balance)balanceCreditComboBox.SelectedItem).Id;
+      var amount = amountCreditTextBox.Text;
+      var forWhat = forWhatCreditTextBox.Text;
 
       string addCreditQuery = 
         "INSERT INTO CustomerCredit(InfoCreditId, CustomerId, Info, Amount) " +
         "VALUES(?, ?, ?, ?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addCreditQuery, connection);
-
-      cmdIC.Parameters.Add(new OleDbParameter("@InfoCreditId", typeOfCredit));
-      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      cmdIC.Parameters.Add(new OleDbParameter("@Info", forWhat));
-      cmdIC.Parameters.Add(new OleDbParameter("@Amount", amount));
-
-      parseComboBox(0, typeOfCredit, cmdIC);
-
-      try
+      using (var cmdIC = new OleDbCommand(addCreditQuery, connection))
       {
-        cmdIC.ExecuteNonQuery();
-        MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
-        string myCreditQuery = myCredit();
-        refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
+        cmdIC.Parameters.Add(new OleDbParameter("@InfoCreditId", typeOfCreditId));
+        cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+        cmdIC.Parameters.Add(new OleDbParameter("@Info", forWhat));
+        cmdIC.Parameters.Add(new OleDbParameter("@Amount", amount));
+
+        try
+        {
+          cmdIC.ExecuteNonQuery();
+          MessageBox.Show("Credit added successfully!", "Credit", MessageBoxButtons.OK);
+          string myCreditQuery = myCredit();
+          refreshDataSet(myCreditQuery, dsCredit, "CustomerCredit");
+        }
+        catch
+        {
+          MessageBox.Show("Incorrect parameters!", "Credit", MessageBoxButtons.OK);
+        }
       }
-      catch
+
+      using (var cmd = new OleDbCommand("UPDATE Balance SET Cash = Cash + ? WHERE BalanceId = ?", connection))
       {
-        MessageBox.Show("Incorrect parameters!", "Credit", MessageBoxButtons.OK);
+        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
+        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+
+        cmd.ExecuteNonQuery();
       }
+
+      RefreshBalanceDataGrid();
     }
 
     private void addDepositButton_Click(object sender, EventArgs e)
     {
-      var depositType = depositTypeComboBox.Text;
       var amount = depositAmountTextBox.Text;
 
-      if (depositType == "" || amount == "")
+      if (depositTypeComboBox.SelectedItem == null ||
+        depositBalanceIdComboBox.SelectedItem == null ||
+        amount == "")
       {
         MessageBox.Show("Empty test field!", "Deposit", MessageBoxButtons.OK);
         return;
       }
 
+      var depositTypeId = ((Deposite)depositTypeComboBox.SelectedItem).Id;
+      var balanceId = ((Balance)depositBalanceIdComboBox.SelectedItem).Id;
+
       string addDepositQuery =
         "INSERT INTO CustomerDeposit(CustomerId, InfoDepositId, Amount) " +
         "VALUES(?, ?, ?)";
 
-      OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
-
-      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      cmdIC.Parameters.Add(new OleDbParameter("@InfoDepositId", depositType));
-      cmdIC.Parameters.Add(new OleDbParameter("@Amount", amount));
-
-      parseComboBox(1, depositType, cmdIC);
-
       try
       {
-        cmdIC.ExecuteNonQuery();
+        using (var cmd = new OleDbCommand(addDepositQuery, connection))
+        {
+          cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+          cmd.Parameters.Add(new OleDbParameter("@InfoDepositId", depositTypeId));
+          cmd.Parameters.Add(new OleDbParameter("@Amount", amount));
+
+          cmd.ExecuteNonQuery();
+        }
+
         MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
-        string myDepositQuery = myDeposit();
-        string popularDepositsQuery = popularDeposits();
-        refreshDataSet(myDepositQuery, dsMyDeposit, "CustomerDeposit");
-        refreshDataSet(popularDepositsQuery, dsTopDeposits, "InfoDeposit");
       }
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Deposit", MessageBoxButtons.OK);
+        return;
       }
+
+      using (var cmd = new OleDbCommand("UPDATE Balance SET Cash = Cash - ? WHERE BalanceId = ?", connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
+        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      string myDepositQuery = myDeposit();
+      string popularDepositsQuery = popularDeposits();
+      refreshDataSet(myDepositQuery, dsMyDeposit, "CustomerDeposit");
+      refreshDataSet(popularDepositsQuery, dsTopDeposits, "InfoDeposit");
+
+      RefreshBalanceDataGrid();
     }
 
     private void buySecurityButton_Click(object sender, EventArgs e)
@@ -910,28 +938,6 @@ namespace Bank
         {
           MessageBox.Show("Incorrect parameters!", "Service", MessageBoxButtons.OK);
         }
-      }
-    }
-
-    private void balancesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-    {
-      var senderGrid = (DataGridView)sender;
-
-      if (!(senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn) || e.RowIndex < 0)
-        return;
-
-      var balanceId = (int)balancesDataGridView["BalanceId", e.RowIndex].Value;
-
-      try
-      {
-        using (var editBalance = new EditBalance(balanceId, customerId, this))
-        {
-          editBalance.ShowDialog();
-        }
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Incorrect parameters!", "Balance", MessageBoxButtons.OK);
       }
     }
 
@@ -1038,10 +1044,11 @@ namespace Bank
         for (var i = 0; i < balanceIds.Count; i++)
           cmd.Parameters.Add(new OleDbParameter($"@BalanceId{i}", balanceIds[i]));
 
-        var reader = cmd.ExecuteReader();
-
-        while (reader.Read())
-          cardIds.Add(reader.GetInt32(0));
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            cardIds.Add(reader.GetInt32(0));
+        }
       }
 
       var deleteQuery = $"DELETE FROM Card WHERE CardId IN ({string.Join(",", cardIds.Select(x => "?"))})";
@@ -1125,6 +1132,7 @@ namespace Bank
       }
 
       RefreshDepositDataGrid();
+      RefreshBalanceDataGrid();
     }
 
     private void sellSecuritiesButton_Click(object sender, EventArgs e)

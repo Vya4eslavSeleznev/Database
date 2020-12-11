@@ -865,7 +865,6 @@ namespace Bank
       this.balancesDataGridView.RowTemplate.Height = 24;
       this.balancesDataGridView.Size = new System.Drawing.Size(508, 383);
       this.balancesDataGridView.TabIndex = 1;
-      this.balancesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.balancesDataGridView_CellContentClick);
       // 
       // tabPage4
       // 
@@ -908,7 +907,7 @@ namespace Bank
       // 
       this.addCreditButton.Location = new System.Drawing.Point(9, 61);
       this.addCreditButton.Name = "addCreditButton";
-      this.addCreditButton.Size = new System.Drawing.Size(504, 26);
+      this.addCreditButton.Size = new System.Drawing.Size(1029, 26);
       this.addCreditButton.TabIndex = 10;
       this.addCreditButton.Text = "Add credit";
       this.addCreditButton.UseVisualStyleBackColor = true;
@@ -966,9 +965,9 @@ namespace Bank
       // groupBox6
       // 
       this.groupBox6.Controls.Add(this.creditInfoDataGridView);
-      this.groupBox6.Location = new System.Drawing.Point(525, 3);
+      this.groupBox6.Location = new System.Drawing.Point(0, 277);
       this.groupBox6.Name = "groupBox6";
-      this.groupBox6.Size = new System.Drawing.Size(516, 541);
+      this.groupBox6.Size = new System.Drawing.Size(1041, 267);
       this.groupBox6.TabIndex = 3;
       this.groupBox6.TabStop = false;
       this.groupBox6.Text = "Credit information";
@@ -976,10 +975,10 @@ namespace Bank
       // creditInfoDataGridView
       // 
       this.creditInfoDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.creditInfoDataGridView.Location = new System.Drawing.Point(6, 19);
+      this.creditInfoDataGridView.Location = new System.Drawing.Point(9, 15);
       this.creditInfoDataGridView.Name = "creditInfoDataGridView";
       this.creditInfoDataGridView.RowHeadersWidth = 51;
-      this.creditInfoDataGridView.Size = new System.Drawing.Size(504, 516);
+      this.creditInfoDataGridView.Size = new System.Drawing.Size(1021, 240);
       this.creditInfoDataGridView.TabIndex = 1;
       // 
       // groupBox7
@@ -987,7 +986,7 @@ namespace Bank
       this.groupBox7.Controls.Add(this.myCreditDataGridView);
       this.groupBox7.Location = new System.Drawing.Point(4, 93);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(515, 451);
+      this.groupBox7.Size = new System.Drawing.Size(1034, 184);
       this.groupBox7.TabIndex = 2;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "My credit";
@@ -999,7 +998,7 @@ namespace Bank
       this.myCreditDataGridView.Name = "myCreditDataGridView";
       this.myCreditDataGridView.RowHeadersWidth = 51;
       this.myCreditDataGridView.RowTemplate.Height = 24;
-      this.myCreditDataGridView.Size = new System.Drawing.Size(505, 426);
+      this.myCreditDataGridView.Size = new System.Drawing.Size(1022, 159);
       this.myCreditDataGridView.TabIndex = 0;
       // 
       // tabPage5
