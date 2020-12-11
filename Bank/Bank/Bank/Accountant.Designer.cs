@@ -198,7 +198,7 @@ namespace Bank
       // 
       this.deleteDepositButton.Location = new System.Drawing.Point(6, 505);
       this.deleteDepositButton.Name = "deleteDepositButton";
-      this.deleteDepositButton.Size = new System.Drawing.Size(504, 31);
+      this.deleteDepositButton.Size = new System.Drawing.Size(505, 31);
       this.deleteDepositButton.TabIndex = 24;
       this.deleteDepositButton.Text = "Delete selected";
       this.deleteDepositButton.UseVisualStyleBackColor = true;
@@ -206,7 +206,7 @@ namespace Bank
       // 
       // depositInfoTextBox
       // 
-      this.depositInfoTextBox.Location = new System.Drawing.Point(336, 48);
+      this.depositInfoTextBox.Location = new System.Drawing.Point(336, 37);
       this.depositInfoTextBox.Name = "depositInfoTextBox";
       this.depositInfoTextBox.Size = new System.Drawing.Size(175, 22);
       this.depositInfoTextBox.TabIndex = 23;
@@ -221,7 +221,7 @@ namespace Bank
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(249, 51);
+      this.label2.Location = new System.Drawing.Point(249, 40);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(83, 17);
       this.label2.TabIndex = 21;
@@ -238,7 +238,7 @@ namespace Bank
       // 
       // addDepositButton
       // 
-      this.addDepositButton.Location = new System.Drawing.Point(6, 109);
+      this.addDepositButton.Location = new System.Drawing.Point(7, 91);
       this.addDepositButton.Name = "addDepositButton";
       this.addDepositButton.Size = new System.Drawing.Size(510, 26);
       this.addDepositButton.TabIndex = 19;
@@ -248,14 +248,14 @@ namespace Bank
       // 
       // amountDepositTextBox
       // 
-      this.amountDepositTextBox.Location = new System.Drawing.Point(77, 81);
+      this.amountDepositTextBox.Location = new System.Drawing.Point(77, 63);
       this.amountDepositTextBox.Name = "amountDepositTextBox";
       this.amountDepositTextBox.Size = new System.Drawing.Size(166, 22);
       this.amountDepositTextBox.TabIndex = 18;
       // 
       // depositTermTextBox
       // 
-      this.depositTermTextBox.Location = new System.Drawing.Point(77, 46);
+      this.depositTermTextBox.Location = new System.Drawing.Point(77, 35);
       this.depositTermTextBox.Name = "depositTermTextBox";
       this.depositTermTextBox.Size = new System.Drawing.Size(166, 22);
       this.depositTermTextBox.TabIndex = 17;
@@ -271,7 +271,7 @@ namespace Bank
       // label25
       // 
       this.label25.AutoSize = true;
-      this.label25.Location = new System.Drawing.Point(9, 51);
+      this.label25.Location = new System.Drawing.Point(9, 40);
       this.label25.Name = "label25";
       this.label25.Size = new System.Drawing.Size(45, 17);
       this.label25.TabIndex = 15;
@@ -280,7 +280,7 @@ namespace Bank
       // label24
       // 
       this.label24.AutoSize = true;
-      this.label24.Location = new System.Drawing.Point(9, 84);
+      this.label24.Location = new System.Drawing.Point(10, 66);
       this.label24.Name = "label24";
       this.label24.Size = new System.Drawing.Size(60, 17);
       this.label24.TabIndex = 14;
@@ -317,9 +317,9 @@ namespace Bank
       // groupBox7
       // 
       this.groupBox7.Controls.Add(this.depositDataGridView);
-      this.groupBox7.Location = new System.Drawing.Point(2, 140);
+      this.groupBox7.Location = new System.Drawing.Point(2, 119);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(515, 358);
+      this.groupBox7.Size = new System.Drawing.Size(515, 379);
       this.groupBox7.TabIndex = 11;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "Deposit types";
@@ -331,7 +331,7 @@ namespace Bank
       this.depositDataGridView.Name = "depositDataGridView";
       this.depositDataGridView.RowHeadersWidth = 51;
       this.depositDataGridView.RowTemplate.Height = 24;
-      this.depositDataGridView.Size = new System.Drawing.Size(505, 332);
+      this.depositDataGridView.Size = new System.Drawing.Size(505, 354);
       this.depositDataGridView.TabIndex = 0;
       // 
       // tabPage2
@@ -376,9 +376,9 @@ namespace Bank
       // groupBox1
       // 
       this.groupBox1.Controls.Add(this.topCreditsDataGridView);
-      this.groupBox1.Location = new System.Drawing.Point(6, 1);
+      this.groupBox1.Location = new System.Drawing.Point(-4, 1);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(516, 541);
+      this.groupBox1.Size = new System.Drawing.Size(526, 541);
       this.groupBox1.TabIndex = 25;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Popular credits";
@@ -386,10 +386,10 @@ namespace Bank
       // topCreditsDataGridView
       // 
       this.topCreditsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.topCreditsDataGridView.Location = new System.Drawing.Point(-3, 19);
+      this.topCreditsDataGridView.Location = new System.Drawing.Point(6, 19);
       this.topCreditsDataGridView.Name = "topCreditsDataGridView";
       this.topCreditsDataGridView.RowHeadersWidth = 51;
-      this.topCreditsDataGridView.Size = new System.Drawing.Size(513, 519);
+      this.topCreditsDataGridView.Size = new System.Drawing.Size(517, 519);
       this.topCreditsDataGridView.TabIndex = 1;
       // 
       // creditPercentTextBox
@@ -710,7 +710,7 @@ namespace Bank
       this.groupBox8.Controls.Add(this.turnOverDataGridView);
       this.groupBox8.Location = new System.Drawing.Point(0, 260);
       this.groupBox8.Name = "groupBox8";
-      this.groupBox8.Size = new System.Drawing.Size(1040, 285);
+      this.groupBox8.Size = new System.Drawing.Size(1037, 282);
       this.groupBox8.TabIndex = 3;
       this.groupBox8.TabStop = false;
       this.groupBox8.Text = "Money turnover";
@@ -721,7 +721,7 @@ namespace Bank
       this.turnOverDataGridView.Location = new System.Drawing.Point(3, 21);
       this.turnOverDataGridView.Name = "turnOverDataGridView";
       this.turnOverDataGridView.RowHeadersWidth = 51;
-      this.turnOverDataGridView.Size = new System.Drawing.Size(1038, 263);
+      this.turnOverDataGridView.Size = new System.Drawing.Size(1034, 261);
       this.turnOverDataGridView.TabIndex = 0;
       // 
       // groupBox10
@@ -741,7 +741,7 @@ namespace Bank
       this.paymentsDataGridView.Name = "paymentsDataGridView";
       this.paymentsDataGridView.RowHeadersWidth = 51;
       this.paymentsDataGridView.RowTemplate.Height = 24;
-      this.paymentsDataGridView.Size = new System.Drawing.Size(518, 235);
+      this.paymentsDataGridView.Size = new System.Drawing.Size(518, 237);
       this.paymentsDataGridView.TabIndex = 0;
       // 
       // groupBox9

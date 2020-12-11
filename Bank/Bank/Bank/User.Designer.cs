@@ -74,6 +74,7 @@ namespace Bank
       this.deleteOperationButton = new System.Windows.Forms.Button();
       this.operationDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.showMyServicesButton = new System.Windows.Forms.Button();
       this.cardBalanceIdComboBox = new System.Windows.Forms.ComboBox();
       this.label20 = new System.Windows.Forms.Label();
       this.deleteCardButton = new System.Windows.Forms.Button();
@@ -109,6 +110,8 @@ namespace Bank
       this.groupBox7 = new System.Windows.Forms.GroupBox();
       this.myCreditDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
+      this.depositBalanceIdComboBox = new System.Windows.Forms.ComboBox();
+      this.label22 = new System.Windows.Forms.Label();
       this.terminateDepositButton = new System.Windows.Forms.Button();
       this.addDepositButton = new System.Windows.Forms.Button();
       this.depositAmountTextBox = new System.Windows.Forms.TextBox();
@@ -122,6 +125,8 @@ namespace Bank
       this.groupBox10 = new System.Windows.Forms.GroupBox();
       this.myDepositsDataGridView = new System.Windows.Forms.DataGridView();
       this.tabPage6 = new System.Windows.Forms.TabPage();
+      this.securitiesBalanceIdComboBox = new System.Windows.Forms.ComboBox();
+      this.label31 = new System.Windows.Forms.Label();
       this.securitiesCountTextBox = new System.Windows.Forms.TextBox();
       this.sellSecuritiesButton = new System.Windows.Forms.Button();
       this.buySecurityButton = new System.Windows.Forms.Button();
@@ -149,11 +154,8 @@ namespace Bank
       this.dsTopSecurities = new System.Data.DataSet();
       this.dsCustomer = new System.Data.DataSet();
       this.dsOperationStatistic = new System.Data.DataSet();
-      this.showMyServicesButton = new System.Windows.Forms.Button();
-      this.label22 = new System.Windows.Forms.Label();
-      this.depositBalanceIdComboBox = new System.Windows.Forms.ComboBox();
-      this.securitiesBalanceIdComboBox = new System.Windows.Forms.ComboBox();
-      this.label31 = new System.Windows.Forms.Label();
+      this.label32 = new System.Windows.Forms.Label();
+      this.balanceCreditComboBox = new System.Windows.Forms.ComboBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
@@ -656,6 +658,16 @@ namespace Bank
       this.tabPage3.Text = "Balance";
       this.tabPage3.UseVisualStyleBackColor = true;
       // 
+      // showMyServicesButton
+      // 
+      this.showMyServicesButton.Location = new System.Drawing.Point(7, 503);
+      this.showMyServicesButton.Name = "showMyServicesButton";
+      this.showMyServicesButton.Size = new System.Drawing.Size(520, 32);
+      this.showMyServicesButton.TabIndex = 24;
+      this.showMyServicesButton.Text = "Show my services";
+      this.showMyServicesButton.UseVisualStyleBackColor = true;
+      this.showMyServicesButton.Click += new System.EventHandler(this.showMyServicesButton_Click);
+      // 
       // cardBalanceIdComboBox
       // 
       this.cardBalanceIdComboBox.FormattingEnabled = true;
@@ -857,6 +869,8 @@ namespace Bank
       // 
       // tabPage4
       // 
+      this.tabPage4.Controls.Add(this.balanceCreditComboBox);
+      this.tabPage4.Controls.Add(this.label32);
       this.tabPage4.Controls.Add(this.addCreditButton);
       this.tabPage4.Controls.Add(this.amountCreditTextBox);
       this.tabPage4.Controls.Add(this.forWhatCreditTextBox);
@@ -875,9 +889,9 @@ namespace Bank
       // 
       // addCreditButton
       // 
-      this.addCreditButton.Location = new System.Drawing.Point(9, 83);
+      this.addCreditButton.Location = new System.Drawing.Point(9, 61);
       this.addCreditButton.Name = "addCreditButton";
-      this.addCreditButton.Size = new System.Drawing.Size(510, 26);
+      this.addCreditButton.Size = new System.Drawing.Size(504, 26);
       this.addCreditButton.TabIndex = 10;
       this.addCreditButton.Text = "Add credit";
       this.addCreditButton.UseVisualStyleBackColor = true;
@@ -885,14 +899,14 @@ namespace Bank
       // 
       // amountCreditTextBox
       // 
-      this.amountCreditTextBox.Location = new System.Drawing.Point(367, 29);
+      this.amountCreditTextBox.Location = new System.Drawing.Point(367, 7);
       this.amountCreditTextBox.Name = "amountCreditTextBox";
-      this.amountCreditTextBox.Size = new System.Drawing.Size(151, 22);
+      this.amountCreditTextBox.Size = new System.Drawing.Size(146, 22);
       this.amountCreditTextBox.TabIndex = 9;
       // 
       // forWhatCreditTextBox
       // 
-      this.forWhatCreditTextBox.Location = new System.Drawing.Point(121, 55);
+      this.forWhatCreditTextBox.Location = new System.Drawing.Point(121, 33);
       this.forWhatCreditTextBox.Name = "forWhatCreditTextBox";
       this.forWhatCreditTextBox.Size = new System.Drawing.Size(151, 22);
       this.forWhatCreditTextBox.TabIndex = 8;
@@ -900,7 +914,7 @@ namespace Bank
       // typeCreditComboBox
       // 
       this.typeCreditComboBox.FormattingEnabled = true;
-      this.typeCreditComboBox.Location = new System.Drawing.Point(121, 25);
+      this.typeCreditComboBox.Location = new System.Drawing.Point(121, 3);
       this.typeCreditComboBox.Name = "typeCreditComboBox";
       this.typeCreditComboBox.Size = new System.Drawing.Size(151, 24);
       this.typeCreditComboBox.TabIndex = 7;
@@ -908,7 +922,7 @@ namespace Bank
       // label25
       // 
       this.label25.AutoSize = true;
-      this.label25.Location = new System.Drawing.Point(288, 32);
+      this.label25.Location = new System.Drawing.Point(288, 10);
       this.label25.Name = "label25";
       this.label25.Size = new System.Drawing.Size(60, 17);
       this.label25.TabIndex = 6;
@@ -917,7 +931,7 @@ namespace Bank
       // label24
       // 
       this.label24.AutoSize = true;
-      this.label24.Location = new System.Drawing.Point(6, 60);
+      this.label24.Location = new System.Drawing.Point(6, 38);
       this.label24.Name = "label24";
       this.label24.Size = new System.Drawing.Size(66, 17);
       this.label24.TabIndex = 5;
@@ -926,7 +940,7 @@ namespace Bank
       // label23
       // 
       this.label23.AutoSize = true;
-      this.label23.Location = new System.Drawing.Point(6, 32);
+      this.label23.Location = new System.Drawing.Point(6, 10);
       this.label23.Name = "label23";
       this.label23.Size = new System.Drawing.Size(99, 17);
       this.label23.TabIndex = 4;
@@ -954,9 +968,9 @@ namespace Bank
       // groupBox7
       // 
       this.groupBox7.Controls.Add(this.myCreditDataGridView);
-      this.groupBox7.Location = new System.Drawing.Point(4, 115);
+      this.groupBox7.Location = new System.Drawing.Point(4, 93);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(515, 429);
+      this.groupBox7.Size = new System.Drawing.Size(515, 451);
       this.groupBox7.TabIndex = 2;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "My credit";
@@ -968,7 +982,7 @@ namespace Bank
       this.myCreditDataGridView.Name = "myCreditDataGridView";
       this.myCreditDataGridView.RowHeadersWidth = 51;
       this.myCreditDataGridView.RowTemplate.Height = 24;
-      this.myCreditDataGridView.Size = new System.Drawing.Size(505, 400);
+      this.myCreditDataGridView.Size = new System.Drawing.Size(505, 426);
       this.myCreditDataGridView.TabIndex = 0;
       // 
       // tabPage5
@@ -991,11 +1005,28 @@ namespace Bank
       this.tabPage5.Text = "Deposit";
       this.tabPage5.UseVisualStyleBackColor = true;
       // 
+      // depositBalanceIdComboBox
+      // 
+      this.depositBalanceIdComboBox.FormattingEnabled = true;
+      this.depositBalanceIdComboBox.Location = new System.Drawing.Point(633, 36);
+      this.depositBalanceIdComboBox.Name = "depositBalanceIdComboBox";
+      this.depositBalanceIdComboBox.Size = new System.Drawing.Size(152, 24);
+      this.depositBalanceIdComboBox.TabIndex = 25;
+      // 
+      // label22
+      // 
+      this.label22.AutoSize = true;
+      this.label22.Location = new System.Drawing.Point(539, 39);
+      this.label22.Name = "label22";
+      this.label22.Size = new System.Drawing.Size(63, 17);
+      this.label22.TabIndex = 24;
+      this.label22.Text = "Balance:";
+      // 
       // terminateDepositButton
       // 
       this.terminateDepositButton.Location = new System.Drawing.Point(531, 509);
       this.terminateDepositButton.Name = "terminateDepositButton";
-      this.terminateDepositButton.Size = new System.Drawing.Size(503, 32);
+      this.terminateDepositButton.Size = new System.Drawing.Size(507, 32);
       this.terminateDepositButton.TabIndex = 23;
       this.terminateDepositButton.Text = "Terminate deposit";
       this.terminateDepositButton.UseVisualStyleBackColor = true;
@@ -1003,9 +1034,9 @@ namespace Bank
       // 
       // addDepositButton
       // 
-      this.addDepositButton.Location = new System.Drawing.Point(794, 46);
+      this.addDepositButton.Location = new System.Drawing.Point(797, 36);
       this.addDepositButton.Name = "addDepositButton";
-      this.addDepositButton.Size = new System.Drawing.Size(244, 33);
+      this.addDepositButton.Size = new System.Drawing.Size(241, 24);
       this.addDepositButton.TabIndex = 22;
       this.addDepositButton.Text = "Add Deposit";
       this.addDepositButton.UseVisualStyleBackColor = true;
@@ -1013,7 +1044,7 @@ namespace Bank
       // 
       // depositAmountTextBox
       // 
-      this.depositAmountTextBox.Location = new System.Drawing.Point(851, 14);
+      this.depositAmountTextBox.Location = new System.Drawing.Point(851, 7);
       this.depositAmountTextBox.Name = "depositAmountTextBox";
       this.depositAmountTextBox.Size = new System.Drawing.Size(187, 22);
       this.depositAmountTextBox.TabIndex = 21;
@@ -1021,7 +1052,7 @@ namespace Bank
       // depositTypeComboBox
       // 
       this.depositTypeComboBox.FormattingEnabled = true;
-      this.depositTypeComboBox.Location = new System.Drawing.Point(633, 14);
+      this.depositTypeComboBox.Location = new System.Drawing.Point(633, 3);
       this.depositTypeComboBox.Name = "depositTypeComboBox";
       this.depositTypeComboBox.Size = new System.Drawing.Size(152, 24);
       this.depositTypeComboBox.TabIndex = 20;
@@ -1029,7 +1060,7 @@ namespace Bank
       // label27
       // 
       this.label27.AutoSize = true;
-      this.label27.Location = new System.Drawing.Point(791, 21);
+      this.label27.Location = new System.Drawing.Point(791, 10);
       this.label27.Name = "label27";
       this.label27.Size = new System.Drawing.Size(60, 17);
       this.label27.TabIndex = 19;
@@ -1038,7 +1069,7 @@ namespace Bank
       // label26
       // 
       this.label26.AutoSize = true;
-      this.label26.Location = new System.Drawing.Point(528, 21);
+      this.label26.Location = new System.Drawing.Point(536, 8);
       this.label26.Name = "label26";
       this.label26.Size = new System.Drawing.Size(91, 17);
       this.label26.TabIndex = 18;
@@ -1086,9 +1117,9 @@ namespace Bank
       // groupBox10
       // 
       this.groupBox10.Controls.Add(this.myDepositsDataGridView);
-      this.groupBox10.Location = new System.Drawing.Point(530, 85);
+      this.groupBox10.Location = new System.Drawing.Point(530, 66);
       this.groupBox10.Name = "groupBox10";
-      this.groupBox10.Size = new System.Drawing.Size(508, 418);
+      this.groupBox10.Size = new System.Drawing.Size(508, 437);
       this.groupBox10.TabIndex = 15;
       this.groupBox10.TabStop = false;
       this.groupBox10.Text = "My deposits";
@@ -1100,7 +1131,7 @@ namespace Bank
       this.myDepositsDataGridView.Name = "myDepositsDataGridView";
       this.myDepositsDataGridView.RowHeadersWidth = 51;
       this.myDepositsDataGridView.RowTemplate.Height = 24;
-      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 391);
+      this.myDepositsDataGridView.Size = new System.Drawing.Size(508, 410);
       this.myDepositsDataGridView.TabIndex = 1;
       // 
       // tabPage6
@@ -1123,6 +1154,23 @@ namespace Bank
       this.tabPage6.Text = "Securities";
       this.tabPage6.UseVisualStyleBackColor = true;
       // 
+      // securitiesBalanceIdComboBox
+      // 
+      this.securitiesBalanceIdComboBox.FormattingEnabled = true;
+      this.securitiesBalanceIdComboBox.Location = new System.Drawing.Point(108, 47);
+      this.securitiesBalanceIdComboBox.Name = "securitiesBalanceIdComboBox";
+      this.securitiesBalanceIdComboBox.Size = new System.Drawing.Size(152, 24);
+      this.securitiesBalanceIdComboBox.TabIndex = 34;
+      // 
+      // label31
+      // 
+      this.label31.AutoSize = true;
+      this.label31.Location = new System.Drawing.Point(12, 50);
+      this.label31.Name = "label31";
+      this.label31.Size = new System.Drawing.Size(63, 17);
+      this.label31.TabIndex = 33;
+      this.label31.Text = "Balance:";
+      // 
       // securitiesCountTextBox
       // 
       this.securitiesCountTextBox.Location = new System.Drawing.Point(320, 12);
@@ -1142,9 +1190,9 @@ namespace Bank
       // 
       // buySecurityButton
       // 
-      this.buySecurityButton.Location = new System.Drawing.Point(269, 42);
+      this.buySecurityButton.Location = new System.Drawing.Point(269, 47);
       this.buySecurityButton.Name = "buySecurityButton";
-      this.buySecurityButton.Size = new System.Drawing.Size(245, 33);
+      this.buySecurityButton.Size = new System.Drawing.Size(240, 24);
       this.buySecurityButton.TabIndex = 30;
       this.buySecurityButton.Text = "Buy now";
       this.buySecurityButton.UseVisualStyleBackColor = true;
@@ -1296,49 +1344,22 @@ namespace Bank
       // 
       this.dsOperationStatistic.DataSetName = "NewDataSet";
       // 
-      // showMyServicesButton
+      // label32
       // 
-      this.showMyServicesButton.Location = new System.Drawing.Point(7, 503);
-      this.showMyServicesButton.Name = "showMyServicesButton";
-      this.showMyServicesButton.Size = new System.Drawing.Size(520, 32);
-      this.showMyServicesButton.TabIndex = 24;
-      this.showMyServicesButton.Text = "Show my services";
-      this.showMyServicesButton.UseVisualStyleBackColor = true;
-      this.showMyServicesButton.Click += new System.EventHandler(this.showMyServicesButton_Click);
+      this.label32.AutoSize = true;
+      this.label32.Location = new System.Drawing.Point(288, 38);
+      this.label32.Name = "label32";
+      this.label32.Size = new System.Drawing.Size(63, 17);
+      this.label32.TabIndex = 11;
+      this.label32.Text = "Balance:";
       // 
-      // label22
+      // balanceCreditComboBox
       // 
-      this.label22.AutoSize = true;
-      this.label22.Location = new System.Drawing.Point(528, 54);
-      this.label22.Name = "label22";
-      this.label22.Size = new System.Drawing.Size(63, 17);
-      this.label22.TabIndex = 24;
-      this.label22.Text = "Balance:";
-      // 
-      // depositBalanceIdComboBox
-      // 
-      this.depositBalanceIdComboBox.FormattingEnabled = true;
-      this.depositBalanceIdComboBox.Location = new System.Drawing.Point(633, 51);
-      this.depositBalanceIdComboBox.Name = "depositBalanceIdComboBox";
-      this.depositBalanceIdComboBox.Size = new System.Drawing.Size(152, 24);
-      this.depositBalanceIdComboBox.TabIndex = 25;
-      // 
-      // securitiesBalanceIdComboBox
-      // 
-      this.securitiesBalanceIdComboBox.FormattingEnabled = true;
-      this.securitiesBalanceIdComboBox.Location = new System.Drawing.Point(108, 47);
-      this.securitiesBalanceIdComboBox.Name = "securitiesBalanceIdComboBox";
-      this.securitiesBalanceIdComboBox.Size = new System.Drawing.Size(152, 24);
-      this.securitiesBalanceIdComboBox.TabIndex = 34;
-      // 
-      // label31
-      // 
-      this.label31.AutoSize = true;
-      this.label31.Location = new System.Drawing.Point(12, 50);
-      this.label31.Name = "label31";
-      this.label31.Size = new System.Drawing.Size(63, 17);
-      this.label31.TabIndex = 33;
-      this.label31.Text = "Balance:";
+      this.balanceCreditComboBox.FormattingEnabled = true;
+      this.balanceCreditComboBox.Location = new System.Drawing.Point(367, 33);
+      this.balanceCreditComboBox.Name = "balanceCreditComboBox";
+      this.balanceCreditComboBox.Size = new System.Drawing.Size(146, 24);
+      this.balanceCreditComboBox.TabIndex = 12;
       // 
       // User
       // 
@@ -1534,5 +1555,7 @@ namespace Bank
     private System.Windows.Forms.Label label22;
     private System.Windows.Forms.ComboBox securitiesBalanceIdComboBox;
     private System.Windows.Forms.Label label31;
+    private System.Windows.Forms.ComboBox balanceCreditComboBox;
+    private System.Windows.Forms.Label label32;
   }
 }

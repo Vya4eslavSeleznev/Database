@@ -59,14 +59,13 @@ SELECT Customer.FirstName, Customer.LastName, Customer.Phone
 FROM Customer
 LEFT JOIN
 (
-	SELECT CustomerBalances.CustomerId
+	SELECT CustomerId
 	FROM Balance
-	JOIN CustomerBalances ON Balance.BalanceId = CustomerBalances.BalanceId
 	WHERE Balance.Date >= DATEADD(MONTH, -2, GETDATE())
-	GROUP BY CustomerBalances.CustomerId
-) AS ActiveCustomerBalances
-ON Customer.CustomerId = ActiveCustomerBalances.CustomerId
-WHERE ActiveCustomerBalances.CustomerId IS NULL;
+	GROUP BY CustomerId
+) AS ActiveCustomerBalance
+ON Customer.CustomerId = ActiveCustomerBalance.CustomerId
+WHERE ActiveCustomerBalance.CustomerId IS NULL;
 
 /*6*/
 -- Расходы/доходы по категориям для клиента за период времени
@@ -195,7 +194,6 @@ AND EXISTS
 SELECT TOP(10)
 Info.FirstName,
 Info.LastName,
-Currency.Name,
 SUM(Total) AS Total,
 Currency.[Name]
 FROM
@@ -207,8 +205,7 @@ FROM
 	Customer.LastName, 
 	SUM(Balance.Cash) AS Total
 	FROM Customer
-	JOIN CustomerBalances ON Customer.CustomerId = CustomerBalances.CustomerId
-	JOIN Balance ON CustomerBalances.BalanceId = Balance.BalanceId
+	JOIN Balance ON Customer.CustomerId = Balance.CustomerId
 	GROUP BY Customer.CustomerId, Balance.CurrencyId, Customer.FirstName, Customer.LastName
 	UNION
 	SELECT

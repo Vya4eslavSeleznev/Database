@@ -30,7 +30,7 @@ namespace Bank
     private string article()
     {
       return
-        "SELECT [Name] FROM Article";
+        "SELECT * FROM Article";
     }
 
     private string cardService()
@@ -73,6 +73,7 @@ namespace Bank
       string articleQuery = article();
       setDataInTable(articleQuery, "Article", dsArticle, articleDataGridView);
       addButtonInDataGrid(articleDataGridView);
+      articleDataGridView.Columns["ArticleId"].Visible = false;
     }
 
     private void setCardService()
@@ -202,6 +203,74 @@ namespace Bank
       catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Call center", MessageBoxButtons.OK);
+      }
+    }
+
+    private void RefreshArticleDataGrid()
+    {
+      articleDataGridView.Columns.Clear();
+      dsArticle = new DataSet();
+
+      setArticle();
+    }
+
+    private void deleteArticleButton_Click(object sender, EventArgs e)
+    {
+      List<int> articleIds = null;
+
+      try
+      {
+        articleIds = (from DataGridViewRow r in articleDataGridView.Rows
+                        where (string)r.Cells[0].Value == "1"
+                        select (int)r.Cells["ArticleId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect article!", "Article", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", articleIds.Select(x => "?"));
+      var query = $"DELETE FROM Article WHERE ArticleId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < articleIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@ArticleId{i}", articleIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshArticleDataGrid();
+    }
+
+    private void createArticleButton_Click(object sender, EventArgs e)
+    {
+      var name = nameArticleTextBox.Text;
+
+      if (name == "")
+      {
+        MessageBox.Show("Incorrect parameters!", "Article", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addArticleQuery =
+        "INSERT INTO Article (Name) " +
+        "VALUES(?)";
+
+      OleDbCommand cmd = new OleDbCommand(addArticleQuery, connection);
+      cmd.Parameters.Add(new OleDbParameter("@Name", name));
+
+      try
+      {
+        cmd.ExecuteNonQuery();
+        MessageBox.Show("Article added successfully!", "Article", MessageBoxButtons.OK);
+        string ArticleQuery = article();
+        refreshDataSet(ArticleQuery, dsArticle, "Article");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Article", MessageBoxButtons.OK);
       }
     }
   }

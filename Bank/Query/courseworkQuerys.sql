@@ -195,3 +195,11 @@ FROM [Card]
 JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
 JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
 WHERE Balance.CustomerId = 1
+
+SELECT [Card].Number, CardService.[Name]
+FROM [Card]
+JOIN CardServices ON [Card].CardId = CardServices.CardId
+JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId
+JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
+JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
+WHERE Balance.CustomerId = 1

@@ -32,6 +32,7 @@ namespace Bank
       this.myServicesDataGridView = new System.Windows.Forms.DataGridView();
       this.connection = new System.Data.OleDb.OleDbConnection();
       this.dsMyServices = new System.Data.DataSet();
+      this.deleteMyServiceButton = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.myServicesDataGridView)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dsMyServices)).BeginInit();
       this.SuspendLayout();
@@ -43,8 +44,9 @@ namespace Bank
       this.myServicesDataGridView.Name = "myServicesDataGridView";
       this.myServicesDataGridView.RowHeadersWidth = 51;
       this.myServicesDataGridView.RowTemplate.Height = 24;
-      this.myServicesDataGridView.Size = new System.Drawing.Size(678, 312);
+      this.myServicesDataGridView.Size = new System.Drawing.Size(678, 272);
       this.myServicesDataGridView.TabIndex = 0;
+      this.myServicesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.myServicesDataGridView_CellContentClick);
       // 
       // connection
       // 
@@ -55,11 +57,22 @@ namespace Bank
       // 
       this.dsMyServices.DataSetName = "NewDataSet";
       // 
+      // deleteMyServiceButton
+      // 
+      this.deleteMyServiceButton.Location = new System.Drawing.Point(1, 278);
+      this.deleteMyServiceButton.Name = "deleteMyServiceButton";
+      this.deleteMyServiceButton.Size = new System.Drawing.Size(679, 33);
+      this.deleteMyServiceButton.TabIndex = 1;
+      this.deleteMyServiceButton.Text = "Delete selected";
+      this.deleteMyServiceButton.UseVisualStyleBackColor = true;
+      this.deleteMyServiceButton.Click += new System.EventHandler(this.deleteMyServiceButton_Click);
+      // 
       // MyServices
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(680, 309);
+      this.Controls.Add(this.deleteMyServiceButton);
       this.Controls.Add(this.myServicesDataGridView);
       this.Name = "MyServices";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -76,5 +89,6 @@ namespace Bank
     private System.Windows.Forms.DataGridView myServicesDataGridView;
     private System.Data.OleDb.OleDbConnection connection;
     private System.Data.DataSet dsMyServices;
+    private System.Windows.Forms.Button deleteMyServiceButton;
   }
 }

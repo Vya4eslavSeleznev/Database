@@ -464,7 +464,7 @@ namespace Bank
       setDataInTable(topSecuritysQuery, "InfoSecurities", dsTopSecurities, topSecuritiesDataGridView);
     }
 
-    private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
+    public void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
     {
       DataGridViewCheckBoxColumn check = new DataGridViewCheckBoxColumn();
       check.HeaderText = headerText;
@@ -473,7 +473,7 @@ namespace Bank
       dataGrid.Columns.Insert(0, check);
     }
 
-    private void addButtonInDataGrid(DataGridView dataGrid, string headerText, string textButton)
+    public void addButtonInDataGrid(DataGridView dataGrid, string headerText, string textButton)
     {
       DataGridViewButtonColumn button = new DataGridViewButtonColumn();
       dataGrid.Columns.Add(button);
@@ -780,7 +780,6 @@ namespace Bank
     {
       var depositType = depositTypeComboBox.Text;
       var amount = depositAmountTextBox.Text;
-     
 
       if (depositType == "" || amount == "")
       {
