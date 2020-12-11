@@ -36,13 +36,13 @@ namespace Bank
     private string cardService()
     {
       return
-        "SELECT [Name], Price FROM CardService";
+        "SELECT * FROM CardService";
     }
 
     private string currency()
     {
       return
-        "SELECT [Name] FROM Currency";
+        "SELECT * FROM Currency";
     }
 
     private string customer()
@@ -82,6 +82,7 @@ namespace Bank
       string cardServiceQuery = cardService();
       setDataInTable(cardServiceQuery, "CardService", dsCardService, serviceDataGridView);
       addButtonInDataGrid(serviceDataGridView);
+      serviceDataGridView.Columns["CardServiceId"].Visible = false;
     }
 
     private void setCurrency()
@@ -90,6 +91,7 @@ namespace Bank
       string currencyQuery = currency();
       setDataInTable(currencyQuery, "Currency", dsCurrency, currencyDataGridView);
       addButtonInDataGrid(currencyDataGridView);
+      currencyDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setCustomer()
@@ -206,12 +208,10 @@ namespace Bank
       }
     }
 
-    private void RefreshArticleDataGrid()
+    private void RefreshDataGrid(DataGridView dataGrid, DataSet ds)
     {
-      articleDataGridView.Columns.Clear();
-      dsArticle = new DataSet();
-
-      setArticle();
+      dataGrid.Columns.Clear();
+      ds = new DataSet();
     }
 
     private void deleteArticleButton_Click(object sender, EventArgs e)
@@ -241,7 +241,8 @@ namespace Bank
         cmd.ExecuteNonQuery();
       }
 
-      RefreshArticleDataGrid();
+      RefreshDataGrid(articleDataGridView, dsArticle);
+      setArticle();
     }
 
     private void createArticleButton_Click(object sender, EventArgs e)
@@ -250,7 +251,7 @@ namespace Bank
 
       if (name == "")
       {
-        MessageBox.Show("Incorrect parameters!", "Article", MessageBoxButtons.OK);
+        MessageBox.Show("Empty fields!", "Article", MessageBoxButtons.OK);
         return;
       }
 
@@ -265,13 +266,208 @@ namespace Bank
       {
         cmd.ExecuteNonQuery();
         MessageBox.Show("Article added successfully!", "Article", MessageBoxButtons.OK);
-        string ArticleQuery = article();
-        refreshDataSet(ArticleQuery, dsArticle, "Article");
+        string articleQuery = article();
+        refreshDataSet(articleQuery, dsArticle, "Article");
       }
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Article", MessageBoxButtons.OK);
       }
+    }
+
+    private void createServiceButton_Click(object sender, EventArgs e)
+    {
+      var name = cardServiceTextBox.Text;
+      var price = servicePriceNumericUpDown.Value.ToString();
+
+      if (name == "" || price == "")
+      {
+        MessageBox.Show("Empty fields!", "Card Service", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addCardServiceQuery =
+        "INSERT INTO CardService (Name, Price) " +
+        "VALUES(?, ?)";
+
+      OleDbCommand cmd = new OleDbCommand(addCardServiceQuery, connection);
+      cmd.Parameters.Add(new OleDbParameter("@Name", name));
+      cmd.Parameters.Add(new OleDbParameter("@Price", price));
+
+      try
+      {
+        cmd.ExecuteNonQuery();
+        MessageBox.Show("Card service added successfully!", "Card Service", MessageBoxButtons.OK);
+        string cardServiceQuery = cardService();
+        refreshDataSet(cardServiceQuery, dsCardService, "CardService");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Card Service", MessageBoxButtons.OK);
+      }
+    }
+
+    private void deleteCardServiceButton_Click(object sender, EventArgs e)
+    {
+      List<int> cardServiceIds = null;
+
+      try
+      {
+        cardServiceIds = (from DataGridViewRow r in serviceDataGridView.Rows
+                      where (string)r.Cells[0].Value == "1"
+                      select (int)r.Cells["CardServiceId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect card service!", "Card Service", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", cardServiceIds.Select(x => "?"));
+      var query = $"DELETE FROM CardService WHERE CardServiceId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < cardServiceIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CardServiceId{i}", cardServiceIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshDataGrid(serviceDataGridView, dsCardService);
+      setCardService();
+    }
+
+    private void createCurrencyButton_Click(object sender, EventArgs e)
+    {
+      var name = currencyNameTextBox.Text;
+
+      if (name == "")
+      {
+        MessageBox.Show("Empty fields!", "Currency", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addCurrencyQuery =
+        "INSERT INTO Currency (Name) " +
+        "VALUES(?)";
+
+      OleDbCommand cmd = new OleDbCommand(addCurrencyQuery, connection);
+      cmd.Parameters.Add(new OleDbParameter("@Name", name));
+
+      try
+      {
+        cmd.ExecuteNonQuery();
+        MessageBox.Show("Currency added successfully!", "Currency", MessageBoxButtons.OK);
+        string currencyQuery = currency();
+        refreshDataSet(currencyQuery, dsCurrency, "Currency");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Currency", MessageBoxButtons.OK);
+      }
+    }
+
+    private void deleteCurrencyButton_Click(object sender, EventArgs e)
+    {
+      List<int> currencyIds = null;
+
+      try
+      {
+        currencyIds = (from DataGridViewRow r in currencyDataGridView.Rows
+                          where (string)r.Cells[0].Value == "1"
+                          select (int)r.Cells["CurrencyId"].Value).ToList();
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect currency!", "Currency", MessageBoxButtons.OK);
+        return;
+      }
+
+      var parametersPart = string.Join(",", currencyIds.Select(x => "?"));
+      var query = $"DELETE FROM Currency WHERE CurrencyId IN ({parametersPart})";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        for (var i = 0; i < currencyIds.Count; i++)
+          cmd.Parameters.Add(new OleDbParameter($"@CurrencyId{i}", currencyIds[i]));
+
+        cmd.ExecuteNonQuery();
+      }
+
+      RefreshDataGrid(currencyDataGridView, dsCurrency);
+      setCurrency();
+    }
+
+    private void saveChangesButton_Click(object sender, EventArgs e)
+    {
+      var firstName = firstNameTextBox.Text;
+      var lastName = lastNameTextBox.Text;
+      var birthady = birthdayTimePicker.Value.Date.ToString("yyyy-MM-dd");
+      var passNum = passportNumTextBox.Text;
+      var phone = phoneTextBox.Text;
+
+      var login = loginTextBox.Text;
+      var password = passwordTextBox.Text;
+      string role = "0";
+      int userId = 0;
+
+
+      if (firstName == "" || lastName == "" || birthady == "" || passNum == ""
+          || phone == "" || login == "" || password == "")
+      {
+        MessageBox.Show("Empty fields!", "Customer", MessageBoxButtons.OK);
+        return;
+      }
+
+      string addUserProfileQuery =
+        "INSERT INTO User (Login, Password, Role) " +
+        "VALUES(?, ?, ?)";
+
+      OleDbCommand userProfileCmd = new OleDbCommand(addUserProfileQuery, connection);
+      userProfileCmd.Parameters.Add(new OleDbParameter("@Login", login));
+      userProfileCmd.Parameters.Add(new OleDbParameter("@Password", password));
+      userProfileCmd.Parameters.Add(new OleDbParameter("@Role", role));
+
+      try
+      {
+        OleDbDataReader rdr = userProfileCmd.ExecuteReader();
+        rdr.Read();
+        userId = Convert.ToInt32(rdr["Id"]);
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Customer", MessageBoxButtons.OK);
+      }
+
+      string addCustomerQuery =
+        "INSERT INTO Customer (FirstName, LastName, PassportNum, Birthday, Phone, UserId) " +
+        "VALUES(?, ?, ?, ?, ?, ?)";
+
+      OleDbCommand customerCmd = new OleDbCommand(addCustomerQuery, connection);
+      customerCmd.Parameters.Add(new OleDbParameter("@FirstName", firstName));
+      customerCmd.Parameters.Add(new OleDbParameter("@LastName", lastName));
+      customerCmd.Parameters.Add(new OleDbParameter("@PassportNum", birthady));
+      customerCmd.Parameters.Add(new OleDbParameter("@Birthday", passNum));
+      customerCmd.Parameters.Add(new OleDbParameter("@Phone", phone));
+      customerCmd.Parameters.Add(new OleDbParameter("@UserId", Convert.ToString(userId)));
+
+      try
+      {
+        customerCmd.ExecuteNonQuery();
+        MessageBox.Show("Customer added successfully!", "Customer", MessageBoxButtons.OK);
+        string customerQuery = customer();
+        refreshDataSet(customerQuery, dsAllCustomers, "Customer");
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Customer", MessageBoxButtons.OK);
+      }
+    }
+
+    private void deleteCustomerButton_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }

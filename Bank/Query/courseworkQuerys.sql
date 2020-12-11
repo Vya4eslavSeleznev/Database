@@ -203,3 +203,14 @@ JOIN CardService ON CardServices.ServiceId = CardService.CardServiceId
 JOIN BalanceCards ON [Card].CardId = BalanceCards.CardId
 JOIN Balance ON BalanceCards.BalanceId = Balance.BalanceId
 WHERE Balance.CustomerId = 1
+
+SELECT " +
+Customer.FirstName, " +
+Customer.LastName, " +
+Customer.PassportNum, " +
+Customer.Birthday, " +
+Customer.Phone, " +
+[User].Login, " +
+[User].Password " +
+FROM Customer " +
+JOIN [User] ON Customer.UserId = [User].Id";

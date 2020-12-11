@@ -257,6 +257,7 @@ namespace Bank
       this.deleteCurrencyButton.TabIndex = 54;
       this.deleteCurrencyButton.Text = "Delete Currency";
       this.deleteCurrencyButton.UseVisualStyleBackColor = true;
+      this.deleteCurrencyButton.Click += new System.EventHandler(this.deleteCurrencyButton_Click);
       // 
       // deleteCardServiceButton
       // 
@@ -266,6 +267,7 @@ namespace Bank
       this.deleteCardServiceButton.TabIndex = 53;
       this.deleteCardServiceButton.Text = "Delete Card Service";
       this.deleteCardServiceButton.UseVisualStyleBackColor = true;
+      this.deleteCardServiceButton.Click += new System.EventHandler(this.deleteCardServiceButton_Click);
       // 
       // createServiceButton
       // 
@@ -275,10 +277,16 @@ namespace Bank
       this.createServiceButton.TabIndex = 52;
       this.createServiceButton.Text = "Create card service";
       this.createServiceButton.UseVisualStyleBackColor = true;
+      this.createServiceButton.Click += new System.EventHandler(this.createServiceButton_Click);
       // 
       // servicePriceNumericUpDown
       // 
       this.servicePriceNumericUpDown.Location = new System.Drawing.Point(330, 10);
+      this.servicePriceNumericUpDown.Maximum = new decimal(new int[] {
+            -402653185,
+            -1613725636,
+            54210108,
+            0});
       this.servicePriceNumericUpDown.Name = "servicePriceNumericUpDown";
       this.servicePriceNumericUpDown.Size = new System.Drawing.Size(174, 22);
       this.servicePriceNumericUpDown.TabIndex = 51;
@@ -331,10 +339,11 @@ namespace Bank
       // 
       this.createCurrencyButton.Location = new System.Drawing.Point(530, 42);
       this.createCurrencyButton.Name = "createCurrencyButton";
-      this.createCurrencyButton.Size = new System.Drawing.Size(510, 28);
+      this.createCurrencyButton.Size = new System.Drawing.Size(501, 28);
       this.createCurrencyButton.TabIndex = 43;
       this.createCurrencyButton.Text = "Create currency";
       this.createCurrencyButton.UseVisualStyleBackColor = true;
+      this.createCurrencyButton.Click += new System.EventHandler(this.createCurrencyButton_Click);
       // 
       // currencyNameTextBox
       // 
@@ -406,6 +415,7 @@ namespace Bank
       this.deleteCustomerButton.TabIndex = 67;
       this.deleteCustomerButton.Text = "Delete Customer";
       this.deleteCustomerButton.UseVisualStyleBackColor = true;
+      this.deleteCustomerButton.Click += new System.EventHandler(this.deleteCustomerButton_Click);
       // 
       // groupBox4
       // 
@@ -435,6 +445,7 @@ namespace Bank
       this.saveChangesButton.TabIndex = 65;
       this.saveChangesButton.Text = "Add customer";
       this.saveChangesButton.UseVisualStyleBackColor = true;
+      this.saveChangesButton.Click += new System.EventHandler(this.saveChangesButton_Click);
       // 
       // birthdayTimePicker
       // 
