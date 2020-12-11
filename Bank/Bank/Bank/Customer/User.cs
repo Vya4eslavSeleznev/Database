@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using Bank.Models;
 using Bank.Exceptions;
+using Bank.Utils;
 
 namespace Bank
 {
@@ -876,7 +877,7 @@ namespace Bank
       }
       catch(OleDbException ex)
       {
-        if (TryHandleOleDbException(ex))
+        if (Helpers.TryHandleOleDbException(ex))
           return;
 
         throw;
@@ -941,7 +942,7 @@ namespace Bank
       }
       catch (OleDbException ex)
       {
-        if (TryHandleOleDbException(ex))
+        if (Helpers.TryHandleOleDbException(ex))
           return;
 
         throw;
@@ -999,7 +1000,7 @@ namespace Bank
         }
         catch (OleDbException ex)
         {
-          if (TryHandleOleDbException(ex))
+          if (Helpers.TryHandleOleDbException(ex))
             return;
 
           throw;
@@ -1009,15 +1010,6 @@ namespace Bank
           MessageBox.Show("Incorrect parameters!", "Service", MessageBoxButtons.OK);
         }
       }
-    }
-
-    private bool TryHandleOleDbException(OleDbException ex)
-    {
-      if (ex.Errors[0].NativeError != 50000)
-        return false;
-
-      MessageBox.Show(ex.Errors[0].Message, "Service", MessageBoxButtons.OK);
-      return true;
     }
 
     private void deleteOperationButton_Click(object sender, EventArgs e)

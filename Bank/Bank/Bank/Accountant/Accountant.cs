@@ -140,12 +140,10 @@ namespace Bank
     private string customerInformation()
     {
       return
-        "SELECT Customer.FirstName, Customer.LastName, Customer.Phone, Balance.Cash, " +
-        "Balance.Number AS BalanceNumber " +//, [Card].Number AS CardNumber " +
+        "SELECT Balance.BalanceId, Customer.FirstName, Customer.LastName, Customer.Phone, Balance.Cash, " +
+        "Balance.Number AS BalanceNumber " +
         "FROM Customer " +
         "JOIN Balance ON Customer.CustomerId = Balance.CustomerId ";
-        //"JOIN BalanceCards ON Balance.BalanceId = BalanceCards.BalanceId " +
-        //"JOIN[Card] ON BalanceCards.CardId = [Card].CardId";
     }
 
     private string popularCredits()
@@ -236,6 +234,8 @@ namespace Bank
       string customerInformationQuery = customerInformation();
       addCheckBoxInDataGrid("Select to update cash", customerInfoDataGridView);
       setDataInTable(customerInformationQuery, "Customer", dsCustomerInformation, customerInfoDataGridView);
+
+      customerInfoDataGridView.Columns["BalanceId"].Visible = false;
     }
 
     private void setShareOfCurrency()
@@ -452,6 +452,14 @@ namespace Bank
       dsCustomerDeposits = new DataSet();
 
       setCustomerDeposits();
+    }
+
+    public void RefreshCustomerBalances()
+    {
+      customerInfoDataGridView.Columns.Clear();
+      dsCustomerInformation = new DataSet();
+
+      setCustomerInformation();
     }
 
     private void deleteDepositButton_Click(object sender, EventArgs e)
@@ -673,6 +681,61 @@ namespace Bank
           MessageBox.Show("Incorrect parameters!", "Security type", MessageBoxButtons.OK);
         }
       }
+    }
+
+    private void customerWriteOffMoneyButton_Click(object sender, EventArgs e)
+    {
+      AmendCustomerBalance(true);
+    }
+
+    private void topUpButton_Click(object sender, EventArgs e)
+    {
+      AmendCustomerBalance(false);
+    }
+
+    private void AmendCustomerBalance(bool isWriteOff)
+    {
+      var cash = customerCashTextBox.Text;
+
+      if (string.IsNullOrEmpty(cash))
+        return;
+
+      var balanceIds = (from DataGridViewRow r in customerInfoDataGridView.Rows
+                        where (string)r.Cells[0].Value == "1"
+                        select (int)r.Cells["BalanceId"].Value).ToList();
+
+      if (balanceIds.Count == 0)
+        return;
+
+      try
+      {
+
+        var balanceIdsParams = string.Join(",", balanceIds.Select(x => "?"));
+        var query = $"UPDATE Balance SET Cash = Cash + ? WHERE BalanceId IN ({balanceIdsParams})";
+
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          cmd.Parameters.Add(new OleDbParameter("@Cash", isWriteOff ? $"-{cash}" : cash));
+
+          for (var i = 0; i < balanceIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@BalanceId{i}", balanceIds[i]));
+
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch (OleDbException ex)
+      {
+        if (Helpers.TryHandleOleDbException(ex))
+          return;
+
+        throw;
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Invalid parameters", "Customer balance", MessageBoxButtons.OK);
+      }
+
+      RefreshCustomerBalances();
     }
   }
 }

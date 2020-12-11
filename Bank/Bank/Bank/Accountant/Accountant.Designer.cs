@@ -650,6 +650,7 @@ namespace Bank
       this.topUpButton.TabIndex = 6;
       this.topUpButton.Text = "Top up";
       this.topUpButton.UseVisualStyleBackColor = true;
+      this.topUpButton.Click += new System.EventHandler(this.topUpButton_Click);
       // 
       // customerWriteOffMoneyButton
       // 
@@ -659,6 +660,7 @@ namespace Bank
       this.customerWriteOffMoneyButton.TabIndex = 5;
       this.customerWriteOffMoneyButton.Text = "Write off money";
       this.customerWriteOffMoneyButton.UseVisualStyleBackColor = true;
+      this.customerWriteOffMoneyButton.Click += new System.EventHandler(this.customerWriteOffMoneyButton_Click);
       // 
       // customerCashTextBox
       // 
