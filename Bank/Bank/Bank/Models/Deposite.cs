@@ -1,6 +1,6 @@
 ﻿namespace Bank.Models
 {
-  public class Deposite
+  public class Deposite : IEntity
   {
     public int Id { get; }
 

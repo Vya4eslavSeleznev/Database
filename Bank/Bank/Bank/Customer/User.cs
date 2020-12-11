@@ -466,12 +466,15 @@ namespace Bank
     private void setDepositInfo()
     {
       string depositInfoQuery =
-        "SELECT InfoDeposit.Term, InfoDeposit.Amount, Currency.[Name] AS Currency, " +
-        "InfoDeposit.[Percent], InfoDeposit.DepositName " +
+        "SELECT InfoDeposit.DepositName, Currency.[Name] AS Currency, InfoDeposit.InfoDepositId, InfoDeposit.Term, InfoDeposit.Amount, Currency.CurrencyId, " +
+        "InfoDeposit.[Percent]  " +
         "FROM InfoDeposit " +
         "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId";
 
       setDataInTable(depositInfoQuery, "InfoDeposit", dsDepositInfo, depositInfoDataGridView);
+
+      depositInfoDataGridView.Columns["InfoDepositId"].Visible = false;
+      depositInfoDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setPopularDeposits()
@@ -852,6 +855,8 @@ namespace Bank
 
       try
       {
+        TransferBalanceMoney(balanceId, $"-{amount}");
+
         using (var cmd = new OleDbCommand(addDepositQuery, connection))
         {
           cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
@@ -863,13 +868,18 @@ namespace Bank
 
         MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
       }
+      catch(OleDbException ex)
+      {
+        if (TryHandleOleDbException(ex))
+          return;
+
+        throw;
+      }
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Deposit", MessageBoxButtons.OK);
         return;
       }
-
-      TransferBalanceMoney(balanceId, $"-{amount}");
 
       string myDepositQuery = myDeposit();
       string popularDepositsQuery = popularDeposits();
@@ -923,7 +933,14 @@ namespace Bank
           cmdIC.ExecuteNonQuery();
         }
       }
-      catch(Exception ex)
+      catch (OleDbException ex)
+      {
+        if (TryHandleOleDbException(ex))
+          return;
+
+        throw;
+      }
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
         return;
@@ -976,11 +993,8 @@ namespace Bank
         }
         catch (OleDbException ex)
         {
-          if (ex.Errors[0].NativeError == 50000)
-          {
-            MessageBox.Show(ex.Errors[0].Message, "Service", MessageBoxButtons.OK);
+          if (TryHandleOleDbException(ex))
             return;
-          }
 
           throw;
         }
@@ -989,6 +1003,15 @@ namespace Bank
           MessageBox.Show("Incorrect parameters!", "Service", MessageBoxButtons.OK);
         }
       }
+    }
+
+    private bool TryHandleOleDbException(OleDbException ex)
+    {
+      if (ex.Errors[0].NativeError != 50000)
+        return false;
+
+      MessageBox.Show(ex.Errors[0].Message, "Service", MessageBoxButtons.OK);
+      return true;
     }
 
     private void deleteOperationButton_Click(object sender, EventArgs e)
@@ -1329,6 +1352,16 @@ namespace Bank
       return (from DataGridViewRow r in grid.Rows
               where (int)r.Cells[keyColumn].Value == key
               select r).FirstOrDefault();
+    }
+
+    private void depositTypeComboBox_SelectedValueChanged(object sender, EventArgs e)
+    {
+      depositBalanceIdComboBox.SelectedItem = null;
+
+      RefreshBalanceComboboxDependingOnCurrency((ComboBox)sender,
+        depositBalanceIdComboBox,
+        depositInfoDataGridView,
+        "InfoDepositId");
     }
   }
 }

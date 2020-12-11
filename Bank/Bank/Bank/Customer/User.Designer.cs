@@ -1072,6 +1072,7 @@ namespace Bank
       this.depositTypeComboBox.Name = "depositTypeComboBox";
       this.depositTypeComboBox.Size = new System.Drawing.Size(152, 24);
       this.depositTypeComboBox.TabIndex = 20;
+      this.depositTypeComboBox.SelectedValueChanged += new System.EventHandler(this.depositTypeComboBox_SelectedValueChanged);
       // 
       // label27
       // 
