@@ -1180,40 +1180,6 @@ namespace Bank
       myServices.ShowDialog();
     }
 
-    private int GetBalanceIdByCustomerAndCurrency(int customerId, int currencyId)
-    {
-      var query = "SELECT TOP(1) BalanceId FROM Balance WHERE CustomerId = ? AND CurrencyId = ?";
-
-      using (var cmd = new OleDbCommand(query, connection))
-      {
-        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-        cmd.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
-
-        using (var reader = cmd.ExecuteReader())
-        {
-          while (reader.Read())
-            return reader.GetInt32(0);
-        }
-      }
-
-      throw new BalanceDoesNotExistException();
-    }
-
-    private void ReturnMoneyOnRandomBalance(int amount, int currencyId)
-    {
-      var balanceId = GetBalanceIdByCustomerAndCurrency(customerId, currencyId);
-      
-      var query = "UPDATE Balance SET Cash = Cash + ? WHERE BalanceId = ?";
-
-      using (var cmd = new OleDbCommand(query, connection))
-      {
-        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
-        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
-
-        cmd.ExecuteNonQuery();
-      }
-    }
-
     private void TerminateDeposite(int customerDepositeId)
     {
       var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId = ?";
@@ -1248,7 +1214,7 @@ namespace Bank
 
         foreach (var depositeWithCash in depositsWithCash)
         {
-          ReturnMoneyOnRandomBalance(depositeWithCash.Amount, depositeWithCash.CurrencyId);
+          Helpers.ReturnMoneyOnRandomBalance(connection, customerId, depositeWithCash.Amount, depositeWithCash.CurrencyId);
           TerminateDeposite(depositeWithCash.DepositId);
         }
       }
@@ -1276,7 +1242,7 @@ namespace Bank
 
         foreach(var item in items)
         {
-          ReturnMoneyOnRandomBalance(item.Price, item.CurrencyId);
+          Helpers.ReturnMoneyOnRandomBalance(connection, customerId, item.Price, item.CurrencyId);
 
           var query = "DELETE FROM CustomerSecurities WHERE InfoSecuritiesId = ? AND CustomerId = ?";
 

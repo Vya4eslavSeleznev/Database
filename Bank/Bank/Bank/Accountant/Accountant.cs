@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using Bank.Models;
 using Bank.Utils;
+using Bank.Exceptions;
 
 namespace Bank
 {
@@ -174,10 +175,10 @@ namespace Bank
     private string customerDeposit()
     {
       return
-        "SELECT CustomerDeposit.CustomerDepositId, Customer.FirstName, " +
+        "SELECT CustomerDeposit.CustomerDepositId, Customer.CustomerId, Customer.FirstName, " +
         "Customer.LastName, Customer.Phone, " +
         "InfoDeposit.DepositName, Currency.[Name], " +
-        "CustomerDeposit.Amount, InfoDeposit.[Percent] " +
+        "CustomerDeposit.Amount, InfoDeposit.[Percent], InfoDeposit.CurrencyId " +
         "FROM Customer " +
         "JOIN CustomerDeposit ON Customer.CustomerId = CustomerDeposit.CustomerId " +
         "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
@@ -271,6 +272,8 @@ namespace Bank
       string customerDepositsQuery = customerDeposit();
       setDataInTable(customerDepositsQuery, "CustomerDeposit", dsCustomerDeposits, customerDepositDataGridView);
       customerDepositDataGridView.Columns["CustomerDepositId"].Visible = false;
+      customerDepositDataGridView.Columns["CustomerId"].Visible = false;
+      customerDepositDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setCurrencyComboBox(ComboBox comboBox)
@@ -582,39 +585,61 @@ namespace Bank
       RefreshCustomerCreditsInfoDataGrid();
     }
 
+    private void RemoveCustomerDeposite(int id)
+    {
+      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId = ?";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerDepositId", id));
+
+        cmd.ExecuteNonQuery();
+      }
+    }
+
     private void terminateDepositButton_Click(object sender, EventArgs e)
     {
-      List<int> customerDepositIds = null;
-
       try
       {
-        customerDepositIds = (from DataGridViewRow r in customerDepositDataGridView.Rows
-                             where (string)r.Cells[0].Value == "1"
-                             select (int)r.Cells["CustomerDepositId"].Value).ToList();
+        var depositsToTerminate = (from DataGridViewRow r in customerDepositDataGridView.Rows
+                                   where (string)r.Cells[0].Value == "1"
+                                   select new
+                                   {
+                                     Id = (int)r.Cells["CustomerDepositId"].Value,
+                                     CustomerId = (int)r.Cells["CustomerId"].Value,
+                                     CurrencyId = (int)r.Cells["CurrencyId"].Value,
+                                     Amount = (int)r.Cells["Amount"].Value,
+                                     Percent = (int)r.Cells["Percent"].Value,
+                                   }).ToList();
+
+        foreach(var deposit in depositsToTerminate)
+        {
+          var amount = (int)Math.Floor(deposit.Amount * (100 + deposit.Percent) / (decimal)100);
+
+          Helpers.ReturnMoneyOnRandomBalance(connection, deposit.CustomerId, amount, deposit.CurrencyId);
+          RemoveCustomerDeposite(deposit.Id);
+        }
       }
-      catch
+      catch (OleDbException ex)
+      {
+        if (Helpers.TryHandleOleDbException(ex))
+          return;
+
+        throw;
+      }
+      catch(BalanceDoesNotExistException ex)
+      {
+        MessageBox.Show(ex.Message, "Debit", MessageBoxButtons.OK);
+        return;
+      }
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect customer!", "Debit", MessageBoxButtons.OK);
         return;
       }
 
-      var parametersPart = string.Join(",", customerDepositIds.Select(x => "?"));
-      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId IN ({parametersPart})";
-
-      using (var cmd = new OleDbCommand(query, connection))
-      {
-        for (var i = 0; i < customerDepositIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", customerDepositIds[i]));
-
-        cmd.ExecuteNonQuery();
-      }
-
-
-      //GET MONEY
-
-
-
       RefreshCustomerDepositInfoDataGrid();
+      RefreshCustomerBalances();
     }
 
     private void depositDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
