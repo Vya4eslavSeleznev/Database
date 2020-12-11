@@ -934,6 +934,7 @@ namespace Bank
       this.typeCreditComboBox.Name = "typeCreditComboBox";
       this.typeCreditComboBox.Size = new System.Drawing.Size(151, 24);
       this.typeCreditComboBox.TabIndex = 7;
+      this.typeCreditComboBox.SelectedValueChanged += new System.EventHandler(this.typeCreditComboBox_SelectedValueChanged);
       // 
       // label25
       // 

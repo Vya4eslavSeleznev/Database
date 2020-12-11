@@ -1,6 +1,6 @@
 ﻿namespace Bank.Models
 {
-  public class Credit
+  public class Credit : IEntity
   {
     public int Id { get; }
 

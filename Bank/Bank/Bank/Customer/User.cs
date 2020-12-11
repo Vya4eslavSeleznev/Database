@@ -444,12 +444,18 @@ namespace Bank
     private void setCreditInformation()
     {
       string creditInfoQuery =
-        "SELECT InfoCredit.[Name] AS NameOfCredit, Currency.[Name] AS Currency, " +
+        "SELECT InfoCredit.InfoCreditId, " +
+        "InfoCredit.[Name] AS NameOfCredit, " +
+        "InfoCredit.CurrencyId, " +
+        "Currency.[Name] AS Currency, " +
         "InfoCredit.[Percent], InfoCredit.Term " +
         "FROM InfoCredit " +
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
 
       setDataInTable(creditInfoQuery, "InfoCredit", dsCreditInfo, creditInfoDataGridView);
+
+      creditInfoDataGridView.Columns["InfoCreditId"].Visible = false;
+      creditInfoDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setMyDeposit()
@@ -1362,6 +1368,16 @@ namespace Bank
         depositBalanceIdComboBox,
         depositInfoDataGridView,
         "InfoDepositId");
+    }
+
+    private void typeCreditComboBox_SelectedValueChanged(object sender, EventArgs e)
+    {
+      balanceCreditComboBox.SelectedItem = null;
+
+      RefreshBalanceComboboxDependingOnCurrency((ComboBox)sender,
+        balanceCreditComboBox,
+        creditInfoDataGridView,
+        "InfoCreditId");
     }
   }
 }
