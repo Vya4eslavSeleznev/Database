@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using Bank.Models;
+using Bank.Exceptions;
 
 namespace Bank
 {
@@ -77,10 +78,33 @@ namespace Bank
       }
     }
 
+    private void SetBalanceIdComboBox2(ComboBox comboBox, int currencyId)
+    {
+      var query = "SELECT BalanceId, Number FROM Balance WHERE CustomerId = ? AND CurrencyId = ?";
+      
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+        cmd.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            comboBox.Items.Add(new Balance(reader.GetInt32(0), reader.GetInt32(1)));
+        }
+      }
+    }
+
     private void RefreshBalanceIdCombobox(ComboBox comboBox)
     {
       comboBox.Items.Clear();
       SetBalanceIdComboBox2(comboBox);
+    }
+
+    private void RefreshBalanceIdCombobox(ComboBox comboBox, int currencyId)
+    {
+      comboBox.Items.Clear();
+      SetBalanceIdComboBox2(comboBox, currencyId);
     }
 
     private void setComboBox()
@@ -162,11 +186,12 @@ namespace Bank
           depositTypeComboBox.Items.Add(new Deposite(reader.GetInt32(0), reader.GetString(1)));
       }
 
-      command.CommandText = "SELECT InfoSecuritiesId, [Name] FROM InfoSecurities";
-      rdr = command.ExecuteReader();
-      while (rdr.Read())
-        securityTypeComboBox.Items.Add(rdr["InfoSecuritiesId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      using (var cmd = new OleDbCommand("SELECT InfoSecuritiesId, [Name] FROM InfoSecurities", connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          securityTypeComboBox.Items.Add(new Security(reader.GetInt32(0), reader.GetString(1)));
+      }
     }
 
     private void ShowRow()
@@ -312,7 +337,7 @@ namespace Bank
     private string myDeposit()
     {
       return
-        "SELECT CustomerDeposit.CustomerDepositId, InfoDeposit.DepositName, CustomerDeposit.Amount " +
+        "SELECT CustomerDeposit.CustomerDepositId, InfoDeposit.DepositName, CustomerDeposit.Amount, InfoDeposit.CurrencyId " +
         "FROM CustomerDeposit " +
         "JOIN InfoDeposit ON CustomerDeposit.InfoDepositId = InfoDeposit.InfoDepositId " +
         "WHERE CustomerId = " + customerId;
@@ -321,10 +346,16 @@ namespace Bank
     private string mySecurities()
     {
       return
-        "SELECT CustomerSecurities.SecuritiesId, InfoSecurities.[Name], CustomerSecurities.Count " +
+        "SELECT InfoSecurities.InfoSecuritiesId, " +
+        "InfoSecurities.[Name], " +
+        "InfoSecurities.CurrencyId, " +
+        "Currency.Name AS 'Currency', " +
+        "(InfoSecurities.Price * SUM(CustomerSecurities.Count)) AS 'Price' " +
         "FROM CustomerSecurities " +
         "JOIN InfoSecurities ON CustomerSecurities.InfoSecuritiesId = InfoSecurities.InfoSecuritiesId " +
-        "WHERE CustomerId = " + customerId;
+        "JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId " +
+        "WHERE CustomerId = " + customerId +
+        " GROUP BY InfoSecurities.InfoSecuritiesId, InfoSecurities.CurrencyId, Currency.Name, InfoSecurities.Price, InfoSecurities.[Name]";
     }
 
     private string popularSecurities()
@@ -429,6 +460,7 @@ namespace Bank
       setDataInTable(myDepositQuery, "CustomerDeposit", dsMyDeposit, myDepositsDataGridView);
 
       myDepositsDataGridView.Columns["CustomerDepositId"].Visible = false;
+      myDepositsDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setDepositInfo()
@@ -455,18 +487,26 @@ namespace Bank
       addCheckBoxInDataGrid("Select to sell", mySecuritiesDataGridView);
       setDataInTable(mySecuritiesQuery, "CustomerSecurities", dsMySecurities, mySecuritiesDataGridView);
 
-      mySecuritiesDataGridView.Columns["SecuritiesId"].Visible = false;
+      mySecuritiesDataGridView.Columns["InfoSecuritiesId"].Visible = false;
+      mySecuritiesDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setSecurityInfo()
     {
       string securityInfoQuery =
-        "SELECT InfoSecurities.[Name], InfoSecurities.Price, Currency.[Name] AS Currency, " +
+        "SELECT InfoSecurities.InfoSecuritiesId, " +
+        "InfoSecurities.[Name], " +
+        "InfoSecurities.Price, " +
+        "Currency.[Name] AS Currency, " +
+        "Currency.CurrencyId, " +
         "InfoSecurities.[Percent rate] " +
         "FROM InfoSecurities " +
         "JOIN Currency ON InfoSecurities.CurrencyId = Currency.CurrencyId";
 
       setDataInTable(securityInfoQuery, "InfoSecurities", dsSecurityInfo, securityInfoDataGridView);
+
+      securityInfoDataGridView.Columns["InfoSecuritiesId"].Visible = false;
+      securityInfoDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
     private void setPopularSecurities()
@@ -786,13 +826,7 @@ namespace Bank
         }
       }
 
-      using (var cmd = new OleDbCommand("UPDATE Balance SET Cash = Cash + ? WHERE BalanceId = ?", connection))
-      {
-        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
-        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
-
-        cmd.ExecuteNonQuery();
-      }
+      TransferBalanceMoney(balanceId, amount);
 
       RefreshBalanceDataGrid();
     }
@@ -835,13 +869,7 @@ namespace Bank
         return;
       }
 
-      using (var cmd = new OleDbCommand("UPDATE Balance SET Cash = Cash - ? WHERE BalanceId = ?", connection))
-      {
-        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
-        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
-
-        cmd.ExecuteNonQuery();
-      }
+      TransferBalanceMoney(balanceId, $"-{amount}");
 
       string myDepositQuery = myDeposit();
       string popularDepositsQuery = popularDeposits();
@@ -851,42 +879,64 @@ namespace Bank
       RefreshBalanceDataGrid();
     }
 
+    private int GetSelectedId(ComboBox cb)
+    {
+      return ((IEntity)cb.SelectedItem).Id;
+    }
+
     private void buySecurityButton_Click(object sender, EventArgs e)
     {
-      var securityType = securityTypeComboBox.Text;
-      var count = securitiesCountTextBox.Text;
+      var countStr = securitiesCountTextBox.Text;
 
-      if (securityType == "" || count == "")
+      if (securityTypeComboBox.SelectedItem == null ||
+        securitiesBalanceIdComboBox.SelectedItem == null ||
+        countStr == "")
       {
         MessageBox.Show("Empty test field!", "Security", MessageBoxButtons.OK);
         return;
       }
 
-      string addDepositQuery =
-        "INSERT INTO CustomerSecurities(InfoSecuritiesId, CustomerId, Count) " +
-        "VALUES(?, ?, ?)";
-
-      OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
-
-      cmdIC.Parameters.Add(new OleDbParameter("@InfoSecuritiesId", securityType));
-      cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
-      cmdIC.Parameters.Add(new OleDbParameter("@Count", count));
-
-      parseComboBox(0, securityType, cmdIC);
-
       try
       {
-        cmdIC.ExecuteNonQuery();
-        MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
-        string mySecuritiesQuery = mySecurities();
-        string topSecuritysQuery = popularSecurities();
-        refreshDataSet(mySecuritiesQuery, dsMySecurities, "CustomerSecurities");
-        refreshDataSet(topSecuritysQuery, dsTopSecurities, "InfoSecurities");
+        var count = int.Parse(countStr);
+
+        var securityId = GetSelectedId(securityTypeComboBox);
+        var balanceId = GetSelectedId(securitiesBalanceIdComboBox);
+
+        var securityRow = GetRow(securityInfoDataGridView, "InfoSecuritiesId", securityId);
+
+        var price = (int)securityRow.Cells["Price"].Value;
+        var amount = price * count;
+
+        TransferBalanceMoney(balanceId, $"-{amount}");
+
+        string addDepositQuery =
+          "INSERT INTO CustomerSecurities(InfoSecuritiesId, CustomerId, Count) " +
+          "VALUES(?, ?, ?)";
+
+        using (var cmdIC = new OleDbCommand(addDepositQuery, connection))
+        {
+          cmdIC.Parameters.Add(new OleDbParameter("@InfoSecuritiesId", securityId));
+          cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+          cmdIC.Parameters.Add(new OleDbParameter("@Count", count));
+
+          cmdIC.ExecuteNonQuery();
+        }
       }
-      catch
+      catch(Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Securities", MessageBoxButtons.OK);
+        return;
       }
+
+      MessageBox.Show("Deposit added successfully!", "Deposit", MessageBoxButtons.OK);
+
+      string mySecuritiesQuery = mySecurities();
+      string topSecuritysQuery = popularSecurities();
+      refreshDataSet(mySecuritiesQuery, dsMySecurities, "CustomerSecurities");
+      refreshDataSet(topSecuritysQuery, dsTopSecurities, "InfoSecurities");
+
+      RefreshBalanceDataGrid();
     }
 
     private void cardsDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -1051,6 +1101,9 @@ namespace Bank
         }
       }
 
+      if (cardIds.Count == 0)
+        return;
+
       var deleteQuery = $"DELETE FROM Card WHERE CardId IN ({string.Join(",", cardIds.Select(x => "?"))})";
 
       using (var cmd = new OleDbCommand(deleteQuery, connection))
@@ -1096,6 +1149,8 @@ namespace Bank
       RefreshCardDataGrid();
       RefreshBalanceDataGrid();
       RefreshBalanceIdCombobox(cardBalanceIdComboBox);
+      RefreshBalanceIdCombobox(depositBalanceIdComboBox);
+      RefreshBalanceIdCombobox(securitiesBalanceIdComboBox);
     }
 
     private void showMyServicesButton_Click(object sender, EventArgs e)
@@ -1104,31 +1159,81 @@ namespace Bank
       myServices.ShowDialog();
     }
 
-    private void terminateDepositButton_Click(object sender, EventArgs e)
+    private int GetBalanceIdByCustomerAndCurrency(int customerId, int currencyId)
     {
-     List<int> depositIds = null;
-
-      try
-      {
-        depositIds = (from DataGridViewRow r in myDepositsDataGridView.Rows
-                      where (string)r.Cells[0].Value == "1"
-                      select (int)r.Cells["CustomerDepositId"].Value).ToList();
-      }
-      catch
-      {
-        MessageBox.Show("Incorrect Deposit!", "Deposit", MessageBoxButtons.OK);
-        return;
-      }
-
-      var parametersPart = string.Join(",", depositIds.Select(x => "?"));
-      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId IN ({parametersPart})";
+      var query = "SELECT TOP(1) BalanceId FROM Balance WHERE CustomerId = ? AND CurrencyId = ?";
 
       using (var cmd = new OleDbCommand(query, connection))
       {
-        for (var i = 0; i < depositIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", depositIds[i]));
+        cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+        cmd.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          while (reader.Read())
+            return reader.GetInt32(0);
+        }
+      }
+
+      throw new BalanceDoesNotExistException();
+    }
+
+    private void ReturnMoneyOnRandomBalance(int amount, int currencyId)
+    {
+      var balanceId = GetBalanceIdByCustomerAndCurrency(customerId, currencyId);
+      
+      var query = "UPDATE Balance SET Cash = Cash + ? WHERE BalanceId = ?";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
+        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
 
         cmd.ExecuteNonQuery();
+      }
+    }
+
+    private void TerminateDeposite(int customerDepositeId)
+    {
+      var query = $"DELETE FROM CustomerDeposit WHERE CustomerDepositId = ?";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@CustomerDepositId", customerDepositeId));
+        
+        cmd.ExecuteNonQuery();
+      }
+    }
+
+    private void terminateDepositButton_Click(object sender, EventArgs e)
+    {
+      var selectedRows = from DataGridViewRow r in myDepositsDataGridView.Rows
+                         where (string)r.Cells[0].Value == "1"
+                         select r;
+
+      if (!selectedRows.Any())
+        return;
+
+      try
+      {
+
+        var depositsWithCash = from row in selectedRows
+                               select new
+                               {
+                                 DepositId = (int)row.Cells["CustomerDepositId"].Value,
+                                 Amount = (int)row.Cells["Amount"].Value,
+                                 CurrencyId = (int)row.Cells["CurrencyId"].Value
+                               };
+
+        foreach (var depositeWithCash in depositsWithCash)
+        {
+          ReturnMoneyOnRandomBalance(depositeWithCash.Amount, depositeWithCash.CurrencyId);
+          TerminateDeposite(depositeWithCash.DepositId);
+        }
+      }
+      catch(Exception ex)
+      {
+        MessageBox.Show("Cannot terminate deposit!", "Terminate deposit", MessageBoxButtons.OK);
       }
 
       RefreshDepositDataGrid();
@@ -1137,32 +1242,93 @@ namespace Bank
 
     private void sellSecuritiesButton_Click(object sender, EventArgs e)
     {
-      List<int> securitiesIds = null;
-
       try
       {
-        securitiesIds = (from DataGridViewRow r in mySecuritiesDataGridView.Rows
-                      where (string)r.Cells[0].Value == "1"
-                      select (int)r.Cells["SecuritiesId"].Value).ToList();
+        var items = (from DataGridViewRow r in mySecuritiesDataGridView.Rows
+                     where (string)r.Cells[0].Value == "1"
+                     select new
+                     {
+                       Id = (int)r.Cells["InfoSecuritiesId"].Value,
+                       Price = (int)r.Cells["Price"].Value,
+                       CurrencyId = (int)r.Cells["CurrencyId"].Value
+                     });
+
+        foreach(var item in items)
+        {
+          ReturnMoneyOnRandomBalance(item.Price, item.CurrencyId);
+
+          var query = "DELETE FROM CustomerSecurities WHERE InfoSecuritiesId = ? AND CustomerId = ?";
+
+          using (var cmd = new OleDbCommand(query, connection))
+          {
+            cmd.Parameters.Add(new OleDbParameter("@Id", item.Id));
+            cmd.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
+
+            cmd.ExecuteNonQuery();
+          }
+        }
       }
-      catch
+      catch(BalanceDoesNotExistException ex)
+      {
+        MessageBox.Show(ex.Message, "Security", MessageBoxButtons.OK);
+        return;
+      }
+      catch(Exception ex)
       {
         MessageBox.Show("Incorrect Security!", "Security", MessageBoxButtons.OK);
         return;
       }
 
-      var parametersPart = string.Join(",", securitiesIds.Select(x => "?"));
-      var query = $"DELETE FROM CustomerSecurities WHERE SecuritiesId IN ({parametersPart})";
+      RefreshSecurityDataGrid();
+      RefreshBalanceDataGrid();
+    }
 
-      using (var cmd = new OleDbCommand(query, connection))
+    private void TransferBalanceMoney(int balanceId, string amount)
+    {
+      using (var cmd = new OleDbCommand("UPDATE Balance SET Cash = Cash + ? WHERE BalanceId = ?", connection))
       {
-        for (var i = 0; i < securitiesIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CustomerDepositId{i}", securitiesIds[i]));
+        cmd.Parameters.Add(new OleDbParameter("@Cash", amount));
+        cmd.Parameters.Add(new OleDbParameter("@BalanceId", balanceId));
 
         cmd.ExecuteNonQuery();
       }
+    }
 
-      RefreshSecurityDataGrid();
+    private void securityTypeComboBox_SelectedValueChanged(object sender, EventArgs e)
+    {
+      securitiesBalanceIdComboBox.SelectedItem = null;
+
+      RefreshBalanceComboboxDependingOnCurrency((ComboBox)sender,
+        securitiesBalanceIdComboBox,
+        securityInfoDataGridView,
+        "InfoSecuritiesId");
+    }
+
+    private void RefreshBalanceComboboxDependingOnCurrency(ComboBox sourceCb,
+      ComboBox cbToRefresh,
+      DataGridView grid,
+      string keyColumn)
+    {
+      var id = GetSelectedId(sourceCb);
+
+      var row = (from DataGridViewRow r in grid.Rows
+                 where (int)r.Cells[keyColumn].Value == id
+                 select r)
+                .FirstOrDefault();
+
+      if (row == null)
+        return;
+
+      var currencyId = (int)row.Cells["CurrencyId"].Value;
+
+      RefreshBalanceIdCombobox(cbToRefresh, currencyId);
+    }
+
+    private DataGridViewRow GetRow(DataGridView grid, string keyColumn, int key)
+    {
+      return (from DataGridViewRow r in grid.Rows
+              where (int)r.Cells[keyColumn].Value == key
+              select r).FirstOrDefault();
     }
   }
 }

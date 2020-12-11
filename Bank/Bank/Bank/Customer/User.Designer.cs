@@ -1221,6 +1221,7 @@ namespace Bank
       this.securityTypeComboBox.Name = "securityTypeComboBox";
       this.securityTypeComboBox.Size = new System.Drawing.Size(152, 24);
       this.securityTypeComboBox.TabIndex = 28;
+      this.securityTypeComboBox.SelectedValueChanged += new System.EventHandler(this.securityTypeComboBox_SelectedValueChanged);
       // 
       // label28
       // 
