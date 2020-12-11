@@ -333,6 +333,7 @@ namespace Bank
       this.depositDataGridView.RowTemplate.Height = 24;
       this.depositDataGridView.Size = new System.Drawing.Size(505, 354);
       this.depositDataGridView.TabIndex = 0;
+      this.depositDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.depositDataGridView_CellContentClick);
       // 
       // tabPage2
       // 
@@ -479,6 +480,7 @@ namespace Bank
       this.creditTypesDataGridView.RowTemplate.Height = 24;
       this.creditTypesDataGridView.Size = new System.Drawing.Size(505, 370);
       this.creditTypesDataGridView.TabIndex = 0;
+      this.creditTypesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.creditTypesDataGridView_CellContentClick);
       // 
       // tabPage3
       // 
@@ -618,12 +620,13 @@ namespace Bank
       // securityTypesDataGridView
       // 
       this.securityTypesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.securityTypesDataGridView.Location = new System.Drawing.Point(4, 19);
+      this.securityTypesDataGridView.Location = new System.Drawing.Point(4, 21);
       this.securityTypesDataGridView.Name = "securityTypesDataGridView";
       this.securityTypesDataGridView.RowHeadersWidth = 51;
       this.securityTypesDataGridView.RowTemplate.Height = 24;
-      this.securityTypesDataGridView.Size = new System.Drawing.Size(505, 374);
+      this.securityTypesDataGridView.Size = new System.Drawing.Size(505, 372);
       this.securityTypesDataGridView.TabIndex = 0;
+      this.securityTypesDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.securityTypesDataGridView_CellContentClick);
       // 
       // tabPage4
       // 

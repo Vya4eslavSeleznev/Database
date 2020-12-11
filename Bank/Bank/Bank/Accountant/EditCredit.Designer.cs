@@ -38,6 +38,7 @@ namespace Bank
       this.creditCurrencyComboBox = new System.Windows.Forms.ComboBox();
       this.label5 = new System.Windows.Forms.Label();
       this.label7 = new System.Windows.Forms.Label();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       this.SuspendLayout();
       // 
       // creditInfoTextBox
@@ -80,6 +81,7 @@ namespace Bank
       this.saveChangesButton.TabIndex = 41;
       this.saveChangesButton.Text = "Save changes";
       this.saveChangesButton.UseVisualStyleBackColor = true;
+      this.saveChangesButton.Click += new System.EventHandler(this.saveChangesButton_Click);
       // 
       // creditTermTextBox
       // 
@@ -114,6 +116,11 @@ namespace Bank
       this.label7.TabIndex = 37;
       this.label7.Text = "Currency:";
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
       // EditCredit
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -131,6 +138,7 @@ namespace Bank
       this.Name = "EditCredit";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "EditCredit";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditCredit_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -147,5 +155,6 @@ namespace Bank
     private System.Windows.Forms.ComboBox creditCurrencyComboBox;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label label7;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }

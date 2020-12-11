@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Models;
+using Bank.Utils;
 
 namespace Bank
 {
@@ -273,11 +275,12 @@ namespace Bank
 
     private void setCurrencyComboBox(ComboBox comboBox)
     {
-      OleDbCommand command = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection);
-      OleDbDataReader rdr = command.ExecuteReader();
-      while (rdr.Read())
-        comboBox.Items.Add(rdr["CurrencyId"] + " - " + rdr["Name"]);
-      rdr.Close();
+      using (var command = new OleDbCommand("SELECT CurrencyId, [Name] FROM Currency", connection))
+      using (var rdr = command.ExecuteReader())
+      {
+        while (rdr.Read())
+          comboBox.Items.Add(new Currency(rdr.GetInt32(0), rdr.GetString(1)));
+      }
     }
 
     private void Accountant_FormClosing(object sender, FormClosingEventArgs e)
@@ -288,18 +291,19 @@ namespace Bank
 
     private void addDepositButton_Click(object sender, EventArgs e)
     {
-      var currency = currencyDepositComboBox.Text;
       var term = depositTermTextBox.Text;
       var amountDeposit = amountDepositTextBox.Text;
       var percent = depositPercentTextBox.Text;
       var depositInfo = depositInfoTextBox.Text;
 
-      if (currency == "" || term == "" || amountDeposit == ""
+      if (currencyDepositComboBox.SelectedItem == null || term == "" || amountDeposit == ""
           || percent == "" || depositInfo == "")
       {
         MessageBox.Show("Empty test field!", "Deposit types", MessageBoxButtons.OK);
         return;
       }
+
+      var currencyId = Helpers.GetSelectedId(currencyDepositComboBox);
 
       string addDepositQuery =
         "INSERT INTO InfoDeposit(CurrencyId, Term, Amount, [Percent], DepositName) " +
@@ -307,13 +311,11 @@ namespace Bank
 
       OleDbCommand cmdIC = new OleDbCommand(addDepositQuery, connection);
 
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
       cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
       cmdIC.Parameters.Add(new OleDbParameter("@Amount", amountDeposit));
       cmdIC.Parameters.Add(new OleDbParameter("@Percent", percent));
       cmdIC.Parameters.Add(new OleDbParameter("@DepositName", depositInfo));
-
-      parseComboBox(0, currency, cmdIC);
 
       try
       {
@@ -328,12 +330,6 @@ namespace Bank
       }
     }
 
-    private void parseComboBox(int index, string data, OleDbCommand cmdIC)
-    {
-      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
-        data.Length - data.IndexOf("-") + 1);
-    }
-
     private void refreshDataSet(string query, DataSet ds, string table)
     {
       var command = new OleDbCommand(query, connection);
@@ -344,16 +340,17 @@ namespace Bank
 
     private void addCreditButton_Click(object sender, EventArgs e)
     {
-      var currency = creditCurrencyComboBox.Text;
       var term = creditTermTextBox.Text;
       var percent = creditPercentTextBox.Text;
       var info = creditInfoTextBox.Text;
 
-      if (currency == "" || term == "" || percent == "" || info == "")
+      if (creditCurrencyComboBox.SelectedItem == null || term == "" || percent == "" || info == "")
       {
         MessageBox.Show("Empty test field!", "Credit types", MessageBoxButtons.OK);
         return;
       }
+
+      var currencyId = Helpers.GetSelectedId(creditCurrencyComboBox);
 
       string addCreditTypeQuery =
         "INSERT INTO InfoCredit([Name], CurrencyId, [Percent], Term) " +
@@ -362,11 +359,9 @@ namespace Bank
       OleDbCommand cmdIC = new OleDbCommand(addCreditTypeQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@Name", info));
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
       cmdIC.Parameters.Add(new OleDbParameter("@Percent", percent));
       cmdIC.Parameters.Add(new OleDbParameter("@Term", term));
-
-      parseComboBox(1, currency, cmdIC);
 
       try
       {
@@ -383,16 +378,17 @@ namespace Bank
 
     private void addSecurityButton_Click(object sender, EventArgs e)
     {
-      var currency = securityCurrencyComboBox.Text;
       var name = securityNameTextBox.Text;
       var price = securityPriceTextBox.Text;
       var percent = percentTextBox.Text;
 
-      if (currency == "" || name == "" || price == "" || percent == "")
+      if (securityCurrencyComboBox.SelectedItem == null || name == "" || price == "" || percent == "")
       {
         MessageBox.Show("Empty test field!", "Credit types", MessageBoxButtons.OK);
         return;
       }
+
+      var currencyId = Helpers.GetSelectedId(securityCurrencyComboBox);
 
       string addSecurityTypeQuery =
         "INSERT INTO InfoSecurities(CurrencyId, [Name], Price, [Percent rate]) " +
@@ -400,12 +396,10 @@ namespace Bank
 
       OleDbCommand cmdIC = new OleDbCommand(addSecurityTypeQuery, connection);
 
-      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currency));
+      cmdIC.Parameters.Add(new OleDbParameter("@CurrencyId", currencyId));
       cmdIC.Parameters.Add(new OleDbParameter("@Name", name));
       cmdIC.Parameters.Add(new OleDbParameter("@Price", price));
       cmdIC.Parameters.Add(new OleDbParameter("@Percent rate", percent));
-
-      parseComboBox(0, currency, cmdIC);
 
       try
       {
@@ -613,6 +607,72 @@ namespace Bank
 
 
       RefreshCustomerDepositInfoDataGrid();
+    }
+
+    private void depositDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var depositTypeId = (int)depositDataGridView["InfoDepositId", e.RowIndex].Value;
+
+          using (var editDeposit = new EditDeposit(depositTypeId, this))
+          {
+            editDeposit.ShowDialog();
+          }
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Deposit type", MessageBoxButtons.OK);
+        }
+      }
+    }
+
+    private void creditTypesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var creditTypeId = (int)creditTypesDataGridView["InfoCreditId", e.RowIndex].Value;
+
+          using (var editCredit = new EditCredit(creditTypeId, this))
+          {
+            editCredit.ShowDialog();
+          }
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Credit type", MessageBoxButtons.OK);
+        }
+      }
+    }
+
+    private void securityTypesDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var securityTypeId = (int)securityTypesDataGridView["InfoSecuritiesId", e.RowIndex].Value;
+
+          using (var editSecurity = new EditSecurity(securityTypeId, this))
+          {
+            editSecurity.ShowDialog();
+          }
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Security type", MessageBoxButtons.OK);
+        }
+      }
     }
   }
 }

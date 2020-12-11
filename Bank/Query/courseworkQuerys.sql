@@ -214,3 +214,18 @@ Customer.Phone,
 [User].Password 
 FROM Customer 
 JOIN [User] ON Customer.UserId = [User].Id
+
+SELECT Currency.[Name], InfoDeposit.Term, InfoDeposit.Amount, InfoDeposit.[Percent], InfoDeposit.DepositName
+FROM InfoDeposit
+JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId
+WHERE InfoDeposit.InfoDepositId = 1
+
+SELECT InfoCredit.[Name], Currency.[Name], InfoCredit.[Percent], InfoCredit.Term
+FROM InfoCredit
+JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId
+WHERE InfoCredit.InfoCreditId = 1
+
+SELECT Currency.[Name], InfoSecurities.[Name], InfoSecurities.Price, InfoSecurities.[Percent rate]
+FROM InfoSecurities
+JOIN Currency ON InfoSecurities.CurrencyId = InfoSecurities.CurrencyId
+WHERE InfoSecurities.InfoSecuritiesId = 2

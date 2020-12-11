@@ -40,6 +40,7 @@ namespace Bank
       this.label25 = new System.Windows.Forms.Label();
       this.label24 = new System.Windows.Forms.Label();
       this.label23 = new System.Windows.Forms.Label();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       this.SuspendLayout();
       // 
       // depositInfoTextBox
@@ -82,6 +83,7 @@ namespace Bank
       this.saveChangesButton.TabIndex = 30;
       this.saveChangesButton.Text = "Save changes";
       this.saveChangesButton.UseVisualStyleBackColor = true;
+      this.saveChangesButton.Click += new System.EventHandler(this.saveChangesButton_Click);
       // 
       // amountDepositTextBox
       // 
@@ -132,6 +134,11 @@ namespace Bank
       this.label23.TabIndex = 24;
       this.label23.Text = "Currency:";
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
       // EditDeposit
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -151,6 +158,7 @@ namespace Bank
       this.Name = "EditDeposit";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "EditDeposit";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditDeposit_FormClosing);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -169,5 +177,6 @@ namespace Bank
     private System.Windows.Forms.Label label25;
     private System.Windows.Forms.Label label24;
     private System.Windows.Forms.Label label23;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }
