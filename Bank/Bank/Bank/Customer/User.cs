@@ -21,11 +21,13 @@ namespace Bank
     private System.Data.DataTable dTable;
     private int iRowID;
     private System.Data.OleDb.OleDbDataAdapter dAdapter;
+    private readonly Authentication authentication;
 
-    public User(int customerId)
+    public User(int customerId, Authentication authentication)
     {
       iRowID = 0;
       this.customerId = customerId;
+      this.authentication = authentication;
       InitializeComponent();
       connection.Open();
       setOperation();
@@ -567,7 +569,7 @@ namespace Bank
     private void User_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
-      Application.Exit();
+      this.authentication.Visible = true;
     }
 
     private void saveChangesButton_Click(object sender, EventArgs e)

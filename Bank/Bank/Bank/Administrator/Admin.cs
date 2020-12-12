@@ -11,9 +11,14 @@ namespace Bank
 {
   public partial class Admin : Form
   {
-    public Admin()
+    private readonly Authentication authentication;
+
+    public Admin(Authentication authentication)
     {
       InitializeComponent();
+
+      this.authentication = authentication;
+
       connection.Open();
       setArticle();
       setCardService();
@@ -207,7 +212,7 @@ namespace Bank
     private void Admin_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
-      Application.Exit();
+      this.authentication.Visible = true;
     }
 
     private void showServiceStatisticButton_Click(object sender, EventArgs e)

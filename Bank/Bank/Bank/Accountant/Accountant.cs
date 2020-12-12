@@ -16,9 +16,14 @@ namespace Bank
 {
   public partial class Accountant : Form
   {
-    public Accountant()
+    private readonly Authentication authentication;
+
+    public Accountant(Authentication authentication)
     {
       InitializeComponent();
+
+      this.authentication = authentication;
+
       connection.Open();
       setDepositTypes();
       setTopDeposits();
@@ -289,7 +294,7 @@ namespace Bank
     private void Accountant_FormClosing(object sender, FormClosingEventArgs e)
     {
       connection.Close();
-      Application.Exit();
+      this.authentication.Visible = true;
     }
 
     private void addDepositButton_Click(object sender, EventArgs e)

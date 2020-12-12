@@ -46,7 +46,7 @@ namespace Bank
         try
         {
           var customerId = Convert.ToInt32(rdr["CustomerId"]);
-          var user = new User(customerId);
+          var user = new User(customerId, this);
           user.Show();
           Visible = false;
         }
@@ -70,13 +70,13 @@ namespace Bank
 
           if (role == 1)
           {
-            var accountant = new Accountant();
+            var accountant = new Accountant(this);
             accountant.Show();
             Visible = false;
           }
           else if (role == 2)
           {
-            var admin = new Admin();
+            var admin = new Admin(this);
             admin.Show();
             Visible = false;
           }
