@@ -14,10 +14,17 @@ namespace Bank
     [STAThread]
     static void Main()
     {
-      Application.EnableVisualStyles();
-      Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new Authentication());
-      //Application.Run(new User(0));
+      //try
+      //{
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+        Application.Run(new Authentication());
+      //}
+      //catch
+      //{
+        //MessageBox.Show("Incorrect parameters!", "Bank", MessageBoxButtons.OK);
+        //return;
+      //}
     }
   }
 }

@@ -105,7 +105,7 @@ JOIN
 ) AS D ON Currency.CurrencyId = D.CurrencyId
 JOIN
 (
-	SELECT Currency.CurrencyId, (SUM(Debit) + SUM(Credit)) AS BalanceAmount 
+	SELECT Currency.CurrencyId, (balance.Cash) AS BalanceAmount 
 	FROM Balance
 	JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId
 	GROUP BY Currency.CurrencyId

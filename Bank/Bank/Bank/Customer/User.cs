@@ -46,6 +46,7 @@ namespace Bank
       setComboBox();
 
       birthdayTimePicker.Value.ToShortDateString();
+      statisticDataGridView.ReadOnly = true;
     }
 
     private void setCurrencyComboBox(OleDbCommand command, OleDbDataReader rdr, ComboBox comboBox)
@@ -404,28 +405,27 @@ namespace Bank
       setDataInTable(myOperationQuery, "Operation", dsOperation, operationDataGridView);
       addButtonInDataGrid(operationDataGridView, "Click to edit", "Edit");
       operationDataGridView.Columns["OperationId"].Visible = false;
+      //operationDataGridView.ReadOnly = true;
     }
 
     private void setMyBalance()
     {
       string myBalanceQuery = myBalance();
-
       addCheckBoxInDataGrid("Select to delete", balancesDataGridView);
       setDataInTable(myBalanceQuery, "Balance", dsBalance, balancesDataGridView);
-
       balancesDataGridView.Columns["BalanceId"].Visible = false;
+      //balancesDataGridView.ReadOnly = true;
     }
 
     private void setMyCards()
     {
       string myCardsQuery = myCard();
-
       addCheckBoxInDataGrid("Select to delete", cardsDataGridView);
       setDataInTable(myCardsQuery, "Card", dsCard, cardsDataGridView);
       addButtonInDataGrid(cardsDataGridView, "Click to edit", "Edit");
       addButtonInDataGrid(cardsDataGridView, "Click to add service", "Add service");
-
       cardsDataGridView.Columns["CardId"].Visible = false;
+      //cardsDataGridView.ReadOnly = true;
     }
 
     private void setCardServices()
@@ -442,6 +442,7 @@ namespace Bank
     {
       string myCreditQuery = myCredit();
       setDataInTable(myCreditQuery, "CustomerCredit", dsCredit, myCreditDataGridView);
+      myCreditDataGridView.ReadOnly = true;
     }
 
     private void setCreditInformation()
@@ -456,20 +457,19 @@ namespace Bank
         "JOIN Currency ON InfoCredit.CurrencyId = Currency.CurrencyId";
 
       setDataInTable(creditInfoQuery, "InfoCredit", dsCreditInfo, creditInfoDataGridView);
-
       creditInfoDataGridView.Columns["InfoCreditId"].Visible = false;
       creditInfoDataGridView.Columns["CurrencyId"].Visible = false;
+      creditInfoDataGridView.ReadOnly = true;
     }
 
     private void setMyDeposit()
     {
       string myDepositQuery = myDeposit();
-
       addCheckBoxInDataGrid("Select to terminate", myDepositsDataGridView);
       setDataInTable(myDepositQuery, "CustomerDeposit", dsMyDeposit, myDepositsDataGridView);
-
       myDepositsDataGridView.Columns["CustomerDepositId"].Visible = false;
       myDepositsDataGridView.Columns["CurrencyId"].Visible = false;
+      //myDepositsDataGridView.ReadOnly = true;
     }
 
     private void setDepositInfo()
@@ -481,15 +481,16 @@ namespace Bank
         "JOIN Currency ON InfoDeposit.CurrencyId = Currency.CurrencyId";
 
       setDataInTable(depositInfoQuery, "InfoDeposit", dsDepositInfo, depositInfoDataGridView);
-
       depositInfoDataGridView.Columns["InfoDepositId"].Visible = false;
       depositInfoDataGridView.Columns["CurrencyId"].Visible = false;
+      depositInfoDataGridView.ReadOnly = true;
     }
 
     private void setPopularDeposits()
     {
       string popularDepositsQuery = popularDeposits();
       setDataInTable(popularDepositsQuery, "InfoDeposit", dsTopDeposits, topDepositsDataGridView);
+      topDepositsDataGridView.ReadOnly = true;
     }
 
     private void setMySecurities()
@@ -501,6 +502,7 @@ namespace Bank
 
       mySecuritiesDataGridView.Columns["InfoSecuritiesId"].Visible = false;
       mySecuritiesDataGridView.Columns["CurrencyId"].Visible = false;
+      //mySecuritiesDataGridView.ReadOnly = true;
     }
 
     private void setSecurityInfo()
@@ -519,12 +521,14 @@ namespace Bank
 
       securityInfoDataGridView.Columns["InfoSecuritiesId"].Visible = false;
       securityInfoDataGridView.Columns["CurrencyId"].Visible = false;
+      securityInfoDataGridView.ReadOnly = true;
     }
 
     private void setPopularSecurities()
     {
       string topSecuritysQuery = popularSecurities();
       setDataInTable(topSecuritysQuery, "InfoSecurities", dsTopSecurities, topSecuritiesDataGridView);
+      topSecuritiesDataGridView.ReadOnly = true;
     }
 
     public void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
@@ -614,6 +618,7 @@ namespace Bank
       catch
       {
         MessageBox.Show("Incorrect personal information!", "Profile", MessageBoxButtons.OK);
+        return;
       }
     }
 
@@ -656,13 +661,22 @@ namespace Bank
       catch (Exception ex)
       {
         MessageBox.Show("Incorrect login or password!", "Profile", MessageBoxButtons.OK);
+        return;
       }
     }
 
     private void parseComboBox(int index, string data, OleDbCommand cmdIC)
     {
-      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
-        data.Length - data.IndexOf("-") + 1);
+      try
+      {
+        cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
+          data.Length - data.IndexOf("-") + 1);
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters in comboBox!", "ComboBox", MessageBoxButtons.OK);
+        return;
+      }
     }
 
     private void addOperationButton_Click(object sender, EventArgs e)
@@ -708,13 +722,30 @@ namespace Bank
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Operation", MessageBoxButtons.OK);
+        return;
       }
     }
 
     private void addCardButton_Click(object sender, EventArgs e)
     {
       var number = cardNumberTextBox.Text;
-      var balanceId = ((Balance)cardBalanceIdComboBox.SelectedItem).Id;
+      int balanceId;
+
+      if (cardBalanceIdComboBox.SelectedItem == null)
+      {
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        return;
+      }
+
+      try
+      {
+        balanceId = ((Balance)cardBalanceIdComboBox.SelectedItem).Id;
+      }
+      catch (NullReferenceException ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        return;
+      }
 
       if (number == "")
       {
@@ -733,9 +764,17 @@ namespace Bank
       {
         cardNumberCommand.ExecuteNonQuery();
       }
-      catch
+      catch (OleDbException ex)
+      {
+        if (Helpers.TryHandleOleDbException(ex))
+          return;
+
+        throw;
+      }
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect card number!", "Card", MessageBoxButtons.OK);
+        return;
       }
 
       string addBalance =
@@ -756,6 +795,7 @@ namespace Bank
       catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        return;
       }
     }
 
@@ -782,8 +822,17 @@ namespace Bank
       string showStatisticQuery = "OperationStatistic ?, ?, ?, ?";
 
       OleDbCommand cmdIC = new OleDbCommand(showStatisticQuery, connection);
+      int currencyId;
 
-      var currencyId = int.Parse(currency.Split('-')[0].Trim());
+      try
+      {
+        currencyId = int.Parse(currency.Split('-')[0].Trim());
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Statistic", MessageBoxButtons.OK);
+        return;
+      }
 
       var startDateParamter = new OleDbParameter("@StartDate", OleDbType.Date);
       var endDateParameter = new OleDbParameter("@EndDate", OleDbType.Date);
@@ -804,6 +853,7 @@ namespace Bank
       catch
       {
         MessageBox.Show("Incorrect parameters!", "Statistic", MessageBoxButtons.OK);
+        return;
       }
     }
 
@@ -841,6 +891,7 @@ namespace Bank
         catch
         {
           MessageBox.Show("Incorrect parameters!", "Credit", MessageBoxButtons.OK);
+          return;
         }
       }
 
@@ -978,7 +1029,17 @@ namespace Bank
       if (!(senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn) || e.RowIndex < 0)
         return;
 
-      var cardId = (int)cardsDataGridView["CardId", e.RowIndex].Value;
+      int cardId;
+
+      try
+      {
+        cardId = (int)cardsDataGridView["CardId", e.RowIndex].Value;
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        return;
+      }
 
       var isEdit = senderGrid.Columns[e.ColumnIndex].HeaderText.Contains("edit");
       var isAdd = senderGrid.Columns[e.ColumnIndex].HeaderText.Contains("add");
@@ -995,6 +1056,7 @@ namespace Bank
         catch (Exception ex)
         {
           MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+          return;
         }
       }
       else if (isAdd)
@@ -1039,12 +1101,20 @@ namespace Bank
       var parametersPart = string.Join(",", operationIds.Select(x => "?"));
       var query = $"DELETE FROM Operation WHERE OperationId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for(var i = 0; i < operationIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@OperationId{i}", operationIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < operationIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@OperationId{i}", operationIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect operation!", "Operation", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshOperationDataGrid();
@@ -1100,12 +1170,20 @@ namespace Bank
 
       var cardQuery = $"DELETE FROM Card WHERE CardId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(cardQuery, connection))
+      try
       {
-        for (var i = 0; i < cardIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
+        using (var cmd = new OleDbCommand(cardQuery, connection))
+        {
+          for (var i = 0; i < cardIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@CardId{i}", cardIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect parameters!", "Card", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshCardDataGrid();
@@ -1229,6 +1307,7 @@ namespace Bank
       catch(Exception ex)
       {
         MessageBox.Show("Cannot terminate deposit!", "Terminate deposit", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshDepositDataGrid();

@@ -431,7 +431,7 @@ namespace Bank
       // 
       this.dateOfOperationPicker.Location = new System.Drawing.Point(321, 34);
       this.dateOfOperationPicker.Name = "dateOfOperationPicker";
-      this.dateOfOperationPicker.Size = new System.Drawing.Size(189, 22);
+      this.dateOfOperationPicker.Size = new System.Drawing.Size(187, 22);
       this.dateOfOperationPicker.TabIndex = 20;
       // 
       // dateToPicker
@@ -464,14 +464,14 @@ namespace Bank
       // 
       this.whoseBalanceTextBox.Location = new System.Drawing.Point(382, 62);
       this.whoseBalanceTextBox.Name = "whoseBalanceTextBox";
-      this.whoseBalanceTextBox.Size = new System.Drawing.Size(128, 22);
+      this.whoseBalanceTextBox.Size = new System.Drawing.Size(126, 22);
       this.whoseBalanceTextBox.TabIndex = 16;
       // 
       // operationCashTextBox
       // 
       this.operationCashTextBox.Location = new System.Drawing.Point(320, 6);
       this.operationCashTextBox.Name = "operationCashTextBox";
-      this.operationCashTextBox.Size = new System.Drawing.Size(190, 22);
+      this.operationCashTextBox.Size = new System.Drawing.Size(188, 22);
       this.operationCashTextBox.TabIndex = 14;
       // 
       // balanceIdComboBox
@@ -889,7 +889,7 @@ namespace Bank
       // balanceCreditComboBox
       // 
       this.balanceCreditComboBox.FormattingEnabled = true;
-      this.balanceCreditComboBox.Location = new System.Drawing.Point(367, 33);
+      this.balanceCreditComboBox.Location = new System.Drawing.Point(884, 5);
       this.balanceCreditComboBox.Name = "balanceCreditComboBox";
       this.balanceCreditComboBox.Size = new System.Drawing.Size(146, 24);
       this.balanceCreditComboBox.TabIndex = 12;
@@ -897,7 +897,7 @@ namespace Bank
       // label32
       // 
       this.label32.AutoSize = true;
-      this.label32.Location = new System.Drawing.Point(288, 38);
+      this.label32.Location = new System.Drawing.Point(805, 10);
       this.label32.Name = "label32";
       this.label32.Size = new System.Drawing.Size(63, 17);
       this.label32.TabIndex = 11;
@@ -905,7 +905,7 @@ namespace Bank
       // 
       // addCreditButton
       // 
-      this.addCreditButton.Location = new System.Drawing.Point(9, 61);
+      this.addCreditButton.Location = new System.Drawing.Point(16, 35);
       this.addCreditButton.Name = "addCreditButton";
       this.addCreditButton.Size = new System.Drawing.Size(1029, 26);
       this.addCreditButton.TabIndex = 10;
@@ -922,7 +922,7 @@ namespace Bank
       // 
       // forWhatCreditTextBox
       // 
-      this.forWhatCreditTextBox.Location = new System.Drawing.Point(121, 33);
+      this.forWhatCreditTextBox.Location = new System.Drawing.Point(638, 7);
       this.forWhatCreditTextBox.Name = "forWhatCreditTextBox";
       this.forWhatCreditTextBox.Size = new System.Drawing.Size(151, 22);
       this.forWhatCreditTextBox.TabIndex = 8;
@@ -930,7 +930,7 @@ namespace Bank
       // typeCreditComboBox
       // 
       this.typeCreditComboBox.FormattingEnabled = true;
-      this.typeCreditComboBox.Location = new System.Drawing.Point(121, 3);
+      this.typeCreditComboBox.Location = new System.Drawing.Point(121, 5);
       this.typeCreditComboBox.Name = "typeCreditComboBox";
       this.typeCreditComboBox.Size = new System.Drawing.Size(151, 24);
       this.typeCreditComboBox.TabIndex = 7;
@@ -948,7 +948,7 @@ namespace Bank
       // label24
       // 
       this.label24.AutoSize = true;
-      this.label24.Location = new System.Drawing.Point(6, 38);
+      this.label24.Location = new System.Drawing.Point(552, 10);
       this.label24.Name = "label24";
       this.label24.Size = new System.Drawing.Size(66, 17);
       this.label24.TabIndex = 5;
@@ -985,9 +985,9 @@ namespace Bank
       // groupBox7
       // 
       this.groupBox7.Controls.Add(this.myCreditDataGridView);
-      this.groupBox7.Location = new System.Drawing.Point(4, 93);
+      this.groupBox7.Location = new System.Drawing.Point(4, 64);
       this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(1034, 184);
+      this.groupBox7.Size = new System.Drawing.Size(1034, 213);
       this.groupBox7.TabIndex = 2;
       this.groupBox7.TabStop = false;
       this.groupBox7.Text = "My credit";
@@ -999,7 +999,7 @@ namespace Bank
       this.myCreditDataGridView.Name = "myCreditDataGridView";
       this.myCreditDataGridView.RowHeadersWidth = 51;
       this.myCreditDataGridView.RowTemplate.Height = 24;
-      this.myCreditDataGridView.Size = new System.Drawing.Size(1022, 159);
+      this.myCreditDataGridView.Size = new System.Drawing.Size(1022, 188);
       this.myCreditDataGridView.TabIndex = 0;
       // 
       // tabPage5

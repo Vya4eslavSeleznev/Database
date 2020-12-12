@@ -32,13 +32,13 @@ AS
 	) AS BC ON inserted.CardId = BC.CardId
 GO 
 
-CREATE TRIGGER AddCredit
-ON CustomerCredit AFTER INSERT
+CREATE TRIGGER BalancePositiveCash 
+ON Balance AFTER UPDATE
 AS
-	DECLARE @article_id INT = 8;
-
-	INSERT INTO Operation (ArticleId, CurrencyId, BalanceId, Cash, Date, WhoseBalance)
-	SELECT @article_id, InfoCredit.CurrencyId, (SELECT TOP(1) BalanceId FROM Balance WHERE Balance.CustomerId = inserted.CustomerId), inserted.Amount, GETDATE(), 00001
-	FROM inserted
-	JOIN InfoCredit ON inserted.InfoCreditId = InfoCredit.InfoCreditId
+	IF EXISTS(SELECT * FROM inserted WHERE inserted.Cash < 0)
+	BEGIN
+		RAISERROR ('Negative balance', 16, 1);
+		ROLLBACK TRANSACTION;
+		RETURN;
+	END
 GO

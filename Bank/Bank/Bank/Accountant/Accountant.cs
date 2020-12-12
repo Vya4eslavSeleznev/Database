@@ -147,9 +147,10 @@ namespace Bank
     {
       return
         "SELECT Balance.BalanceId, Customer.FirstName, Customer.LastName, Customer.Phone, Balance.Cash, " +
-        "Balance.Number AS BalanceNumber " +
+        "Currency.[Name], Balance.Number AS BalanceNumber " +
         "FROM Customer " +
-        "JOIN Balance ON Customer.CustomerId = Balance.CustomerId ";
+        "JOIN Balance ON Customer.CustomerId = Balance.CustomerId " +
+        "JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId";
     }
 
     private string popularCredits()
@@ -203,6 +204,7 @@ namespace Bank
     {
       string topDepositsQuery = topDeposits();
       setDataInTable(topDepositsQuery, "InfoDeposit", dsPopularDeposits, topDepositsDataGridView);
+      topDepositsDataGridView.ReadOnly = true;
     }
 
     private void setCreditTypes()
@@ -227,12 +229,14 @@ namespace Bank
     {
       string topSecuritiesQuery = popularSecurities();
       setDataInTable(topSecuritiesQuery, "CustomerSecurities", dsPopularSecurity, topSecurityDataGridView);
+      topSecurityDataGridView.ReadOnly = true;
     }
 
     private void setBankPayments()
     {
       string paymentsQuery = bankPayments();
       setDataInTable(paymentsQuery, "InfoDeposit", dsPayments, paymentsDataGridView);
+      paymentsDataGridView.ReadOnly = true;
     }
 
     private void setCustomerInformation()
@@ -249,18 +253,21 @@ namespace Bank
       string shareOfCurrencyQuery = "CurrencyStatistics";
       setDataInTable(shareOfCurrencyQuery, "CurrencyStatistics", dsShareOfCurrency,
                      shareOfCurrencyDataGridView);
+      shareOfCurrencyDataGridView.ReadOnly = true;
     }
 
     private void setMoneyTurnover()
     {
       string moneyTurnoverQuery = "MoneyTurnover";
       setDataInTable(moneyTurnoverQuery, "MoneyStatistics", dsTurnover, turnOverDataGridView);
+      turnOverDataGridView.ReadOnly = true;
     }
 
     private void setPopularCredits()
     {
       string popularCreditsQuery = popularCredits();
       setDataInTable(popularCreditsQuery, "InfoCredit", dsPopularCredits, topCreditsDataGridView);
+      topCreditsDataGridView.ReadOnly = true;
     }
 
     private void setCustomerCredits()
@@ -489,12 +496,20 @@ namespace Bank
       var parametersPart = string.Join(",", depositIds.Select(x => "?"));
       var query = $"DELETE FROM InfoDeposit WHERE InfoDepositId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < depositIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@InfoDepositId{i}", depositIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < depositIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@InfoDepositId{i}", depositIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of deposit!", "Deposit", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshDepositInfoDataGrid();
@@ -519,12 +534,20 @@ namespace Bank
       var parametersPart = string.Join(",", creditIds.Select(x => "?"));
       var query = $"DELETE FROM InfoCredit WHERE InfoCreditId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < creditIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@InfoCreditId{i}", creditIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < creditIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@InfoCreditId{i}", creditIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of credit!", "Credit", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshCreditInfoDataGrid();
@@ -549,12 +572,20 @@ namespace Bank
       var parametersPart = string.Join(",", securityIds.Select(x => "?"));
       var query = $"DELETE FROM InfoSecurities WHERE InfoSecuritiesId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < securityIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@InfoSecuritiesId{i}", securityIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < securityIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@InfoSecuritiesId{i}", securityIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect type of security!", "Security", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshSecurityInfoDataGrid();
@@ -579,12 +610,20 @@ namespace Bank
       var parametersPart = string.Join(",", customerCreditIds.Select(x => "?"));
       var query = $"DELETE FROM CustomerCredit WHERE CustomerCreditId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < customerCreditIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CustomerCreditId{i}", customerCreditIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < customerCreditIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@CustomerCreditId{i}", customerCreditIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect customer!", "Debit", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshCustomerCreditsInfoDataGrid();
@@ -730,15 +769,14 @@ namespace Bank
       if (string.IsNullOrEmpty(cash))
         return;
 
-      var balanceIds = (from DataGridViewRow r in customerInfoDataGridView.Rows
-                        where (string)r.Cells[0].Value == "1"
-                        select (int)r.Cells["BalanceId"].Value).ToList();
-
-      if (balanceIds.Count == 0)
-        return;
-
       try
       {
+        var balanceIds = (from DataGridViewRow r in customerInfoDataGridView.Rows
+                          where (string)r.Cells[0].Value == "1"
+                          select (int)r.Cells["BalanceId"].Value).ToList();
+
+        if (balanceIds.Count == 0)
+          return;
 
         var balanceIdsParams = string.Join(",", balanceIds.Select(x => "?"));
         var query = $"UPDATE Balance SET Cash = Cash + ? WHERE BalanceId IN ({balanceIdsParams})";

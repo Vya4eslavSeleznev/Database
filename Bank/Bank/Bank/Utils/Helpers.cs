@@ -2,6 +2,7 @@
 using Bank.Models;
 using System.Data.OleDb;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Bank.Utils
 {
@@ -14,10 +15,20 @@ namespace Bank.Utils
 
     public static bool TryHandleOleDbException(OleDbException ex)
     {
-      if (ex.Errors[0].NativeError != 50000)
+      var knonwErrors = new int[]
+      {
+        2627,
+        50000
+      };
+
+      var error = (from OleDbError e in ex.Errors
+                   where knonwErrors.Contains(e.NativeError)
+                   select e).FirstOrDefault();
+
+      if (error == null)
         return false;
 
-      MessageBox.Show(ex.Errors[0].Message, "Unexpected error", MessageBoxButtons.OK);
+      MessageBox.Show(error.Message, "Unexpected error", MessageBoxButtons.OK);
       return true;
     }
 

@@ -30,6 +30,7 @@ namespace Bank
       setUser();
       setInactiveCustomers();
       setRichestCustomers();
+      setPoorestCustomers();
     }
 
     private string article()
@@ -103,7 +104,7 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", customerDataGridView);
       string customerQuery = customer();
       setDataInTable(customerQuery, "Customer", dsAllCustomers, customerDataGridView);
-      addButtonInDataGrid(customerDataGridView);
+      //addButtonInDataGrid(customerDataGridView);
 
       customerDataGridView.Columns["CustomerId"].Visible = false;
     }
@@ -121,12 +122,21 @@ namespace Bank
     {
       string inactiveCustomersQuery = "InactiveCustomers";
       setDataInTable(inactiveCustomersQuery, "CustomerStatistic", dsInactiveCustomers, inactiveCustomersDataGridView);
+      inactiveCustomersDataGridView.ReadOnly = true;
     }
 
     private void setRichestCustomers()
     {
       string richestCustomersQuery = "RichestCustomers";
       setDataInTable(richestCustomersQuery, "RichestCustomers", dsRichestCustomers, richestCustomersDataGridView);
+      richestCustomersDataGridView.ReadOnly = true;
+    }
+
+    private void setPoorestCustomers()
+    {
+      string poorestCustomersQuery = "PoorestCustomers";
+      setDataInTable(poorestCustomersQuery, "PoorestCustomers", dsPoorestCustomers, debtorsDataGridView);
+      debtorsDataGridView.ReadOnly = true;
     }
 
     private void addCheckBoxInDataGrid(string headerText, DataGridView dataGrid)
@@ -271,12 +281,20 @@ namespace Bank
       var parametersPart = string.Join(",", articleIds.Select(x => "?"));
       var query = $"DELETE FROM Article WHERE ArticleId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < articleIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@ArticleId{i}", articleIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < articleIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@ArticleId{i}", articleIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect article!", "Article", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshDataGrid(articleDataGridView, ref dsArticle);
@@ -364,12 +382,20 @@ namespace Bank
       var parametersPart = string.Join(",", cardServiceIds.Select(x => "?"));
       var query = $"DELETE FROM CardService WHERE CardServiceId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < cardServiceIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CardServiceId{i}", cardServiceIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < cardServiceIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@CardServiceId{i}", cardServiceIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect card service!", "Card Service", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshDataGrid(serviceDataGridView, ref dsCardService);
@@ -425,12 +451,20 @@ namespace Bank
       var parametersPart = string.Join(",", currencyIds.Select(x => "?"));
       var query = $"DELETE FROM Currency WHERE CurrencyId IN ({parametersPart})";
 
-      using (var cmd = new OleDbCommand(query, connection))
+      try
       {
-        for (var i = 0; i < currencyIds.Count; i++)
-          cmd.Parameters.Add(new OleDbParameter($"@CurrencyId{i}", currencyIds[i]));
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < currencyIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@CurrencyId{i}", currencyIds[i]));
 
-        cmd.ExecuteNonQuery();
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch
+      {
+        MessageBox.Show("Incorrect currency!", "Currency", MessageBoxButtons.OK);
+        return;
       }
 
       RefreshDataGrid(currencyDataGridView, ref dsCurrency);

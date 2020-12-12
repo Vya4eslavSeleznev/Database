@@ -66,10 +66,10 @@ BEGIN
 	) AS D ON Currency.CurrencyId = D.CurrencyId
 	JOIN
 	(
-		SELECT Currency.CurrencyId, Balance.Cash AS BalanceAmount 
+		SELECT Currency.CurrencyId, ISNULL(SUM(Balance.Cash), 0) AS BalanceAmount 
 		FROM Balance
 		JOIN Currency ON Balance.CurrencyId = Currency.CurrencyId
-		GROUP BY Currency.CurrencyId, Balance.Cash
+		GROUP BY Currency.CurrencyId
 	) AS B ON Currency.CurrencyId = B.CurrencyId
 	JOIN
 	(
@@ -109,7 +109,7 @@ END
 GO
 
 CREATE PROCEDURE ServiceStatistic
-	@ServiceName VARCHAR
+	@ServiceId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -121,7 +121,7 @@ BEGIN
 	JOIN [Card] ON BalanceCards.CardId = [Card].CardId
 	JOIN CardServices ON [Card].CardId = CardServices.CardId
 	JOIN CardService on CardServices.ServiceId = CardService.CardServiceId
-	WHERE CardService.[Name] = @ServiceName
+	WHERE CardService.CardServiceId = @ServiceId
 END
 GO
 
