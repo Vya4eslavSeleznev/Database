@@ -628,10 +628,15 @@ namespace Bank
         return;
       }
 
+      var credentialsManager = new CredentialsManager();
+
+      var passwordSaltPair = credentialsManager.HashPassword(password);
+
       string updateProfileQuery =
         "UPDATE[User] " +
-          "SET[Login] = ?, " +
-          "[Password] = ? " +
+          "SET [Login] = ?, " +
+          "[Password] = ?, " +
+          "[Salt] = ? " +
           "FROM [User] " +
           "JOIN Customer ON [User].Id = Customer.UserId " +
         "WHERE CustomerId = ?";
@@ -639,7 +644,8 @@ namespace Bank
       OleDbCommand cmdIC = new OleDbCommand(updateProfileQuery, connection);
 
       cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
-      cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
+      cmdIC.Parameters.Add(new OleDbParameter("@Password", passwordSaltPair.Password));
+      cmdIC.Parameters.Add(new OleDbParameter("@Salt", passwordSaltPair.Salt));
       cmdIC.Parameters.Add(new OleDbParameter("@CustomerId", customerId));
 
       try
@@ -647,7 +653,7 @@ namespace Bank
         cmdIC.ExecuteNonQuery();
         MessageBox.Show("Login and password updated!", "Profile", MessageBoxButtons.OK);
       }
-      catch
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect login or password!", "Profile", MessageBoxButtons.OK);
       }

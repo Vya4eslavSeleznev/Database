@@ -197,8 +197,8 @@ namespace Bank
     private void SetUserRoleCombobox()
     {
       userRoleComboBox.Items.Add(new UserRole(0, "Customer"));
-      userRoleComboBox.Items.Add(new UserRole(0, "Accountant"));
-      userRoleComboBox.Items.Add(new UserRole(0, "Administrator"));
+      userRoleComboBox.Items.Add(new UserRole(1, "Accountant"));
+      userRoleComboBox.Items.Add(new UserRole(2, "Administrator"));
     }
 
     private void refreshDataSet(string query, DataSet ds, string table)
@@ -608,16 +608,21 @@ namespace Bank
 
       var userRole = Helpers.GetSelectedId(userRoleComboBox);
       var login = userLogin.Text;
-      var password = userLogin.Text;
+      var password = userPassword.Text;
+
+      var credentialsManager = new CredentialsManager();
+
+      var passwordSaltPair = credentialsManager.HashPassword(password);
 
       try
       {
-        var query = "INSERT INTO [User] ([Login], [Password], [Role]) VALUES (?, ?, ?)";
+        var query = "INSERT INTO [User] ([Login], [Password], [Salt], [Role]) VALUES (?, ?, ?, ?)";
 
         using (var cmd = new OleDbCommand(query, connection))
         {
           cmd.Parameters.Add(new OleDbParameter("@Login", login));
-          cmd.Parameters.Add(new OleDbParameter("@Password", password));
+          cmd.Parameters.Add(new OleDbParameter("@Password", passwordSaltPair.Password));
+          cmd.Parameters.Add(new OleDbParameter("@Salt", passwordSaltPair.Salt));
           cmd.Parameters.Add(new OleDbParameter("@Role", userRole));
 
           cmd.ExecuteNonQuery();

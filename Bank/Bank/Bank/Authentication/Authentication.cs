@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Utils;
+using Bank.Exceptions;
+using Bank.Models;
 
 namespace Bank
 {
@@ -10,9 +13,10 @@ namespace Bank
     {
       InitializeComponent();
       connection.Open();
-      rolesComboBox.Items.Add("Customer");
-      rolesComboBox.Items.Add("Accountant");
-      rolesComboBox.Items.Add("Admin");
+
+      rolesComboBox.Items.Add(new UserRole(0, "Customer"));
+      rolesComboBox.Items.Add(new UserRole(1, "Accountant"));
+      rolesComboBox.Items.Add(new UserRole(2, "Administrator"));
     }
 
     private string role()
@@ -23,73 +27,94 @@ namespace Bank
         "WHERE [Login] = ? AND [Password] = ?";
     }
 
+    private PasswordSaltPair GetOldPasswordSaltPair(string login, int role)
+    {
+      var query = "SELECT [Password], Salt FROM [User] WHERE [Login] = ? AND [Role] = ?";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@Login", login));
+        cmd.Parameters.Add(new OleDbParameter("@Role", role));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          if (reader.Read())
+            return new PasswordSaltPair(reader.GetString(0), reader.GetString(1));
+        }
+      }
+
+      throw new InvalidCredentialsException();
+    }
+
+    public int GetCustomerId(string login)
+    {
+      var query = "SELECT CustomerId FROM Customer JOIN [User] ON Customer.UserId = [User].Id WHERE [User].[Login] = ?";
+
+      using (var cmd = new OleDbCommand(query, connection))
+      {
+        cmd.Parameters.Add(new OleDbParameter("@Login", login));
+
+        using (var reader = cmd.ExecuteReader())
+        {
+          if (reader.Read())
+            return reader.GetInt32(0);
+        }
+      }
+
+      throw new InvalidCredentialsException();
+    }
+
     private void logInButton_Click(object sender, EventArgs e)
     {
       var login = loginTextBox.Text;
       var password = passwordTextBox.Text;
 
-      if (rolesComboBox.SelectedIndex == 0)
+      if (rolesComboBox.SelectedItem == null || string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
       {
-        string idQuery =
-          "SELECT CustomerId " +
-          "FROM Customer " +
-          "JOIN [User] " +
-          "ON Customer.UserId = [User].Id " +
-          "WHERE [Login] = ? AND [Password] = ?";
+        MessageBox.Show("Values are required!", "Authentication", MessageBoxButtons.OK);
+        return;
+      }
 
-        OleDbCommand cmdIC = new OleDbCommand(idQuery, connection);
-        cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
-        cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
-        OleDbDataReader rdr = cmdIC.ExecuteReader();
-        rdr.Read();
+      var roleId = Helpers.GetSelectedId(rolesComboBox);
 
-        try
+      try
+      {
+        var passwordSaltPair = GetOldPasswordSaltPair(login, roleId);
+
+        var credentialsManager = new CredentialsManager();
+
+        if (!credentialsManager.VerifyHashedPassword(passwordSaltPair, password))
+          throw new InvalidCredentialsException();
+
+        if (roleId == 0)
         {
-          var customerId = Convert.ToInt32(rdr["CustomerId"]);
+          var customerId = GetCustomerId(login);
+
           var user = new User(customerId, this);
           user.Show();
           Visible = false;
         }
-        catch (Exception ex)
+        else if (roleId == 1)
         {
-          MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
+          var accountant = new Accountant(this);
+          accountant.Show();
+          Visible = false;
         }
-      }
-      else
+        else if (roleId == 2)
+        {
+          var admin = new Admin(this);
+          admin.Show();
+          Visible = false;
+        }
+      } 
+      catch(InvalidCredentialsException ex)
       {
-        string roleQuery = role();
-        OleDbCommand cmdIC = new OleDbCommand(roleQuery, connection);
-        cmdIC.Parameters.Add(new OleDbParameter("@Login", login));
-        cmdIC.Parameters.Add(new OleDbParameter("@Password", password));
-        OleDbDataReader rdr = cmdIC.ExecuteReader();
-        rdr.Read();
-
-        try
-        {
-          var role = Convert.ToInt32(rdr["Role"]);
-
-          if (role == 1)
-          {
-            var accountant = new Accountant(this);
-            accountant.Show();
-            Visible = false;
-          }
-          else if (role == 2)
-          {
-            var admin = new Admin(this);
-            admin.Show();
-            Visible = false;
-          }
-          else
-          {
-            MessageBox.Show("Incorrect type of account!", "Authentication", MessageBoxButtons.OK);
-            return;
-          }
-        }
-        catch (Exception ex)
-        {
-          MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
-        }
+        MessageBox.Show(ex.Message, "Authentication", MessageBoxButtons.OK);
+        return;
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Authentication", MessageBoxButtons.OK);
       }
     }
 
