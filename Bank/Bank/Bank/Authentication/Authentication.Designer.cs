@@ -65,7 +65,7 @@ namespace Bank
       this.loginTextBox.Name = "loginTextBox";
       this.loginTextBox.Size = new System.Drawing.Size(281, 22);
       this.loginTextBox.TabIndex = 3;
-      this.loginTextBox.Text = "login1";
+      this.loginTextBox.Text = "login2";
       // 
       // passwordTextBox
       // 
@@ -73,7 +73,7 @@ namespace Bank
       this.passwordTextBox.Name = "passwordTextBox";
       this.passwordTextBox.Size = new System.Drawing.Size(281, 22);
       this.passwordTextBox.TabIndex = 4;
-      this.passwordTextBox.Text = "pwd1";
+      this.passwordTextBox.Text = "pwd2";
       this.passwordTextBox.UseSystemPasswordChar = true;
       // 
       // logInButton

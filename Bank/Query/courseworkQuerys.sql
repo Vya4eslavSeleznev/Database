@@ -229,3 +229,5 @@ SELECT Currency.[Name], InfoSecurities.[Name], InfoSecurities.Price, InfoSecurit
 FROM InfoSecurities
 JOIN Currency ON InfoSecurities.CurrencyId = InfoSecurities.CurrencyId
 WHERE InfoSecurities.InfoSecuritiesId = 2
+
+SELECT * FROM CardService

@@ -34,6 +34,7 @@ namespace Bank
       this.label6 = new System.Windows.Forms.Label();
       this.cardServiceTextBox = new System.Windows.Forms.TextBox();
       this.label2 = new System.Windows.Forms.Label();
+      this.connection = new System.Data.OleDb.OleDbConnection();
       ((System.ComponentModel.ISupportInitialize)(this.servicePriceNumericUpDown)).BeginInit();
       this.SuspendLayout();
       // 
@@ -45,6 +46,7 @@ namespace Bank
       this.editServiceButton.TabIndex = 57;
       this.editServiceButton.Text = "Save changes";
       this.editServiceButton.UseVisualStyleBackColor = true;
+      this.editServiceButton.Click += new System.EventHandler(this.editServiceButton_Click);
       // 
       // servicePriceNumericUpDown
       // 
@@ -83,6 +85,11 @@ namespace Bank
       this.label2.TabIndex = 53;
       this.label2.Text = "Name:";
       // 
+      // connection
+      // 
+      this.connection.ConnectionString = "Provider=SQLNCLI11;Data Source=LAPTOP-V75FG2GF\\SQLEXPRESS;Integrated Security=SSP" +
+    "I;Initial Catalog=Bank";
+      // 
       // EditCardService
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -96,6 +103,7 @@ namespace Bank
       this.Name = "EditCardService";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "EditCardService";
+      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditCardService_FormClosing);
       ((System.ComponentModel.ISupportInitialize)(this.servicePriceNumericUpDown)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
@@ -109,5 +117,6 @@ namespace Bank
     private System.Windows.Forms.Label label6;
     private System.Windows.Forms.TextBox cardServiceTextBox;
     private System.Windows.Forms.Label label2;
+    private System.Data.OleDb.OleDbConnection connection;
   }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using Bank.Utils;
+using Bank.Models;
 
 namespace Bank
 {
@@ -20,6 +18,8 @@ namespace Bank
       setArticle();
       setCardService();
       setCurrency();
+      SetUserCombobox();
+      SetUserRoleCombobox();
       setCustomer();
       setServiceComboBox();
       setUser();
@@ -49,6 +49,7 @@ namespace Bank
     {
       return
         "SELECT " +
+        "CUstomer.CustomerId, " +
         "Customer.FirstName, " +
         "Customer.LastName, " +
         "Customer.PassportNum, " +
@@ -63,7 +64,7 @@ namespace Bank
     private string user()
     {
       return
-        "SELECT [Login], [Password], Role " +
+        "SELECT Id, [Login], [Password], Role " +
         "FROM [User]";
     }
 
@@ -72,7 +73,6 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", articleDataGridView);
       string articleQuery = article();
       setDataInTable(articleQuery, "Article", dsArticle, articleDataGridView);
-      addButtonInDataGrid(articleDataGridView);
       articleDataGridView.Columns["ArticleId"].Visible = false;
     }
 
@@ -90,7 +90,6 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", currencyDataGridView);
       string currencyQuery = currency();
       setDataInTable(currencyQuery, "Currency", dsCurrency, currencyDataGridView);
-      addButtonInDataGrid(currencyDataGridView);
       currencyDataGridView.Columns["CurrencyId"].Visible = false;
     }
 
@@ -100,6 +99,8 @@ namespace Bank
       string customerQuery = customer();
       setDataInTable(customerQuery, "Customer", dsAllCustomers, customerDataGridView);
       addButtonInDataGrid(customerDataGridView);
+
+      customerDataGridView.Columns["CustomerId"].Visible = false;
     }
 
     private void setUser()
@@ -107,7 +108,8 @@ namespace Bank
       addCheckBoxInDataGrid("Select to delete", usersDataGridView);
       string usersQuery = user();
       setDataInTable(usersQuery, "User", dsUser, usersDataGridView);
-      addButtonInDataGrid(usersDataGridView);
+
+      usersDataGridView.Columns["Id"].Visible = false;
     }
 
     private void setInactiveCustomers()
@@ -152,19 +154,46 @@ namespace Bank
       dataAdapter.Fill(dataSet, tableName);
     }
 
-    private void setServiceComboBox()
+    private void setDataInTable(OleDbCommand command, string tableName, DataSet dataSet, DataGridView dataGrid)
     {
-      OleDbCommand command = new OleDbCommand("SELECT [Name] FROM CardService", connection);
-      OleDbDataReader rdr = command.ExecuteReader();
-      while (rdr.Read())
-        serviceStatisticComboBox.Items.Add(rdr["Name"]);
-      rdr.Close();
+      var dataAdapter = new OleDbDataAdapter(command);
+      DataTable table = new DataTable(tableName);
+      dataSet.Tables.Add(table);
+      dataGrid.AutoGenerateColumns = true;
+      dataGrid.DataSource = dataSet;
+      dataGrid.DataMember = tableName;
+      dataAdapter.Fill(dataSet, tableName);
     }
 
-    private void parseComboBox(int index, string data, OleDbCommand cmdIC)
+    private void setServiceComboBox()
     {
-      cmdIC.Parameters[index].Value = data.Remove(data.IndexOf("-") - 1,
-        data.Length - data.IndexOf("-") + 1);
+      using (var command = new OleDbCommand("SELECT CardServiceId, [Name] FROM CardService", connection))
+      using (var rdr = command.ExecuteReader())
+      {
+        while (rdr.Read())
+          serviceStatisticComboBox.Items.Add(new Service(rdr.GetInt32(0), rdr.GetString(1)));
+      }
+    }
+
+    private void SetUserCombobox()
+    {
+      var query = "SELECT Id, [Login] FROM [User] WHERE " +
+        "NOT EXISTS(SELECT * FROM Customer WHERE Customer.UserId = [User].Id) AND " +
+        "[Role] = 0";
+      
+      using (var cmd = new OleDbCommand(query, connection))
+      using (var reader = cmd.ExecuteReader())
+      {
+        while (reader.Read())
+          customerUserComboBox.Items.Add(new Models.User(reader.GetInt32(0), reader.GetString(1)));
+      }
+    }
+
+    private void SetUserRoleCombobox()
+    {
+      userRoleComboBox.Items.Add(new UserRole(0, "Customer"));
+      userRoleComboBox.Items.Add(new UserRole(0, "Accountant"));
+      userRoleComboBox.Items.Add(new UserRole(0, "Administrator"));
     }
 
     private void refreshDataSet(string query, DataSet ds, string table)
@@ -183,32 +212,36 @@ namespace Bank
 
     private void showServiceStatisticButton_Click(object sender, EventArgs e)
     {
-      var service = serviceStatisticComboBox.Text;
-
-      if (service == "")
+      if (serviceStatisticComboBox.SelectedItem == null)
       {
         MessageBox.Show("Empty text field!", "Call center", MessageBoxButtons.OK);
         return;
       }
 
-      string getCustomersWithServiceQuery = "ServiceStatistic ?";
+      var serviceId = Helpers.GetSelectedId(serviceStatisticComboBox);
 
-      OleDbCommand cmd = new OleDbCommand(getCustomersWithServiceQuery, connection);
-      cmd.Parameters.Add(new OleDbParameter("@Name", service));
+      string getCustomersWithServiceQuery = "ServiceStatistic ?";
 
       try
       {
-        cmd.ExecuteNonQuery();
-        MessageBox.Show("Service statistic!", "Call center", MessageBoxButtons.OK);
-        setDataInTable(getCustomersWithServiceQuery, "Service", dsServices, callCenterServiceDataGridView);
+        using (var cmd = new OleDbCommand(getCustomersWithServiceQuery, connection))
+        {
+          cmd.Parameters.Add(new OleDbParameter("@Id", serviceId));
+
+          callCenterServiceDataGridView.Columns.Clear();
+          dsServices = new DataSet();
+
+          setDataInTable(cmd, "Service", dsServices, callCenterServiceDataGridView);
+        }
       }
       catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Call center", MessageBoxButtons.OK);
+        return;
       }
     }
 
-    private void RefreshDataGrid(DataGridView dataGrid, DataSet ds)
+    private void RefreshDataGrid(DataGridView dataGrid, ref DataSet ds)
     {
       dataGrid.Columns.Clear();
       ds = new DataSet();
@@ -241,7 +274,7 @@ namespace Bank
         cmd.ExecuteNonQuery();
       }
 
-      RefreshDataGrid(articleDataGridView, dsArticle);
+      RefreshDataGrid(articleDataGridView, ref dsArticle);
       setArticle();
     }
 
@@ -334,7 +367,7 @@ namespace Bank
         cmd.ExecuteNonQuery();
       }
 
-      RefreshDataGrid(serviceDataGridView, dsCardService);
+      RefreshDataGrid(serviceDataGridView, ref dsCardService);
       setCardService();
     }
 
@@ -395,7 +428,7 @@ namespace Bank
         cmd.ExecuteNonQuery();
       }
 
-      RefreshDataGrid(currencyDataGridView, dsCurrency);
+      RefreshDataGrid(currencyDataGridView, ref dsCurrency);
       setCurrency();
     }
 
@@ -407,67 +440,192 @@ namespace Bank
       var passNum = passportNumTextBox.Text;
       var phone = phoneTextBox.Text;
 
-      var login = loginTextBox.Text;
-      var password = passwordTextBox.Text;
-      string role = "0";
-      int userId = 0;
-
-
       if (firstName == "" || lastName == "" || birthady == "" || passNum == ""
-          || phone == "" || login == "" || password == "")
+          || phone == "" || customerUserComboBox.SelectedItem == null)
       {
         MessageBox.Show("Empty fields!", "Customer", MessageBoxButtons.OK);
         return;
       }
 
-      string addUserProfileQuery =
-        "INSERT INTO User (Login, Password, Role) " +
-        "VALUES(?, ?, ?)";
-
-      OleDbCommand userProfileCmd = new OleDbCommand(addUserProfileQuery, connection);
-      userProfileCmd.Parameters.Add(new OleDbParameter("@Login", login));
-      userProfileCmd.Parameters.Add(new OleDbParameter("@Password", password));
-      userProfileCmd.Parameters.Add(new OleDbParameter("@Role", role));
-
-      try
-      {
-        OleDbDataReader rdr = userProfileCmd.ExecuteReader();
-        rdr.Read();
-        userId = Convert.ToInt32(rdr["Id"]);
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Incorrect parameters!", "Customer", MessageBoxButtons.OK);
-      }
+      var userId = Helpers.GetSelectedId(customerUserComboBox);
 
       string addCustomerQuery =
         "INSERT INTO Customer (FirstName, LastName, PassportNum, Birthday, Phone, UserId) " +
         "VALUES(?, ?, ?, ?, ?, ?)";
 
-      OleDbCommand customerCmd = new OleDbCommand(addCustomerQuery, connection);
-      customerCmd.Parameters.Add(new OleDbParameter("@FirstName", firstName));
-      customerCmd.Parameters.Add(new OleDbParameter("@LastName", lastName));
-      customerCmd.Parameters.Add(new OleDbParameter("@PassportNum", birthady));
-      customerCmd.Parameters.Add(new OleDbParameter("@Birthday", passNum));
-      customerCmd.Parameters.Add(new OleDbParameter("@Phone", phone));
-      customerCmd.Parameters.Add(new OleDbParameter("@UserId", Convert.ToString(userId)));
-
       try
       {
-        customerCmd.ExecuteNonQuery();
-        MessageBox.Show("Customer added successfully!", "Customer", MessageBoxButtons.OK);
-        string customerQuery = customer();
-        refreshDataSet(customerQuery, dsAllCustomers, "Customer");
+        using (var customerCmd = new OleDbCommand(addCustomerQuery, connection))
+        {
+          customerCmd.Parameters.Add(new OleDbParameter("@FirstName", firstName));
+          customerCmd.Parameters.Add(new OleDbParameter("@LastName", lastName));
+          customerCmd.Parameters.Add(new OleDbParameter("@PassportNum", passNum));
+          customerCmd.Parameters.Add(new OleDbParameter("@Birthday", birthady));
+          customerCmd.Parameters.Add(new OleDbParameter("@Phone", phone));
+          customerCmd.Parameters.Add(new OleDbParameter("@UserId", userId));
+
+          customerCmd.ExecuteNonQuery();
+        }
       }
-      catch
+      catch (Exception ex)
       {
         MessageBox.Show("Incorrect parameters!", "Customer", MessageBoxButtons.OK);
+        return;
       }
+
+      MessageBox.Show("Customer added successfully!", "Customer", MessageBoxButtons.OK);
+
+      RefreshCustonersGrid();
+
+      customerUserComboBox.SelectedItem = null;
+      RefreshUsersCombobox();
+    }
+
+    private void RefreshCustonersGrid()
+    {
+      string customerQuery = customer();
+      refreshDataSet(customerQuery, dsAllCustomers, "Customer");
     }
 
     private void deleteCustomerButton_Click(object sender, EventArgs e)
     {
+      try
+      {
+        var customerIds = (from DataGridViewRow r in customerDataGridView.Rows
+                       where (string)r.Cells[0].Value == "1"
+                       select (int)r.Cells["CustomerId"].Value).ToList();
 
+        if (customerIds.Count == 0)
+          return;
+
+        var parametrs = string.Join(",", customerIds.Select(x => "?"));
+        var query = $"DELETE FROM Customer WHERE CustomerId IN ({parametrs})";
+
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < customerIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@CutomerId{i}", customerIds[i]));
+
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Delete user", MessageBoxButtons.OK);
+        return;
+      }
+
+      RefreshCustonersGrid();
+      RefreshUsersCombobox();
+    }
+
+    public void RefreshCardServiceDataGrid()
+    {
+      serviceDataGridView.Columns.Clear();
+      dsCardService = new DataSet();
+      setCardService();
+    }
+
+    public void RefreshUsersDataGrid()
+    {
+      usersDataGridView.Columns.Clear();
+      dsUser = new DataSet();
+      setUser();
+    }
+
+    private void serviceDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    {
+      var senderGrid = (DataGridView)sender;
+
+      if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+      {
+        try
+        {
+          var cardServiceId = (int)serviceDataGridView["CardServiceId", e.RowIndex].Value;
+
+          using (var editCardService = new EditCardService(cardServiceId, this))
+          {
+            editCardService.ShowDialog();
+          }
+        }
+        catch (Exception ex)
+        {
+          MessageBox.Show("Incorrect parameters!", "Card Service", MessageBoxButtons.OK);
+        }
+      }
+    }
+
+    private void RefreshUsersCombobox()
+    {
+      customerUserComboBox.Items.Clear();
+      SetUserCombobox();
+    }
+
+    private void deleteUserButton_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        var userIds = (from DataGridViewRow r in usersDataGridView.Rows
+                       where (string)r.Cells[0].Value == "1"
+                       select (int)r.Cells["Id"].Value).ToList();
+
+        if (userIds.Count == 0)
+          return;
+
+        var parametrs = string.Join(",", userIds.Select(x => "?"));
+        var query = $"DELETE FROM [User] WHERE Id IN ({parametrs})";
+
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          for (var i = 0; i < userIds.Count; i++)
+            cmd.Parameters.Add(new OleDbParameter($"@UserId{i}", userIds[i]));
+
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Delete user", MessageBoxButtons.OK);
+        return;
+      }
+
+      RefreshUsersDataGrid();
+      RefreshUsersCombobox();
+    }
+
+    private void addUserButton_Click(object sender, EventArgs e)
+    {
+      if (userRoleComboBox.SelectedItem == null || string.IsNullOrEmpty(userLogin.Text) || string.IsNullOrEmpty(userPassword.Text))
+      {
+        MessageBox.Show("Empty fields!", "User", MessageBoxButtons.OK);
+        return;
+      }
+
+      var userRole = Helpers.GetSelectedId(userRoleComboBox);
+      var login = userLogin.Text;
+      var password = userLogin.Text;
+
+      try
+      {
+        var query = "INSERT INTO [User] ([Login], [Password], [Role]) VALUES (?, ?, ?)";
+
+        using (var cmd = new OleDbCommand(query, connection))
+        {
+          cmd.Parameters.Add(new OleDbParameter("@Login", login));
+          cmd.Parameters.Add(new OleDbParameter("@Password", password));
+          cmd.Parameters.Add(new OleDbParameter("@Role", userRole));
+
+          cmd.ExecuteNonQuery();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Incorrect parameters!", "Add user", MessageBoxButtons.OK);
+        return;
+      }
+
+      RefreshUsersDataGrid();
+      RefreshUsersCombobox();
     }
   }
 }

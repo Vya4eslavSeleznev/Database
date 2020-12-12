@@ -1,12 +1,12 @@
 ﻿namespace Bank.Models
 {
-  class Service : IEntity
+  public class User : IEntity
   {
     public int Id { get; }
 
     public string Name { get; }
 
-    public Service(int id, string name)
+    public User(int id, string name)
     {
       Id = id;
       Name = name;

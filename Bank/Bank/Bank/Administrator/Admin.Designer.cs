@@ -58,13 +58,10 @@ namespace Bank
       this.customerDataGridView = new System.Windows.Forms.DataGridView();
       this.saveChangesButton = new System.Windows.Forms.Button();
       this.birthdayTimePicker = new System.Windows.Forms.DateTimePicker();
-      this.passwordTextBox = new System.Windows.Forms.TextBox();
-      this.loginTextBox = new System.Windows.Forms.TextBox();
       this.phoneTextBox = new System.Windows.Forms.TextBox();
       this.passportNumTextBox = new System.Windows.Forms.TextBox();
       this.lastNameTextBox = new System.Windows.Forms.TextBox();
       this.firstNameTextBox = new System.Windows.Forms.TextBox();
-      this.label3 = new System.Windows.Forms.Label();
       this.label4 = new System.Windows.Forms.Label();
       this.label5 = new System.Windows.Forms.Label();
       this.label8 = new System.Windows.Forms.Label();
@@ -90,10 +87,10 @@ namespace Bank
       this.usersDataGridView = new System.Windows.Forms.DataGridView();
       this.addUserButton = new System.Windows.Forms.Button();
       this.label15 = new System.Windows.Forms.Label();
-      this.textBox2 = new System.Windows.Forms.TextBox();
-      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.userPassword = new System.Windows.Forms.TextBox();
+      this.userLogin = new System.Windows.Forms.TextBox();
       this.label14 = new System.Windows.Forms.Label();
-      this.comboBox1 = new System.Windows.Forms.ComboBox();
+      this.userRoleComboBox = new System.Windows.Forms.ComboBox();
       this.label13 = new System.Windows.Forms.Label();
       this.connection = new System.Data.OleDb.OleDbConnection();
       this.dsArticle = new System.Data.DataSet();
@@ -105,6 +102,7 @@ namespace Bank
       this.dsServices = new System.Data.DataSet();
       this.dsUser = new System.Data.DataSet();
       this.dsInactiveCustomers = new System.Data.DataSet();
+      this.customerUserComboBox = new System.Windows.Forms.ComboBox();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.groupBox1.SuspendLayout();
@@ -334,6 +332,7 @@ namespace Bank
       this.serviceDataGridView.RowHeadersWidth = 51;
       this.serviceDataGridView.Size = new System.Drawing.Size(513, 407);
       this.serviceDataGridView.TabIndex = 1;
+      this.serviceDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.serviceDataGridView_CellContentClick);
       // 
       // createCurrencyButton
       // 
@@ -383,17 +382,15 @@ namespace Bank
       // 
       // tabPage3
       // 
+      this.tabPage3.Controls.Add(this.customerUserComboBox);
       this.tabPage3.Controls.Add(this.deleteCustomerButton);
       this.tabPage3.Controls.Add(this.groupBox4);
       this.tabPage3.Controls.Add(this.saveChangesButton);
       this.tabPage3.Controls.Add(this.birthdayTimePicker);
-      this.tabPage3.Controls.Add(this.passwordTextBox);
-      this.tabPage3.Controls.Add(this.loginTextBox);
       this.tabPage3.Controls.Add(this.phoneTextBox);
       this.tabPage3.Controls.Add(this.passportNumTextBox);
       this.tabPage3.Controls.Add(this.lastNameTextBox);
       this.tabPage3.Controls.Add(this.firstNameTextBox);
-      this.tabPage3.Controls.Add(this.label3);
       this.tabPage3.Controls.Add(this.label4);
       this.tabPage3.Controls.Add(this.label5);
       this.tabPage3.Controls.Add(this.label8);
@@ -454,21 +451,6 @@ namespace Bank
       this.birthdayTimePicker.Size = new System.Drawing.Size(373, 22);
       this.birthdayTimePicker.TabIndex = 64;
       // 
-      // passwordTextBox
-      // 
-      this.passwordTextBox.Location = new System.Drawing.Point(591, 71);
-      this.passwordTextBox.Name = "passwordTextBox";
-      this.passwordTextBox.Size = new System.Drawing.Size(440, 22);
-      this.passwordTextBox.TabIndex = 63;
-      this.passwordTextBox.UseSystemPasswordChar = true;
-      // 
-      // loginTextBox
-      // 
-      this.loginTextBox.Location = new System.Drawing.Point(592, 39);
-      this.loginTextBox.Name = "loginTextBox";
-      this.loginTextBox.Size = new System.Drawing.Size(439, 22);
-      this.loginTextBox.TabIndex = 62;
-      // 
       // phoneTextBox
       // 
       this.phoneTextBox.Location = new System.Drawing.Point(592, 10);
@@ -497,23 +479,14 @@ namespace Bank
       this.firstNameTextBox.Size = new System.Drawing.Size(373, 22);
       this.firstNameTextBox.TabIndex = 58;
       // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(512, 76);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(73, 17);
-      this.label3.TabIndex = 57;
-      this.label3.Text = "Password:";
-      // 
       // label4
       // 
       this.label4.AutoSize = true;
       this.label4.Location = new System.Drawing.Point(512, 44);
       this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(47, 17);
+      this.label4.Size = new System.Drawing.Size(53, 21);
       this.label4.TabIndex = 56;
-      this.label4.Text = "Login:";
+      this.label4.Text = "User:";
       // 
       // label5
       // 
@@ -697,10 +670,10 @@ namespace Bank
       this.tabPage6.Controls.Add(this.groupBox8);
       this.tabPage6.Controls.Add(this.addUserButton);
       this.tabPage6.Controls.Add(this.label15);
-      this.tabPage6.Controls.Add(this.textBox2);
-      this.tabPage6.Controls.Add(this.textBox1);
+      this.tabPage6.Controls.Add(this.userPassword);
+      this.tabPage6.Controls.Add(this.userLogin);
       this.tabPage6.Controls.Add(this.label14);
-      this.tabPage6.Controls.Add(this.comboBox1);
+      this.tabPage6.Controls.Add(this.userRoleComboBox);
       this.tabPage6.Controls.Add(this.label13);
       this.tabPage6.Location = new System.Drawing.Point(4, 25);
       this.tabPage6.Name = "tabPage6";
@@ -717,6 +690,7 @@ namespace Bank
       this.deleteUserButton.TabIndex = 8;
       this.deleteUserButton.Text = "DeleteUser";
       this.deleteUserButton.UseVisualStyleBackColor = true;
+      this.deleteUserButton.Click += new System.EventHandler(this.deleteUserButton_Click);
       // 
       // groupBox8
       // 
@@ -744,8 +718,9 @@ namespace Bank
       this.addUserButton.Name = "addUserButton";
       this.addUserButton.Size = new System.Drawing.Size(333, 28);
       this.addUserButton.TabIndex = 6;
-      this.addUserButton.Text = "button1";
+      this.addUserButton.Text = "Add";
       this.addUserButton.UseVisualStyleBackColor = true;
+      this.addUserButton.Click += new System.EventHandler(this.addUserButton_Click);
       // 
       // label15
       // 
@@ -756,20 +731,20 @@ namespace Bank
       this.label15.TabIndex = 5;
       this.label15.Text = "Password:";
       // 
-      // textBox2
+      // userPassword
       // 
-      this.textBox2.Location = new System.Drawing.Point(541, 12);
-      this.textBox2.Name = "textBox2";
-      this.textBox2.Size = new System.Drawing.Size(137, 22);
-      this.textBox2.TabIndex = 4;
-      this.textBox2.UseSystemPasswordChar = true;
+      this.userPassword.Location = new System.Drawing.Point(541, 12);
+      this.userPassword.Name = "userPassword";
+      this.userPassword.Size = new System.Drawing.Size(137, 22);
+      this.userPassword.TabIndex = 4;
+      this.userPassword.UseSystemPasswordChar = true;
       // 
-      // textBox1
+      // userLogin
       // 
-      this.textBox1.Location = new System.Drawing.Point(309, 12);
-      this.textBox1.Name = "textBox1";
-      this.textBox1.Size = new System.Drawing.Size(137, 22);
-      this.textBox1.TabIndex = 3;
+      this.userLogin.Location = new System.Drawing.Point(309, 12);
+      this.userLogin.Name = "userLogin";
+      this.userLogin.Size = new System.Drawing.Size(137, 22);
+      this.userLogin.TabIndex = 3;
       // 
       // label14
       // 
@@ -780,13 +755,13 @@ namespace Bank
       this.label14.TabIndex = 2;
       this.label14.Text = "Login:";
       // 
-      // comboBox1
+      // userRoleComboBox
       // 
-      this.comboBox1.FormattingEnabled = true;
-      this.comboBox1.Location = new System.Drawing.Point(104, 12);
-      this.comboBox1.Name = "comboBox1";
-      this.comboBox1.Size = new System.Drawing.Size(137, 24);
-      this.comboBox1.TabIndex = 1;
+      this.userRoleComboBox.FormattingEnabled = true;
+      this.userRoleComboBox.Location = new System.Drawing.Point(104, 12);
+      this.userRoleComboBox.Name = "userRoleComboBox";
+      this.userRoleComboBox.Size = new System.Drawing.Size(137, 24);
+      this.userRoleComboBox.TabIndex = 1;
       // 
       // label13
       // 
@@ -837,6 +812,14 @@ namespace Bank
       // dsInactiveCustomers
       // 
       this.dsInactiveCustomers.DataSetName = "NewDataSet";
+      // 
+      // customerUserComboBox
+      // 
+      this.customerUserComboBox.FormattingEnabled = true;
+      this.customerUserComboBox.Location = new System.Drawing.Point(592, 44);
+      this.customerUserComboBox.Name = "customerUserComboBox";
+      this.customerUserComboBox.Size = new System.Drawing.Size(439, 24);
+      this.customerUserComboBox.TabIndex = 68;
       // 
       // Admin
       // 
@@ -919,13 +902,10 @@ namespace Bank
     private System.Windows.Forms.DataGridView customerDataGridView;
     private System.Windows.Forms.Button saveChangesButton;
     private System.Windows.Forms.DateTimePicker birthdayTimePicker;
-    private System.Windows.Forms.TextBox passwordTextBox;
-    private System.Windows.Forms.TextBox loginTextBox;
     private System.Windows.Forms.TextBox phoneTextBox;
     private System.Windows.Forms.TextBox passportNumTextBox;
     private System.Windows.Forms.TextBox lastNameTextBox;
     private System.Windows.Forms.TextBox firstNameTextBox;
-    private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label label4;
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label label8;
@@ -957,18 +937,19 @@ namespace Bank
     private System.Windows.Forms.TabPage tabPage6;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.Button deleteCustomerButton;
-    private System.Windows.Forms.TextBox textBox1;
+    private System.Windows.Forms.TextBox userLogin;
     private System.Windows.Forms.Label label14;
-    private System.Windows.Forms.ComboBox comboBox1;
+    private System.Windows.Forms.ComboBox userRoleComboBox;
     private System.Windows.Forms.GroupBox groupBox8;
     private System.Windows.Forms.Button addUserButton;
     private System.Windows.Forms.Label label15;
-    private System.Windows.Forms.TextBox textBox2;
+    private System.Windows.Forms.TextBox userPassword;
     private System.Windows.Forms.DataGridView usersDataGridView;
     private System.Windows.Forms.Button deleteUserButton;
     private System.Data.DataSet dsUser;
     private System.Windows.Forms.GroupBox groupBox9;
     private System.Windows.Forms.DataGridView inactiveCustomersDataGridView;
     private System.Data.DataSet dsInactiveCustomers;
+    private System.Windows.Forms.ComboBox customerUserComboBox;
   }
 }
