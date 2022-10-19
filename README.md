@@ -2,7 +2,7 @@
 
 ---
 
-![Gif](https://github.com/Vya4eslavSeleznev/Database/blob/develop/docs/bank.gif)
+![Gif](https://github.com/Vya4eslavSeleznev/Database/blob/master/docs/bank.gif)
 
 ---
 
