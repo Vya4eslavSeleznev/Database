@@ -2,6 +2,10 @@
 
 ---
 
+![Gif](https://github.com/Vya4eslavSeleznev/Database/blob/develop/docs/bank.gif)
+
+---
+
 ### Схема базы данных:
 
 ![Db Schema](/docs/db.png)
