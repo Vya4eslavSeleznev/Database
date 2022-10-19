@@ -1,4 +1,4 @@
-# Проектирование приложения для предоставления банковских услугВариант 4: Автоматизация домашнего бюджета
+# Проектирование приложения для предоставления банковских услуг
 
 ---
 
@@ -8,22 +8,22 @@
 
 ###### Описание таблиц:
 
-•	Article — таблица наименования операции
-•	Operation — таблица операций
-•	Currency — таблица валют
-•	User — таблица данных для профиля клиента или работника
-•	Customer — таблица для личной информации клиента
-•	Balance — банковский счет клиента
-•	BalanceCards — связь “many-to-many” с таблицей Card
-•	Card — таблица для карт клиентов
-•	CardServices — связь “many-to-many” с таблицей CardService
-•	CardService — таблиц с услугами для карт
-•	CustomerCredit — связь “many-to-many” с таблицей InfoCredit
-•	InfoCredit — информация о кредите
-•	CustomerSecurities — связь “many-to-many” с таблицей InfoSecurities
-•	InfoSecurities — информация о ценных бумагах
-•	CustomerDeposit— связь “many-to-many” с таблицей InfoDeposit
-•	InfoDeposit — информация о вкладе
+•	Article — таблица наименования операции  
+•	Operation — таблица операций  
+•	Currency — таблица валют  
+•	User — таблица данных для профиля клиента или работника  
+•	Customer — таблица для личной информации клиента  
+•	Balance — банковский счет клиента  
+•	BalanceCards — связь “many-to-many” с таблицей Card  
+•	Card — таблица для карт клиентов  
+•	CardServices — связь “many-to-many” с таблицей CardService  
+•	CardService — таблиц с услугами для карт  
+•	CustomerCredit — связь “many-to-many” с таблицей InfoCredit  
+•	InfoCredit — информация о кредите  
+•	CustomerSecurities — связь “many-to-many” с таблицей InfoSecurities  
+•	InfoSecurities — информация о ценных бумагах  
+•	CustomerDeposit— связь “many-to-many” с таблицей InfoDeposit  
+•	InfoDeposit — информация о вкладе  
 
 ---
 
